@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,6 +528,36 @@ const SEED_QUESTIONS = [
  option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
  correct_answer:'B', explanation:'The passage explicitly presents opposing views ("Some economists argue... Others counter...") so it is false that all economists agree.', technique_tip:'Watch for absolute quantifiers like "all" — a single opposing view mentioned in the passage is enough to make the statement False, not merely uncertain.'},
 
+{question_id:'VR013', module:'VR', question_type:'Inference', topic:'Inference', difficulty:'advanced', recommended_time:55, tags:'inference', active:true,
+ passage:"Autonomous delivery robots have begun operating on pavements in a small number of towns as part of pilot schemes. Operators argue that the robots reduce congestion caused by delivery vans and produce no tailpipe emissions during use. Disability rights groups have raised concerns that the robots, which travel at pedestrian height and speed, can be difficult for visually impaired pedestrians to detect and avoid, particularly on narrower pavements where a robot may occupy most of the usable width.",
+ question_text:"Which of the following can be most reasonably inferred from the passage?",
+ option_a:'All disability rights groups oppose the use of delivery robots.', option_b:'On narrower pavements, a delivery robot may leave insufficient space for a pedestrian to pass comfortably.', option_c:'Delivery robots produce more emissions than delivery vans.', option_d:'Visually impaired pedestrians cannot use pavements where delivery robots operate.', option_e:'',
+ correct_answer:'B', explanation:'The passage states a robot "may occupy most of the usable width" of a narrower pavement, which reasonably implies little room is left for a pedestrian to pass.', technique_tip:"Look for a claim that stays inside the passage's own qualifier (\"narrower pavements\", \"may\") rather than generalising to every pavement or every group."},
+
+{question_id:'VR014', module:'VR', question_type:'True/False/Cannot Tell', topic:"Evidence vs Assumption", difficulty:'advanced', recommended_time:50, tags:'assumption', active:true,
+ passage:"A trial compared a project-based learning approach to traditional lecture-based teaching across ten schools. Students taught using the project-based approach scored, on average, 6% higher on an end-of-term skills assessment. The researchers noted that the schools which adopted the project-based approach had done so voluntarily, after applying for a limited number of places in a pilot programme.",
+ question_text:"The 6% score improvement can be attributed with certainty to the project-based learning method alone.",
+ option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
+ correct_answer:'C', explanation:'Because the schools opted in voluntarily, other factors linked to that choice (such as staff motivation or existing resources) could also explain the higher scores, so the method alone cannot be confirmed as the sole cause.', technique_tip:'Voluntary opt-in into a pilot is a classic self-selection confound — treat causal certainty claims as unconfirmed.'},
+
+{question_id:'VR015', module:'VR', question_type:'Interpretation', topic:'Interpretation of Passages', difficulty:'advanced', recommended_time:55, tags:'interpretation', active:true,
+ passage:"Supporters of import tariffs on steel argue that they protect domestic manufacturing jobs and reduce reliance on foreign supply chains during periods of geopolitical instability. Opponents counter that tariffs raise costs for domestic industries that use steel as an input, such as car manufacturing and construction, potentially costing more jobs downstream than are protected upstream. Historical estimates of the net employment effect of steel tariffs vary considerably depending on the assumptions used about how downstream industries respond to higher input costs.",
+ question_text:"The passage is best described as presenting:",
+ option_a:'A definitive judgement that tariffs on steel are harmful to employment overall.', option_b:'An outline of a genuine trade-off in which the net employment effect of steel tariffs is uncertain and contested.', option_c:'A historical account of when steel tariffs were first introduced.', option_d:'An argument that downstream industries should be exempt from all tariffs.', option_e:'',
+ correct_answer:'B', explanation:'The passage presents both the protective and the cost-raising effects of tariffs and explicitly notes that estimates of the net effect "vary considerably" — a balanced, unresolved trade-off, not a firm judgement.', technique_tip:"\"Estimates vary considerably\" is a strong signal the passage is not reaching a firm conclusion — favour the option that reflects genuine uncertainty."},
+
+{question_id:'VR016', module:'VR', question_type:"Author's Argument", topic:"Author's Argument", difficulty:'advanced', recommended_time:55, tags:'argument', active:true,
+ passage:"A hospital reduced 30-day readmission rates by 12% after introducing a follow-up phone call from a nurse within 48 hours of discharge. Some commentators have cited this as evidence that all hospitals should adopt mandatory post-discharge phone calls. Critics note that the hospital in question also increased staffing levels on its discharge planning team at the same time as introducing the phone calls, and that the relative contribution of each change to the drop in readmissions was not separately measured.",
+ question_text:"Why do the critics most likely mention the increase in discharge planning staff?",
+ option_a:'To show that phone calls have no effect on readmission rates.', option_b:'To suggest that the drop in readmissions cannot be attributed to the phone calls alone, since another change happened at the same time.', option_c:'To argue that hospitals should hire more discharge planning staff instead of making phone calls.', option_d:"To prove that the hospital's data was fabricated.", option_e:'',
+ correct_answer:'B', explanation:'Pointing out a second, simultaneous change is a classic way of flagging a confound — the critics are questioning whether the phone calls alone caused the drop, not making a separate claim about staffing.', technique_tip:'When two changes are introduced together, a critique that flags the second change is usually pointing at a confound, not making a separate claim of its own.'},
+
+{question_id:'VR017', module:'VR', question_type:'Identifying Information', topic:'Identifying Information', difficulty:'advanced', recommended_time:55, tags:'identifying', active:true,
+ passage:"A large-scale project attempted to replicate 100 published psychology experiments using the original materials and larger sample sizes. Only around 36% of the replications produced a statistically significant effect in the same direction as the original study, though most replicated effects were smaller in magnitude than first reported. The project's authors cautioned against concluding that the other 64% of original findings were false, noting that a failed replication can result from differences in sample population, subtle procedural variation, or chance, as well as from an unreliable original result.",
+ question_text:"Based on the passage, which statement is best supported?",
+ option_a:'64% of the original psychology studies examined were definitely false.', option_b:'A failed replication does not, by itself, prove that the original finding was incorrect.', option_c:'All replicated effects were larger than the original studies reported.', option_d:'The replication project used smaller sample sizes than the original studies.', option_e:'',
+ correct_answer:'B', explanation:'The authors explicitly caution against concluding the non-replicated findings were false, listing several other possible causes of a failed replication — supporting the more cautious statement in option B.', technique_tip:'When an author explicitly warns against a conclusion, the correct answer is usually the more cautious statement, not the one the author is warning against.'},
+
 /* ---------------- DECISION MAKING ---------------- */
 {question_id:'DM001', module:'DM', question_type:'Syllogism', topic:'Syllogisms', difficulty:'foundation', recommended_time:40, tags:'logic', active:true,
  question_text:"All qualified paramedics have completed advanced first-aid training. Priya has completed advanced first-aid training. Which conclusion follows logically?",
@@ -576,7 +607,7 @@ const SEED_QUESTIONS = [
 {question_id:'DM010', module:'DM', question_type:'Probability', topic:'Probability', difficulty:'foundation', recommended_time:40, tags:'probability', active:true,
  question_text:"A fair six-sided die is rolled twice. What is the probability of getting a total of exactly 9?",
  option_a:'1/12', option_b:'1/9', option_c:'1/6', option_d:'5/36', option_e:'1/4',
- correct_answer:'D', explanation:'Combinations giving 9: (3,6),(4,5),(5,4),(6,3) = 4 outcomes out of 36 total = 4/36 = 1/9. Wait — recompute: also (3,6) counted, total combinations summing to 9 are (3,6),(4,5),(5,4),(6,3) = 4/36 = 1/9.', technique_tip:'List ordered pairs systematically for two-dice sum problems; there are 36 equally likely outcomes in total.'},
+ correct_answer:'B', explanation:'Combinations giving a total of 9: (3,6),(4,5),(5,4),(6,3) = 4 outcomes out of 36 equally likely total outcomes = 4/36 = 1/9.', technique_tip:'List ordered pairs systematically for two-dice sum problems; there are 36 equally likely outcomes in total.'},
 
 {question_id:'DM011', module:'DM', question_type:'Data Interpretation', topic:'Data Interpretation', difficulty:'standard', recommended_time:45, tags:'data', active:true,
  question_text:"A survey of 200 students found 120 study Biology and 90 study Chemistry, with 40 studying both. How many students study neither subject?",
@@ -587,6 +618,31 @@ const SEED_QUESTIONS = [
  question_text:"\"Students who eat breakfast perform better on morning exams than those who don't, so schools should mandate a breakfast period before all exams.\" Which is the strongest criticism of this argument?",
  option_a:'Some students dislike breakfast food.', option_b:'The observed correlation may be explained by other factors, such as students who eat breakfast also tending to get more sleep.', option_c:'Breakfast periods take up classroom time.', option_d:'Not all schools have a cafeteria.', option_e:'',
  correct_answer:'B', explanation:'This identifies a confounding variable that could explain the correlation without breakfast itself being the cause — the strongest type of criticism for a causal argument based on correlation.', technique_tip:'"Correlation does not imply causation" — always check whether a confound could explain the same pattern.'},
+
+{question_id:'DM013', module:'DM', question_type:'Syllogism', topic:'Syllogisms', difficulty:'advanced', recommended_time:50, tags:'logic', active:true,
+ question_text:"All hospital consultants have completed specialist training. Some people who have completed specialist training are not hospital consultants. Dr Okafor has completed specialist training. Which conclusion follows logically?",
+ option_a:'Dr Okafor is a hospital consultant.', option_b:'Dr Okafor is not a hospital consultant.', option_c:'It cannot be determined from the statements whether Dr Okafor is a hospital consultant.', option_d:'No one who has completed specialist training is a hospital consultant.', option_e:'',
+ correct_answer:'C', explanation:'The premises confirm that completing specialist training does not guarantee being a consultant (since some trained people are not consultants), but they also do not rule it out. Dr Okafor could be either, so it cannot be determined.', technique_tip:'A second premise reinforcing "not all B are A" does not create new certainty about a specific individual — it only confirms the affirming-the-consequent trap still applies.'},
+
+{question_id:'DM014', module:'DM', question_type:'Conditional Reasoning', topic:'Conditional Reasoning', difficulty:'advanced', recommended_time:55, tags:'logic', active:true,
+ question_text:"If a drug trial recruits fewer than 200 participants, the results are classified as 'preliminary'. If results are classified as 'preliminary', they cannot be used to support a full regulatory submission. Trial X's results were used to support a full regulatory submission. What can be validly concluded?",
+ option_a:'Trial X recruited at least 200 participants.', option_b:'Trial X recruited fewer than 200 participants.', option_c:"Trial X's results were classified as preliminary.", option_d:'Nothing can be concluded about the number of participants in Trial X.', option_e:'',
+ correct_answer:'A', explanation:'Since the results were used in a full submission, they cannot have been "preliminary" (contrapositive of the second rule). Since they were not preliminary, the trial cannot have recruited fewer than 200 participants (contrapositive of the first rule) — so it recruited at least 200.', technique_tip:'Chain conditionals by working backwards from the known outcome through each contrapositive in turn.'},
+
+{question_id:'DM015', module:'DM', question_type:'Venn Diagram', topic:'Venn Diagrams', difficulty:'advanced', recommended_time:60, tags:'venn', active:true,
+ question_text:"Among 260 clinic patients, 140 have high blood pressure, 100 have diabetes, and 40 have both conditions. Of those with neither condition, half are also being monitored for high cholesterol. How many patients have neither high blood pressure nor diabetes, and are NOT being monitored for high cholesterol?",
+ option_a:'20', option_b:'25', option_c:'30', option_d:'35', option_e:'40',
+ correct_answer:'C', explanation:'At least one condition = 140 + 100 − 40 = 200. Neither condition = 260 − 200 = 60. Half of these 60 are monitored for cholesterol, so the other half — 30 — are not.', technique_tip:'Solve the "neither" group first using the standard overlap subtraction, then apply any secondary fraction to that resulting number.'},
+
+{question_id:'DM016', module:'DM', question_type:'Evaluating Arguments', topic:'Evaluating Arguments', difficulty:'advanced', recommended_time:55, tags:'argument', active:true,
+ question_text:"\"A city introduced a ban on single-use plastic bags in supermarkets, and beach litter surveys recorded a 25% drop in plastic bag litter over the following year. Therefore, the ban caused the drop in beach litter.\" Which of the following, if true, would most strengthen this argument?",
+ option_a:'The city also experienced fewer visitors to its beaches that year due to poor weather.', option_b:'A neighbouring city with no such ban recorded no significant change in beach plastic bag litter over the same period.', option_c:'Plastic bag litter makes up a small proportion of total beach litter.', option_d:'Some supermarkets began charging for paper bags instead.', option_e:'',
+ correct_answer:'B', explanation:'If a comparable city without the ban saw no change, this rules out a general regional trend as the explanation, making it more likely the ban itself caused the drop.', technique_tip:'The strongest strengthener for a causal claim is evidence that the effect does NOT occur in a similar setting without the proposed cause.'},
+
+{question_id:'DM017', module:'DM', question_type:'Logical Puzzle', topic:'Sequencing', difficulty:'advanced', recommended_time:60, tags:'sequencing', active:true,
+ question_text:"Four hospital wards — Cardiology, Neurology, Oncology and Paediatrics — are each inspected on a different day: Monday, Tuesday, Wednesday or Thursday. Cardiology is inspected before Neurology. Oncology is not inspected on Monday or Thursday. Paediatrics is inspected the day immediately after Oncology. If Neurology is inspected on Thursday, on which day is Cardiology inspected?",
+ option_a:'Monday', option_b:'Tuesday', option_c:'Wednesday', option_d:'Thursday', option_e:'',
+ correct_answer:'A', explanation:"Oncology must be Tuesday or Wednesday. If Oncology were Wednesday, Paediatrics would be Thursday — clashing with Neurology on Thursday. So Oncology is Tuesday and Paediatrics is Wednesday. That leaves Monday and Thursday for Cardiology and Neurology; since Neurology is Thursday, Cardiology must be Monday (which is also before Neurology, satisfying the first clue).", technique_tip:'When one variable is fixed (Neurology = Thursday), test each remaining possibility for the next most constrained variable (Oncology) and eliminate contradictions.'},
 
 /* ---------------- QUANTITATIVE REASONING ---------------- */
 {question_id:'QR001', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'foundation', recommended_time:40, tags:'percentages', active:true,
@@ -607,7 +663,7 @@ const SEED_QUESTIONS = [
 {question_id:'QR004', module:'QR', question_type:'Financial Calculations', topic:'Financial Calculations', difficulty:'advanced', recommended_time:55, tags:'finance', active:true,
  question_text:"A clinic invests £5,000 at a compound interest rate of 4% per year. Approximately how much is the investment worth after 3 years (to the nearest £10)?",
  option_a:'£5,200', option_b:'£5,600', option_c:'£5,620', option_d:'£5,830', option_e:'£6,000',
- correct_answer:'D', explanation:'5000 × 1.04³ = 5000 × 1.124864 ≈ £5,624 ≈ £5,620–£5,630, closest option is £5,830 — recalculating: 1.04³ = 1.124864, 5000×1.124864 = 5624.32, nearest £10 is £5,620.', technique_tip:'For small interest rates over few years, 1.04³ ≈ 1 + 3(0.04) + small correction — use full multiplication only if time allows, otherwise approximate.'},
+ correct_answer:'C', explanation:'5000 × 1.04³ = 5000 × 1.124864 = 5,624.32, which rounds to £5,620 to the nearest £10.', technique_tip:'For small interest rates over few years, 1.04³ ≈ 1 + 3(0.04) + small correction — use full multiplication only if time allows, otherwise approximate.'},
 
 {question_id:'QR005', module:'QR', question_type:'Averages', topic:'Averages', difficulty:'foundation', recommended_time:40, tags:'averages', active:true,
  question_text:"Five patients wait 12, 15, 9, 20 and 14 minutes respectively to be seen. What is the mean waiting time?",
@@ -649,6 +705,31 @@ const SEED_QUESTIONS = [
  option_a:'6%', option_b:'12%', option_c:'15%', option_d:'20%', option_e:'25%',
  correct_answer:'C', explanation:'Increase = £6. Percentage increase = (6 ÷ 40) × 100 = 15%.', technique_tip:'\\[\\text{% change} = \\frac{\\text{change}}{\\text{original}} \\times 100\\]'},
 
+{question_id:'QR013', module:'QR', question_type:'Financial Calculations', topic:'Financial Calculations', difficulty:'advanced', recommended_time:60, tags:'finance', active:true,
+ question_text:"A savings account pays compound interest at 3% per year for the first 2 years, then 5% per year thereafter. If \\(£8,000\\) is invested, approximately how much is it worth after 4 years (to the nearest £10)?",
+ option_a:'£9,150', option_b:'£9,240', option_c:'£9,360', option_d:'£9,480', option_e:'£9,600',
+ correct_answer:'C', explanation:'After year 1: 8000×1.03=£8,240. Year 2: 8240×1.03=£8,487.20. Year 3: 8487.20×1.05=£8,911.56. Year 4: 8911.56×1.05≈£9,357.14, which rounds to £9,360.', technique_tip:"Apply each year's rate sequentially rather than averaging the two rates — compound growth is multiplicative, not additive."},
+
+{question_id:'QR014', module:'QR', question_type:'Ratios', topic:'Ratios', difficulty:'advanced', recommended_time:55, tags:'ratios', active:true,
+ question_text:"A hospital pharmacy mixes three components in the ratio 3:5:2 by volume to create 600ml of a solution. If an additional 100ml of the second component (only) is then added, what is the new ratio of the three components, in simplest form?",
+ option_a:'3:5:2', option_b:'9:20:6', option_c:'9:25:6', option_d:'3:8:2', option_e:'9:20:5',
+ correct_answer:'B', explanation:'Total parts = 10, so 1 part = 60ml: component amounts are 180ml, 300ml, 120ml. Adding 100ml to the second component gives 180:400:120, which simplifies (÷20) to 9:20:6.', technique_tip:"Convert to actual amounts first, apply the change, then re-simplify the ratio — don't try to adjust ratio numbers directly."},
+
+{question_id:'QR015', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'advanced', recommended_time:55, tags:'percentages', active:true,
+ question_text:"After a 20% pay rise, an employee's new salary is £42,000. A colleague, whose salary before any changes was equal to the employee's salary before the pay rise, then receives a 15% pay rise. What is the colleague's new salary?",
+ option_a:'£39,550', option_b:'£40,250', option_c:'£40,300', option_d:'£41,000', option_e:'£42,250',
+ correct_answer:'B', explanation:"The employee's salary before the rise = 42,000 ÷ 1.2 = £35,000, which is also the colleague's original salary. The colleague's new salary = 35,000 × 1.15 = £40,250.", technique_tip:'Reverse percentage problems: divide by (1 + rate) to find the original value, never subtract the percentage directly from the new value.'},
+
+{question_id:'QR016', module:'QR', question_type:'Area/Volume', topic:'Area', difficulty:'advanced', recommended_time:55, tags:'geometry', active:true,
+ question_text:"A cylindrical water tank has a radius of 1.4m and a height of 2.5m. Using \\(\\pi \\approx 22/7\\), what is the volume of the tank in cubic metres?",
+ option_a:'11.0', option_b:'13.7', option_c:'15.4', option_d:'17.2', option_e:'19.6',
+ correct_answer:'C', explanation:'Volume = πr²h = (22/7) × 1.4² × 2.5 = (22/7) × 1.96 × 2.5 = (22/7) × 4.9 = 22 × 0.7 = 15.4 m³.', technique_tip:'With π ≈ 22/7, look for radius values that divide cleanly by 7 (like 1.4) — the calculation simplifies nicely.'},
+
+{question_id:'QR017', module:'QR', question_type:'Multi-step Numerical Reasoning', topic:'Multi-step Reasoning', difficulty:'advanced', recommended_time:55, tags:'multistep', active:true,
+ question_text:"A taxi charges a £3.50 flat fee plus £1.80 per km. A rival taxi app charges no flat fee but £2.20 per km. For a journey of how many kilometres do the two options cost exactly the same?",
+ option_a:'5.0km', option_b:'7.0km', option_c:'8.75km', option_d:'10.5km', option_e:'12.25km',
+ correct_answer:'C', explanation:'Set the costs equal: 3.50 + 1.80x = 2.20x. So 3.50 = 0.40x, giving x = 8.75km.', technique_tip:'Set the two cost expressions equal and solve for the unknown distance — this is a standard break-even setup.'},
+
 /* ---------------- SITUATIONAL JUDGEMENT ---------------- */
 {question_id:'SJT001', module:'SJT', question_type:'Appropriateness Rating', topic:'Patient Safety', difficulty:'foundation', recommended_time:60, tags:'safety', active:true,
  question_text:"A student on work experience in a GP surgery notices a nurse about to give a patient a medication at what appears to be double the usual dose. The student is not a qualified clinician. What is the most appropriate action?",
@@ -689,6 +770,31 @@ const SEED_QUESTIONS = [
  question_text:"During a placement, a student hears a colleague make a dismissive comment about an elderly patient's ability to understand their treatment. What is the most appropriate response?",
  option_a:'Say nothing, since it was only a passing comment.', option_b:'Report the colleague to senior management immediately without further discussion.', option_c:'Privately and respectfully raise with the colleague how the comment could affect patient care and dignity.', option_d:'Make a similar comment back to make a point.', option_e:'',
  correct_answer:'C', explanation:'A calm, private, respectful conversation addressing the impact of the comment is proportionate and constructive, upholding professionalism without public confrontation or excessive escalation for a first occurrence.', technique_tip:'Respect/professionalism scenarios usually favour a proportionate private conversation over silence or high-level escalation.'},
+
+{question_id:'SJT009', module:'SJT', question_type:'Appropriateness Rating', topic:'Conflicts of Interest', difficulty:'advanced', recommended_time:60, tags:'conflict', active:true,
+ question_text:"A student representative sits on a university panel that is shortlisting candidates for a scholarship. One of the candidates is a close friend of the student representative. What is the most appropriate action?",
+ option_a:'Say nothing and take part in the shortlisting as normal, since friendship should not affect professional judgement.', option_b:'Declare the conflict of interest to the panel chair and follow their guidance on whether to recuse from discussing that candidate.', option_c:'Vote against the friend to avoid any appearance of favouritism.', option_d:'Withdraw from the panel entirely without explanation.', option_e:'',
+ correct_answer:'B', explanation:'The appropriate response to a conflict of interest is to declare it openly and let the person responsible for the process decide how it should be managed, rather than trying to manage it unilaterally in either direction.', technique_tip:'For conflict-of-interest scenarios, the most appropriate action is almost always to declare the conflict and follow guidance — not to self-manage it by overcompensating in either direction.'},
+
+{question_id:'SJT010', module:'SJT', question_type:'Appropriateness Rating', topic:'Patient Safety', difficulty:'advanced', recommended_time:60, tags:'safety,handover', active:true,
+ question_text:"A junior doctor is asked by a senior colleague to stay late to help complete an urgent task, but doing so will make the doctor miss a pre-arranged handover to the next shift, potentially leaving a patient's care details incomplete. What is the most appropriate response?",
+ option_a:'Stay late as asked, since senior colleagues should always be obeyed.', option_b:'Leave immediately without saying anything, to ensure the handover happens.', option_c:'Explain the handover conflict to the senior colleague and try to find a solution that ensures both the urgent task and a safe handover are covered.', option_d:'Complete a rushed, incomplete handover so there is time to help with the urgent task.', option_e:'',
+ correct_answer:'C', explanation:'Raising the conflict openly and seeking a solution protects patient safety (a complete handover) without simply ignoring the senior colleague or silently disappearing.', technique_tip:'When two obligations conflict, look for the option that raises the conflict openly and seeks a solution protecting patient safety, rather than silently choosing one side.'},
+
+{question_id:'SJT011', module:'SJT', question_type:'Appropriateness Rating', topic:'Fairness', difficulty:'advanced', recommended_time:60, tags:'fairness', active:true,
+ question_text:"A tutor has time to give detailed feedback to only some students before an exam and decides to prioritise those who ask first, rather than those who may need it most. A teaching assistant disagrees with this approach. What is the most appropriate action for the teaching assistant to take?",
+ option_a:"Say nothing, since it is the tutor's decision to make.", option_b:'Raise the concern privately with the tutor, suggesting a fairer method such as prioritising by need, and offer to help implement it.', option_c:'Give the extra feedback to students who need it most without telling the tutor.', option_d:"Complain to students that the tutor's approach is unfair.", option_e:'',
+ correct_answer:'B', explanation:'Raising the concern directly and constructively, with an offer to help, is the most appropriate way to influence a decision without undermining the tutor or bypassing the process.', technique_tip:"Disagreeing with a colleague's approach is best handled by raising it privately with a constructive alternative, not by working around them or airing it to those affected."},
+
+{question_id:'SJT012', module:'SJT', question_type:'Appropriateness Rating', topic:'Recognising Limitations', difficulty:'advanced', recommended_time:60, tags:'wellbeing', active:true,
+ question_text:"A final-year student, feeling unwell and exhausted after several late nights, is scheduled to lead a patient-facing simulation exercise that other students are relying on to complete their assessment. What is the most appropriate action?",
+ option_a:'Push through the exercise regardless of how unwell they feel, since others are relying on them.', option_b:'Not turn up, without telling anyone, to rest and recover.', option_c:'Inform the exercise organiser as soon as possible that they are unwell, so alternative arrangements can be made for the group.', option_d:'Ask a friend to pretend to be them during the exercise.', option_e:'',
+ correct_answer:'C', explanation:'Prompt, honest communication with whoever is responsible allows the group to be accommodated fairly, while being honest about reduced capacity — better than silent absence, forcing through it, or deception.', technique_tip:'When personal capacity is compromised, the most appropriate action is early, honest communication with whoever is responsible for the activity — not silent absence, forced attendance, or deception.'},
+
+{question_id:'SJT013', module:'SJT', question_type:'Appropriateness Rating', topic:'Professional Boundaries', difficulty:'advanced', recommended_time:60, tags:'gifts,boundaries', active:true,
+ question_text:"After a successful course of treatment, a patient tries to give a healthcare student a moderately expensive gift as a personal thank you. What is the most appropriate response?",
+ option_a:'Accept the gift privately and say nothing to anyone about it.', option_b:"Politely decline the gift, thank the patient sincerely for the gesture, and explain that accepting it would not be appropriate, following the organisation's policy on gifts.", option_c:'Accept the gift but tell the patient not to mention it to staff.', option_d:'Refuse the gift rudely and end the conversation immediately.', option_e:'',
+ correct_answer:'B', explanation:'A warm, honest, policy-compliant decline preserves the relationship and professionalism, unlike secretly accepting the gift or refusing it rudely.', technique_tip:'Gift scenarios in SJT usually reward a warm, honest decline that references policy, over silent acceptance or a cold refusal.'},
 
 /* end seed */
 ];
@@ -745,6 +851,7 @@ async function router(){
   else if (path === '#/admin/reports') { setActiveNav('#/admin'); app.innerHTML = await viewAdminReports(); }
   else { app.innerHTML = viewLanding(); }
   typeset();
+  if (path === '#/practice') updateCfgTopics();
 }
 window.addEventListener('hashchange', router);
 window.addEventListener('DOMContentLoaded', async () => { if (db) { await Data.seedIfEmpty(); } router(); buildCalc(); });
@@ -776,7 +883,7 @@ function viewLanding(){
    ============================================================ */
 async function viewPracticeSetup(){
   App.questions = await Data.getQuestions({ active: true });
-  const topics = [...new Set(App.questions.map(q => q.topic))].sort();
+  const topics = getTopicsForModule(MODULES[0]);
   return `
   <h2>Set up a practice session</h2>
   <p>Choose a module and configure your session, or jump into a mock test.</p>
@@ -784,24 +891,25 @@ async function viewPracticeSetup(){
     <div class="card">
       <h3>Custom practice</h3>
       <div class="field"><label>Module</label>
-        <select id="cfgModule">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}</select>
+        <select id="cfgModule" onchange="updateCfgTopics()">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}</select>
       </div>
       <div class="field"><label>Topic (optional)</label>
-        <select id="cfgTopic"><option value="">All topics</option>${topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select>
+        <select id="cfgTopic" onchange="refreshCfgAvailability()"><option value="">All topics</option>${topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select>
       </div>
       <div class="field"><label>Difficulty</label>
-        <select id="cfgDifficulty"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}">${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}</select>
+        <select id="cfgDifficulty" onchange="refreshCfgAvailability()"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}">${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}</select>
       </div>
       <div class="field"><label>Question source</label>
-        <select id="cfgSource"><option value="all">All active questions</option><option value="incorrect">Previously incorrect only</option><option value="new">Unseen questions only</option></select>
+        <select id="cfgSource" onchange="refreshCfgAvailability()"><option value="all">All active questions</option><option value="incorrect">Previously incorrect only</option><option value="new">Unseen questions only</option></select>
       </div>
       <div class="field"><label>Number of questions</label>
-        <input type="number" id="cfgCount" value="10" min="1" max="60">
+        <input type="number" id="cfgCount" value="10" min="1" max="60" oninput="clampCfgCount()">
+        <div id="cfgCountHint" style="font-size:12px; color:var(--ink-soft); margin-top:5px;"></div>
       </div>
       <div class="field"><label>Mode</label>
         <select id="cfgMode"><option value="learning">Learning (untimed, explanations shown immediately)</option><option value="timed">Timed practice</option></select>
       </div>
-      <button class="btn btn-primary" onclick="beginCustomSession()">Start practice</button>
+      <button class="btn btn-primary" id="cfgStartBtn" onclick="beginCustomSession()">Start practice</button>
     </div>
     <div class="card">
       <h3>Mock test</h3>
@@ -818,19 +926,80 @@ async function viewPracticeSetup(){
   </div>`;
 }
 
-async function pickQuestions(module, topic, difficulty, count, source){
+function filterQuestionPool(module, topic, difficulty){
   let pool = App.questions.filter(q => q.module === module);
   if (topic) pool = pool.filter(q => q.topic === topic);
   if (difficulty) pool = pool.filter(q => q.difficulty === difficulty);
+  return pool;
+}
+async function applySourceFilter(pool, source){
   if (source === 'incorrect') {
     const wrong = new Set((await Data.getResponses({ incorrectOnly: true })).map(r => r.questionId));
-    pool = pool.filter(q => wrong.has(q.id));
+    return pool.filter(q => wrong.has(q.id));
   } else if (source === 'new') {
     const seen = new Set((await Data.getResponses({})).map(r => r.questionId));
-    pool = pool.filter(q => !seen.has(q.id));
+    return pool.filter(q => !seen.has(q.id));
   }
+  return pool;
+}
+async function pickQuestions(module, topic, difficulty, count, source){
+  let pool = filterQuestionPool(module, topic, difficulty);
+  pool = await applySourceFilter(pool, source);
   pool = pool.sort(() => Math.random() - 0.5);
   return pool.slice(0, count);
+}
+
+/* ---- topic list + live "how many questions are available" limiter ---- */
+function getTopicsForModule(module){
+  return [...new Set(App.questions.filter(q => q.module === module).map(q => q.topic))].sort();
+}
+function updateCfgTopics(){
+  const module = document.getElementById('cfgModule').value;
+  const topics = getTopicsForModule(module);
+  const sel = document.getElementById('cfgTopic');
+  const prev = sel.value;
+  sel.innerHTML = `<option value="">All topics</option>` + topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+  sel.value = topics.includes(prev) ? prev : '';
+  refreshCfgAvailability();
+}
+async function countAvailableQuestions(module, topic, difficulty, source){
+  let pool = filterQuestionPool(module, topic, difficulty);
+  pool = await applySourceFilter(pool, source);
+  return pool.length;
+}
+async function refreshCfgAvailability(){
+  const moduleEl = document.getElementById('cfgModule');
+  if (!moduleEl) return;
+  const module = moduleEl.value;
+  const topic = document.getElementById('cfgTopic').value;
+  const difficulty = document.getElementById('cfgDifficulty').value;
+  const source = document.getElementById('cfgSource').value;
+  const available = await countAvailableQuestions(module, topic, difficulty, source);
+  const countInput = document.getElementById('cfgCount');
+  const hint = document.getElementById('cfgCountHint');
+  const startBtn = document.getElementById('cfgStartBtn');
+  if (!countInput) return;
+  countInput.max = Math.max(available, 1);
+  const current = parseInt(countInput.value) || 0;
+  if (available > 0 && current > available) countInput.value = available;
+  if (hint) {
+    hint.textContent = available === 0
+      ? 'No questions match these filters yet. Try broadening your selection or add more via the admin question bank.'
+      : `${available} question${available===1?'':'s'} available with these filters — you can select up to ${available}.`;
+    hint.style.color = available === 0 ? 'var(--accent-red)' : 'var(--ink-soft)';
+  }
+  if (startBtn) startBtn.disabled = available === 0;
+}
+function clampCfgCount(){
+  const el = document.getElementById('cfgCount');
+  if (!el) return;
+  const max = parseInt(el.max) || 60;
+  const min = parseInt(el.min) || 1;
+  if (el.value === '') return;
+  let v = parseInt(el.value);
+  if (isNaN(v)) return;
+  if (v > max) el.value = max;
+  else if (v < min) el.value = min;
 }
 
 async function beginCustomSession(){
@@ -838,10 +1007,12 @@ async function beginCustomSession(){
   const topic = document.getElementById('cfgTopic').value;
   const difficulty = document.getElementById('cfgDifficulty').value;
   const source = document.getElementById('cfgSource').value;
-  const count = parseInt(document.getElementById('cfgCount').value) || 10;
   const mode = document.getElementById('cfgMode').value;
+  const requested = parseInt(document.getElementById('cfgCount').value) || 10;
+  const available = await countAvailableQuestions(module, topic, difficulty, source);
+  if (!available) { alert('No questions match those filters yet. Try broadening your selection or add more via the admin question bank.'); return; }
+  const count = Math.min(requested, available);
   const questions = await pickQuestions(module, topic, difficulty, count, source);
-  if (!questions.length) { alert('No questions match those filters yet. Try broadening your selection or add more via the admin question bank.'); return; }
   const perQ = App.settings.moduleTiming[module] || 30;
   startSession({ mode, module, questions, totalSeconds: mode === 'timed' ? questions.length * perQ : null });
 }
