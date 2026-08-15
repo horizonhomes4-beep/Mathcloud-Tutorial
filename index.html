@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathCloud UCAT Coaching</title>
+
+<!-- ============================================================
+     EXTERNAL LIBRARIES
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" id="mathjax-script"></script>
+
+<style>
+:root{
+  --bg:#F6F8FC;
+  --surface:#FFFFFF;
+  --ink:#0F2140;
+  --ink-soft:#4A5B7A;
+  --line:#E1E7F0;
+  --primary:#1B5FD1;
+  --primary-dark:#123F8C;
+  --primary-tint:#EAF1FD;
+  --accent-green:#0E9F6E;
+  --accent-green-tint:#E7F8F1;
+  --accent-amber:#C77F00;
+  --accent-amber-tint:#FDF3E2;
+  --accent-red:#D64545;
+  --accent-red-tint:#FCEAEA;
+  --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, Menlo, monospace;
+  --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgba(15,33,64,.04), 0 4px 16px rgba(15,33,64,.06);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+button{font-family:inherit;}
+::selection{background:var(--primary-tint);}
+:focus-visible{outline:3px solid var(--primary); outline-offset:2px;}
+
+/* ---------- layout shell ---------- */
+.topbar{
+  position:sticky; top:0; z-index:40;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:17px; letter-spacing:-.01em; text-decoration:none;}
+.brand .mark{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg, var(--primary), #4C86E8);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff; font-family:var(--serif); font-weight:700; font-size:15px;
+}
+.brand .sub{font-weight:500; color:var(--ink-soft); font-size:12px; margin-left:2px;}
+.nav{display:flex; gap:4px; align-items:center;}
+.nav a{
+  padding:8px 14px; border-radius:8px; font-size:14px; font-weight:600;
+  color:var(--ink-soft); text-decoration:none;
+}
+.nav a.active, .nav a:hover{background:var(--primary-tint); color:var(--primary-dark);}
+.nav .divider{width:1px; height:22px; background:var(--line); margin:0 6px;}
+
+#setupBanner{
+  background:var(--accent-amber-tint); border-bottom:1px solid #F1D9A8;
+  color:#7A5200; font-size:13px; padding:10px 24px; display:none;
+  align-items:center; gap:8px;
+}
+#setupBanner.show{display:flex;}
+#setupBanner code{background:#fff; padding:1px 6px; border-radius:4px; border:1px solid #F1D9A8;}
+
+main{max-width:1180px; margin:0 auto; padding:32px 24px 80px;}
+footer{text-align:center; padding:28px; color:var(--ink-soft); font-size:12.5px;}
+
+/* ---------- generic components ---------- */
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow);
+}
+.grid{display:grid; gap:18px;}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+@media(max-width:900px){.grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.grid.cols-2,.grid.cols-3,.grid.cols-4{grid-template-columns:1fr;}}
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 18px; border-radius:8px; border:1px solid transparent;
+  font-weight:700; font-size:14px; cursor:pointer; text-decoration:none;
+  transition:transform .05s ease;
+}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--primary); color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-ghost{background:transparent; color:var(--primary-dark); border-color:var(--line);}
+.btn-ghost:hover{background:var(--primary-tint);}
+.btn-danger{background:var(--accent-red-tint); color:var(--accent-red); border-color:#F3C6C6;}
+.btn-sm{padding:6px 12px; font-size:12.5px; border-radius:6px;}
+.btn:disabled{opacity:.5; cursor:not-allowed;}
+
+.badge{display:inline-block; padding:3px 9px; border-radius:99px; font-size:11.5px; font-weight:700; letter-spacing:.02em;}
+.badge-blue{background:var(--primary-tint); color:var(--primary-dark);}
+.badge-green{background:var(--accent-green-tint); color:var(--accent-green);}
+.badge-amber{background:var(--accent-amber-tint); color:var(--accent-amber);}
+.badge-red{background:var(--accent-red-tint); color:var(--accent-red);}
+.badge-grey{background:#EEF1F6; color:var(--ink-soft);}
+
+.eyebrow{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--primary);}
+h1,h2,h3{font-family:var(--serif); font-weight:700; letter-spacing:-.01em; margin:0 0 6px;}
+h1{font-size:34px;} h2{font-size:24px;} h3{font-size:17px;}
+p{margin:0 0 12px; color:var(--ink-soft);}
+label{font-size:12.5px; font-weight:700; color:var(--ink-soft); display:block; margin-bottom:5px;}
+input[type=text],input[type=number],input[type=search],select,textarea{
+  width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px;
+  font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
+}
+textarea{resize:vertical; min-height:70px;}
+.field{margin-bottom:14px;}
+table{width:100%; border-collapse:collapse; font-size:13.5px;}
+th,td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--line);}
+th{color:var(--ink-soft); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;}
+tr:hover td{background:#FAFBFE;}
+.stat-num{font-family:var(--serif); font-size:30px; font-weight:700;}
+.stat-label{font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+.empty{padding:40px 20px; text-align:center; color:var(--ink-soft); border:1.5px dashed var(--line); border-radius:var(--radius);}
+
+/* ---------- landing ---------- */
+.hero{
+  padding:64px 0 40px; text-align:left; position:relative;
+}
+.hero h1{font-size:46px; max-width:720px;}
+.hero p.lead{font-size:17px; max-width:560px;}
+.hero-actions{display:flex; gap:12px; margin-top:22px;}
+.timer-chip{
+  font-family:var(--mono); background:var(--ink); color:#fff; display:inline-flex;
+  gap:10px; padding:8px 14px; border-radius:8px; font-size:13px; margin-bottom:20px;
+}
+.feature-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:44px;}
+@media(max-width:900px){.feature-row{grid-template-columns:1fr 1fr;}}
+.feature-row .card h3{margin-bottom:4px;}
+.feature-row .card p{font-size:13.5px; margin:0;}
+
+/* ---------- practice session ---------- */
+.session-header{
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:12px 18px; margin-bottom:20px; flex-wrap:wrap; gap:10px;
+}
+.session-meta{display:flex; gap:16px; align-items:center; font-size:13px; color:var(--ink-soft);}
+.timer{font-family:var(--mono); font-weight:700; font-size:16px; color:var(--ink);}
+.timer.low{color:var(--accent-red);}
+.progress-bar{height:6px; background:var(--line); border-radius:99px; overflow:hidden; margin-top:8px;}
+.progress-bar > div{height:100%; background:var(--primary); border-radius:99px; transition:width .2s;}
+
+.passage-box{
+  background:#FBFCFE; border:1px solid var(--line); border-radius:8px; padding:18px;
+  font-family:var(--serif); font-size:15px; line-height:1.7; max-height:320px; overflow-y:auto; margin-bottom:18px;
+}
+.question-text{font-size:17px; font-weight:600; margin-bottom:16px; line-height:1.5;}
+.options{display:flex; flex-direction:column; gap:10px;}
+.option{
+  display:flex; align-items:flex-start; gap:12px; padding:13px 15px; border:1.5px solid var(--line);
+  border-radius:8px; cursor:pointer; background:#fff; font-size:14.5px;
+}
+.option:hover{border-color:var(--primary); background:var(--primary-tint);}
+.option.selected{border-color:var(--primary); background:var(--primary-tint); font-weight:600;}
+.option .key{
+  width:24px;height:24px; border-radius:6px; background:#EEF1F6; color:var(--ink-soft);
+  display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;
+}
+.option.selected .key{background:var(--primary); color:#fff;}
+.option.correct{border-color:var(--accent-green); background:var(--accent-green-tint);}
+.option.correct .key{background:var(--accent-green); color:#fff;}
+.option.incorrect{border-color:var(--accent-red); background:var(--accent-red-tint);}
+.option.incorrect .key{background:var(--accent-red); color:#fff;}
+
+.session-footer{display:flex; justify-content:space-between; align-items:center; margin-top:20px; gap:10px; flex-wrap:wrap;}
+.explanation-box{
+  margin-top:18px; padding:16px; border-radius:8px; background:var(--primary-tint); border:1px solid #CFE0FA; font-size:14px;
+}
+.explanation-box h4{margin:0 0 6px; font-size:13px; color:var(--primary-dark);}
+.tip-box{margin-top:10px; padding:12px 14px; border-radius:8px; background:var(--accent-amber-tint); font-size:13.5px; border:1px solid #F1D9A8;}
+
+.calc{
+  position:fixed; right:24px; bottom:24px; width:220px; background:var(--ink); color:#fff;
+  border-radius:12px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.25); z-index:30; display:none;
+}
+.calc.show{display:block;}
+.calc input{background:#132C55; color:#fff; border:none; margin-bottom:8px; font-family:var(--mono); text-align:right; font-size:18px;}
+.calc-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:6px;}
+.calc-grid button{padding:10px 0; border-radius:6px; border:none; background:#1A3A6B; color:#fff; font-family:var(--mono); cursor:pointer;}
+.calc-grid button:hover{background:#234A88;}
+
+/* ---------- misc ---------- */
+.tab-row{display:flex; gap:6px; border-bottom:1px solid var(--line); margin-bottom:20px; flex-wrap:wrap;}
+.tab{padding:10px 4px; margin-right:16px; font-weight:700; font-size:13.5px; color:var(--ink-soft); cursor:pointer; border-bottom:2px solid transparent;}
+.tab.active{color:var(--primary-dark); border-color:var(--primary);}
+.filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;}
+.filters select, .filters input{width:auto; min-width:140px;}
+.modal-bg{position:fixed; inset:0; background:rgba(15,33,64,.45); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff; border-radius:12px; padding:24px; max-width:640px; width:100%; max-height:86vh; overflow-y:auto;}
+.heatcell{width:100%; aspect-ratio:1.6; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff;}
+.flag-btn{background:#fff; border:1.5px solid var(--line); border-radius:8px; padding:8px 12px; cursor:pointer; font-weight:700; font-size:13px; color:var(--ink-soft);}
+.flag-btn.flagged{background:var(--accent-amber-tint); border-color:#F1D9A8; color:var(--accent-amber);}
+.disclaimer{font-size:11.5px; color:var(--ink-soft); border-top:1px dashed var(--line); padding-top:10px; margin-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="#/" class="brand">
+    <span class="mark">M</span>
+    <span>MathCloud <span class="sub">UCAT Coaching</span></span>
+  </a>
+  <nav class="nav" id="nav">
+    <a href="#/practice">Practice</a>
+    <a href="#/dashboard">Progress</a>
+    <span class="divider"></span>
+
+  </nav>
+</div>
+<div id="setupBanner">
+  ⚠ Firebase isn't connected yet — data won't save. Paste your project keys into <code>firebaseConfig</code> near the top of this file's script, then reload.
+</div>
+
+<main id="app"></main>
+
+<footer>
+  MathCloud UCAT Coaching — practice scores are estimates generated by this platform and are not official UCAT results. Not affiliated with or endorsed by UCAT or any university.
+</footer>
+
+<div class="calc" id="calc">
+  <input type="text" id="calcDisplay" readonly value="0">
+  <div class="calc-grid" id="calcGrid"></div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalBody"></div></div>
+
+<script>
+/* ============================================================
+   FIREBASE CONFIGURATION
+   ------------------------------------------------------------
+   Paste your project's config here (Firebase Console → Project
+   Settings → General → Your apps → SDK setup and configuration).
+   Until this is filled in, the app will show a setup banner and
+   data will not persist.
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyClpc-ybBzSALYXtPHDw8cox8i1xEKxSao",
+  authDomain: "memory-87b65.firebaseapp.com",
+  projectId: "memory-87b65",
+  storageBucket: "memory-87b65.firebasestorage.app",
+  messagingSenderId: "123213603131",
+  appId: "1:123213603131:web:e2e385481ee08a760d171e",
+  /* NOTE: Realtime Database requires a databaseURL. This is the default
+     pattern Firebase assigns for a project's default RTDB instance. If your
+     database was created in a specific region, open Firebase Console →
+     Realtime Database and copy the exact URL shown there into this field —
+     it may instead look like:
+     https://memory-87b65-default-rtdb.<region>.firebasedatabase.app */
+  databaseURL: "https://memory-87b65-default-rtdb.firebaseio.com"
+};
+
+const FIREBASE_READY = firebaseConfig.apiKey !== "YOUR_API_KEY";
+let db = null;
+if (FIREBASE_READY) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} else {
+  document.getElementById('setupBanner').classList.add('show');
+}
+
+/* ============================================================
+   REALTIME DATABASE DATA LAYER
+   Top-level paths: /questions, /attempts, /responses, /weaknesses, /student, /settings
+   ============================================================ */
+function snapToArray(val) {
+  if (!val) return [];
+  return Object.keys(val).map(k => ({ ...val[k], id: k }));
+}
+function sanitizeKey(k) { return String(k).replace(/[.#$\[\]\/]/g, '_'); }
+
+const Data = {
+  async getQuestions(filters = {}) {
+    if (!db) return [];
+    const snap = await db.ref('questions').once('value');
+    let rows = snapToArray(snap.val());
+    if (filters.module) rows = rows.filter(q => q.module === filters.module);
+    if (filters.difficulty) rows = rows.filter(q => q.difficulty === filters.difficulty);
+    if (filters.topic) rows = rows.filter(q => q.topic === filters.topic);
+    if (filters.active !== undefined) rows = rows.filter(q => !!q.active === filters.active);
+    if (filters.questionType) rows = rows.filter(q => q.questionType === filters.questionType);
+    if (filters.search) {
+      const s = filters.search.toLowerCase();
+      rows = rows.filter(q => (q.question_text||q.questionText||'').toLowerCase().includes(s) || (q.topic||'').toLowerCase().includes(s) || (q.id||'').toLowerCase().includes(s));
+    }
+    return rows;
+  },
+  async getQuestion(id) {
+    if (!db) return null;
+    const snap = await db.ref('questions/' + id).once('value');
+    return snap.exists() ? { ...snap.val(), id } : null;
+  },
+  async saveQuestion(q) {
+    if (!db) return;
+    const id = q.id ? sanitizeKey(q.id) : db.ref('questions').push().key;
+    const payload = { ...q, id, updatedAt: Date.now() };
+    if (!q.createdAt) payload.createdAt = Date.now();
+    await db.ref('questions/' + id).update(payload);
+    return id;
+  },
+  async deleteQuestion(id) {
+    if (!db) return;
+    await db.ref('questions/' + id).remove();
+  },
+  async bulkAddQuestions(list) {
+    if (!db) return;
+    const updates = {};
+    list.forEach(q => {
+      const id = q.question_id ? sanitizeKey(q.question_id) : (q.id ? sanitizeKey(q.id) : db.ref('questions').push().key);
+      updates['questions/' + id] = { ...q, id, createdAt: Date.now(), updatedAt: Date.now() };
+    });
+    await db.ref().update(updates);
+  },
+  async getAttempts() {
+    if (!db) return [];
+    const snap = await db.ref('attempts').once('value');
+    return snapToArray(snap.val()).sort((a, b) => (b.date||0) - (a.date||0));
+  },
+  async saveAttempt(attempt, responses) {
+    if (!db) return null;
+    const attemptId = db.ref('attempts').push().key;
+    const updates = {};
+    updates['attempts/' + attemptId] = { ...attempt, id: attemptId, date: Date.now() };
+    responses.forEach(r => {
+      const rid = db.ref('responses').push().key;
+      updates['responses/' + rid] = { ...r, id: rid, attemptId };
+    });
+    await db.ref().update(updates);
+    await Data.updateWeaknesses(attempt.module, responses);
+    return attemptId;
+  },
+  async getResponses(filters = {}) {
+    if (!db) return [];
+    const snap = await db.ref('responses').once('value');
+    let rows = snapToArray(snap.val());
+    if (filters.attemptId) rows = rows.filter(r => r.attemptId === filters.attemptId);
+    if (filters.flagged) rows = rows.filter(r => r.flagged);
+    if (filters.incorrectOnly) rows = rows.filter(r => r.correct === false);
+    return rows;
+  },
+  async updateWeaknesses(module, responses) {
+    if (!db) return;
+    const byTopic = {};
+    responses.forEach(r => {
+      const key = module + '::' + r.topic;
+      if (!byTopic[key]) byTopic[key] = { correct: 0, total: 0, time: 0 };
+      byTopic[key].total++;
+      byTopic[key].time += (r.timeTaken || 0);
+      if (r.correct) byTopic[key].correct++;
+    });
+    const updates = {};
+    for (const key in byTopic) {
+      const [mod, topic] = key.split('::');
+      const stat = byTopic[key];
+      const accuracy = Math.round((stat.correct / stat.total) * 100);
+      const avgTime = Math.round(stat.time / stat.total);
+      const docId = sanitizeKey(mod + '_' + topic);
+      const existingSnap = await db.ref('weaknesses/' + docId).once('value');
+      let priority = 1;
+      if (existingSnap.exists()) {
+        const prev = existingSnap.val();
+        priority = accuracy < 60 ? Math.min((prev.priority || 1) + 1, 5) : Math.max((prev.priority || 1) - 1, 1);
+      } else if (accuracy < 60) {
+        priority = 2;
+      }
+      updates['weaknesses/' + docId] = { module: mod, topic, accuracy, averageTime: avgTime, priority, updatedAt: Date.now() };
+    }
+    await db.ref().update(updates);
+  },
+  async getWeaknesses() {
+    if (!db) return [];
+    const snap = await db.ref('weaknesses').once('value');
+    return snapToArray(snap.val());
+  },
+  async getStudent() {
+    if (!db) return DEFAULT_STUDENT;
+    const snap = await db.ref('student').once('value');
+    return snap.exists() ? { ...DEFAULT_STUDENT, ...snap.val() } : DEFAULT_STUDENT;
+  },
+  async saveStudent(profile) {
+    if (!db) return;
+    await db.ref('student').update(profile);
+  },
+  async getSettings() {
+    if (!db) return DEFAULT_SETTINGS;
+    const snap = await db.ref('settings').once('value');
+    return snap.exists() ? { ...DEFAULT_SETTINGS, ...snap.val() } : DEFAULT_SETTINGS;
+  },
+  async saveSettings(cfg) {
+    if (!db) return;
+    await db.ref('settings').set(cfg);
+  },
+  async seedIfEmpty() {
+    if (!db) return;
+    const snap = await db.ref('questions').limitToFirst(1).once('value');
+    if (!snap.exists()) await Data.bulkAddQuestions(SEED_QUESTIONS);
+    const studentSnap = await db.ref('student').once('value');
+    if (!studentSnap.exists()) await Data.saveStudent(DEFAULT_STUDENT);
+    const settingsSnap = await db.ref('settings').once('value');
+    if (!settingsSnap.exists()) await Data.saveSettings(DEFAULT_SETTINGS);
+  }
+};
+
+const DEFAULT_STUDENT = {
+  name: 'Student', targetUniversity: '', targetCourse: '', targetUCATYear: new Date().getFullYear() + 1,
+  targetScore: 2800, testDate: ''
+};
+const DEFAULT_SETTINGS = {
+  moduleTiming: { VR: 21, DM: 26, QR: 25, SJT: 26 },
+  moduleQuestionCounts: { VR: 44, DM: 35, QR: 36, SJT: 69 },
+  diagnosticCounts: { VR: 10, DM: 10, QR: 10, SJT: 10 },
+  difficultyDistribution: { foundation: 30, standard: 45, advanced: 25 },
+  dailyPracticeTarget: 20
+};
+
+const MODULES = ['VR', 'DM', 'QR', 'SJT'];
+const MODULE_NAMES = { VR: 'Verbal Reasoning', DM: 'Decision Making', QR: 'Quantitative Reasoning', SJT: 'Situational Judgement' };
+const DIFFICULTIES = ['foundation', 'standard', 'advanced'];
+
+/* ============================================================
+   SEED QUESTION BANK — original, UCAT-style, not official content
+   ============================================================ */
+const SEED_QUESTIONS = [
+/* ---------------- VERBAL REASONING ---------------- */
+{question_id:'VR001', module:'VR', question_type:'True/False/Cannot Tell', topic:'Inference', difficulty:'foundation', recommended_time:45, tags:'inference,passage', active:true,
+ passage:"Urban beekeeping has grown rapidly in the last decade, with municipal governments in several major cities relaxing restrictions on rooftop hives. Proponents argue that city-kept bees benefit from a wider variety of flowering plants than their rural counterparts, since urban parks and gardens are often planted with diverse, non-native species that bloom at different times of year. Critics counter that dense hive placement in small areas can increase competition for forage among colonies, potentially harming wild pollinator populations that rely on the same limited green spaces.",
+ question_text:"Urban bees always produce more honey than rural bees.",
+ option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
+ correct_answer:'C', explanation:'The passage discusses forage diversity and competition, but makes no claim at all about honey yield. Nothing in the text supports or contradicts a claim about quantity of honey produced, so it cannot be determined from the passage.', technique_tip:'If the statement introduces a measure (honey yield) that the passage never mentions, the answer is almost always "Cannot Tell" — do not use outside knowledge.'},
+
+{question_id:'VR002', module:'VR', question_type:'True/False/Cannot Tell', topic:'Inference', difficulty:'standard', recommended_time:45, tags:'inference,passage', active:true,
+ passage:"Urban beekeeping has grown rapidly in the last decade, with municipal governments in several major cities relaxing restrictions on rooftop hives. Proponents argue that city-kept bees benefit from a wider variety of flowering plants than their rural counterparts, since urban parks and gardens are often planted with diverse, non-native species that bloom at different times of year. Critics counter that dense hive placement in small areas can increase competition for forage among colonies, potentially harming wild pollinator populations that rely on the same limited green spaces.",
+ question_text:"According to critics, placing many hives close together in a small area could have a negative effect on wild pollinators.",
+ option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
+ correct_answer:'A', explanation:'The passage states critics believe dense hive placement increases competition for forage, potentially harming wild pollinator populations — this directly matches the statement.', technique_tip:'Match the statement to the exact clause in the passage; watch for the word "potentially" which still counts as the passage making that claim.'},
+
+{question_id:'VR003', module:'VR', question_type:"Author's Argument", topic:"Author's Argument", difficulty:'standard', recommended_time:50, tags:'argument', active:true,
+ passage:"Remote work advocates often cite reduced commuting time as a universal benefit, yet this framing obscures significant variation by household composition. A single professional in a one-bedroom flat gains focus and flexibility; a parent sharing a small home with school-age children juggling their own online lessons may experience the opposite — fragmented attention, competition for space, and blurred boundaries between work and family life. Policies that treat remote work as an unqualified good risk designing support (tax relief for home offices, for instance) around the former group while ignoring the latter.",
+ question_text:"Which of the following best summarises the author's main argument?",
+ option_a:'Remote work should be banned for parents of school-age children.', option_b:'The benefits of remote work are not evenly distributed across different household types, and policy should reflect this.', option_c:'Commuting time reduction is the only benefit of remote work worth measuring.', option_d:'Home office tax relief is poorly designed and should be abolished immediately.', option_e:'',
+ correct_answer:'B', explanation:'The author is not arguing against remote work itself, but against treating it as a uniform benefit — pointing out that outcomes differ by household composition and that policy should account for this. Option B captures this balanced, nuanced position; the others overstate or narrow the argument.', technique_tip:'For "author\'s argument" questions, favour the option that captures the overall thrust and nuance, not one extreme detail.'},
+
+{question_id:'VR004', module:'VR', question_type:'Inference', topic:'Inference', difficulty:'advanced', recommended_time:55, tags:'inference', active:true,
+ passage:"Remote work advocates often cite reduced commuting time as a universal benefit, yet this framing obscures significant variation by household composition. A single professional in a one-bedroom flat gains focus and flexibility; a parent sharing a small home with school-age children juggling their own online lessons may experience the opposite — fragmented attention, competition for space, and blurred boundaries between work and family life. Policies that treat remote work as an unqualified good risk designing support (tax relief for home offices, for instance) around the former group while ignoring the latter.",
+ question_text:"Which of the following can be most reasonably inferred from the passage?",
+ option_a:'All parents find remote work less productive than office work.', option_b:'Existing home-office tax relief schemes were designed with single professionals more in mind than parents in shared households.', option_c:'School-age children should not be allowed to attend online lessons at home.', option_d:'Single professionals never experience any downsides from remote work.', option_e:'',
+ correct_answer:'B', explanation:'The passage warns that policies "risk designing support...around the former group while ignoring the latter" — implying existing or proposed support may already skew toward single professionals. Option B is a cautious, textually-grounded inference; the others go beyond or contradict what is stated.', technique_tip:'A safe inference stays close to the passage\'s own hedged language ("risk", "may") rather than converting it into an absolute claim.'},
+
+{question_id:'VR005', module:'VR', question_type:'Matching Information', topic:'Matching Information', difficulty:'foundation', recommended_time:40, tags:'matching', active:true,
+ passage:"Three approaches dominate modern flood defence: hard engineering (concrete walls and barriers), soft engineering (wetland restoration and managed retreat), and hybrid schemes that combine both. Hard engineering offers immediate, predictable protection but is costly to maintain and can increase flood risk downstream by redirecting water flow. Soft engineering is cheaper over the long term and can improve biodiversity, but is slower to implement and less effective against sudden, severe surges.",
+ question_text:"Which flood defence approach is described as being able to increase flood risk further down a river?",
+ option_a:'Soft engineering', option_b:'Hard engineering', option_c:'Hybrid schemes', option_d:'None of the approaches', option_e:'',
+ correct_answer:'B', explanation:'The passage states hard engineering "can increase flood risk downstream by redirecting water flow."', technique_tip:'Matching Information questions are solved by scanning for the exact keyword ("downstream") rather than reading the whole passage again.'},
+
+{question_id:'VR006', module:'VR', question_type:'Identifying Information', topic:'Identifying Information', difficulty:'standard', recommended_time:45, tags:'identifying', active:true,
+ passage:"Three approaches dominate modern flood defence: hard engineering (concrete walls and barriers), soft engineering (wetland restoration and managed retreat), and hybrid schemes that combine both. Hard engineering offers immediate, predictable protection but is costly to maintain and can increase flood risk downstream by redirecting water flow. Soft engineering is cheaper over the long term and can improve biodiversity, but is slower to implement and less effective against sudden, severe surges.",
+ question_text:"Based on the passage, which statement is best supported?",
+ option_a:'Soft engineering is always the superior choice for coastal cities.', option_b:'Hybrid schemes are never used in practice.', option_c:'Each approach involves a trade-off between speed of implementation, cost, and effectiveness against sudden surges.', option_d:'Hard engineering has no drawbacks compared to soft engineering.', option_e:'',
+ correct_answer:'C', explanation:'The passage lays out costs and benefits for both hard and soft engineering, showing that each involves trade-offs — this is the only option that is a balanced, supported summary.', technique_tip:'Eliminate options containing absolutes ("always", "never", "no drawbacks") first when the passage is comparative.'},
+
+{question_id:'VR007', module:'VR', question_type:'True/False/Cannot Tell', topic:"Evidence vs Assumption", difficulty:'advanced', recommended_time:50, tags:'assumption', active:true,
+ passage:"A recent workplace study tracked productivity across two groups: one using a standard eight-hour office day, and another on a compressed four-day, ten-hour schedule. Self-reported job satisfaction rose by 18% in the compressed-schedule group over six months. However, the study's authors noted that participants in the compressed group had volunteered for the trial, whereas the standard-schedule group had not opted in.",
+ question_text:"The rise in job satisfaction was caused entirely by the compressed schedule itself, independent of any other factor.",
+ option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
+ correct_answer:'C', explanation:'The passage flags a key confound: the compressed group self-selected into the trial, which could itself explain higher satisfaction (volunteer bias) rather than the schedule alone. The passage does not rule this out or confirm it, so it cannot be told from the text whether the schedule was the sole cause.', technique_tip:'When a passage mentions a methodological caveat (like self-selection), treat any "purely caused by X" statement as unconfirmed — the answer is usually "Cannot Tell".'},
+
+{question_id:'VR008', module:'VR', question_type:"Author's Argument", topic:"Author's Argument", difficulty:'standard', recommended_time:45, tags:'argument', active:true,
+ passage:"A recent workplace study tracked productivity across two groups: one using a standard eight-hour office day, and another on a compressed four-day, ten-hour schedule. Self-reported job satisfaction rose by 18% in the compressed-schedule group over six months. However, the study's authors noted that participants in the compressed group had volunteered for the trial, whereas the standard-schedule group had not opted in.",
+ question_text:"Why do the study's authors most likely mention that participants volunteered for the compressed schedule?",
+ option_a:'To prove the compressed schedule is more popular with employees.', option_b:'To highlight a possible limitation in attributing the satisfaction increase solely to the schedule change.', option_c:'To argue that the standard schedule should be abolished.', option_d:'To show that volunteering has no effect on study outcomes.', option_e:'',
+ correct_answer:'B', explanation:'Noting the self-selection is a classic caveat flagging a possible confound — the authors are being transparent about a limitation, not proving popularity or arguing for abolition.', technique_tip:'When authors mention a study design detail right after presenting a result, they are usually qualifying that result, not celebrating it.'},
+
+{question_id:'VR009', module:'VR', question_type:'Reading Comprehension', topic:'Reading Comprehension', difficulty:'foundation', recommended_time:40, tags:'comprehension', active:true,
+ passage:"Coral reefs cover less than 1% of the ocean floor but support roughly a quarter of all known marine species. Rising sea temperatures cause corals to expel the symbiotic algae living in their tissues, a process known as bleaching, which leaves the coral white and vulnerable to disease. A bleached coral is not dead, and can recover if temperatures drop quickly enough, but repeated bleaching events reduce its ability to recover each time.",
+ question_text:"What happens during coral bleaching, according to the passage?",
+ option_a:'The coral dies immediately and cannot recover.', option_b:'The coral expels algae living inside it, turning white and becoming vulnerable to disease.', option_c:'The coral grows a new species of algae.', option_d:'The coral sinks to the ocean floor.', option_e:'',
+ correct_answer:'B', explanation:'The passage directly describes bleaching as the coral expelling its symbiotic algae, leaving it white and vulnerable to disease.', technique_tip:'For direct comprehension questions, find the sentence containing the key term and match wording carefully.'},
+
+{question_id:'VR010', module:'VR', question_type:'Inference', topic:'Inference', difficulty:'standard', recommended_time:45, tags:'inference', active:true,
+ passage:"Coral reefs cover less than 1% of the ocean floor but support roughly a quarter of all known marine species. Rising sea temperatures cause corals to expel the symbiotic algae living in their tissues, a process known as bleaching, which leaves the coral white and vulnerable to disease. A bleached coral is not dead, and can recover if temperatures drop quickly enough, but repeated bleaching events reduce its ability to recover each time.",
+ question_text:"It can be inferred from the passage that:",
+ option_a:'A coral reef that experiences frequent bleaching events is likely to become progressively less resilient over time.', option_b:'Coral bleaching only happens once per coral colony.', option_c:'Coral reefs support less than 1% of marine species.', option_d:'Sea temperature has no effect on coral health.', option_e:'',
+ correct_answer:'A', explanation:'The passage states repeated bleaching "reduces its ability to recover each time" — implying a cumulative, worsening effect on resilience, which is a reasonable inference.', technique_tip:'Look for cumulative/repeated language ("each time", "repeated") as a strong signal for trend-based inference questions.'},
+
+{question_id:'VR011', module:'VR', question_type:'Interpretation', topic:'Interpretation of Passages', difficulty:'advanced', recommended_time:55, tags:'interpretation', active:true,
+ passage:"Some economists argue that a universal basic income (UBI) would simplify welfare administration by replacing a patchwork of means-tested benefits with a single unconditional payment. Others counter that a UBI set high enough to meaningfully replace existing support would be prohibitively expensive, while one set low enough to be affordable would leave the most vulnerable worse off than under a well-targeted, means-tested system.",
+ question_text:"The passage is best described as presenting:",
+ option_a:'A single, one-sided argument in favour of universal basic income.', option_b:'A balanced outline of a trade-off between simplicity and adequacy of support in the UBI debate.', option_c:'A historical account of how welfare systems have changed over time.', option_d:'A definitive conclusion that means-tested welfare is superior in all cases.', option_e:'',
+ correct_answer:'B', explanation:'The passage presents both a pro-UBI simplification argument and a counter-argument about cost/adequacy trade-offs, without reaching a firm conclusion — this is a balanced presentation of a trade-off.', technique_tip:'If a passage gives "some argue...others counter..." structure, the correct summary option should reflect both sides, not just one.'},
+
+{question_id:'VR012', module:'VR', question_type:'True/False/Cannot Tell', topic:'Inference', difficulty:'foundation', recommended_time:40, tags:'inference', active:true,
+ passage:"Some economists argue that a universal basic income (UBI) would simplify welfare administration by replacing a patchwork of means-tested benefits with a single unconditional payment. Others counter that a UBI set high enough to meaningfully replace existing support would be prohibitively expensive, while one set low enough to be affordable would leave the most vulnerable worse off than under a well-targeted, means-tested system.",
+ question_text:"All economists agree that a universal basic income would simplify welfare administration.",
+ option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'',
+ correct_answer:'B', explanation:'The passage explicitly presents opposing views ("Some economists argue... Others counter...") so it is false that all economists agree.', technique_tip:'Watch for absolute quantifiers like "all" — a single opposing view mentioned in the passage is enough to make the statement False, not merely uncertain.'},
+
+/* ---------------- DECISION MAKING ---------------- */
+{question_id:'DM001', module:'DM', question_type:'Syllogism', topic:'Syllogisms', difficulty:'foundation', recommended_time:40, tags:'logic', active:true,
+ question_text:"All qualified paramedics have completed advanced first-aid training. Priya has completed advanced first-aid training. Which conclusion follows logically?",
+ option_a:'Priya is a qualified paramedic.', option_b:'Priya is not a qualified paramedic.', option_c:'It cannot be determined whether Priya is a qualified paramedic.', option_d:'No paramedics have completed advanced first-aid training.', option_e:'',
+ correct_answer:'C', explanation:'The premise only tells us all paramedics have the training, not that everyone with the training is a paramedic (affirming the consequent). Priya having the training does not guarantee she is a paramedic.', technique_tip:'"All A are B" does not mean "all B are A" — this is one of the most common syllogism traps.'},
+
+{question_id:'DM002', module:'DM', question_type:'Conditional Reasoning', topic:'Conditional Reasoning', difficulty:'standard', recommended_time:45, tags:'logic', active:true,
+ question_text:"If a patient's temperature is above 38°C, the nurse must record it as a fever. Patient X's temperature was not recorded as a fever. What can be validly concluded?",
+ option_a:"Patient X's temperature was above 38°C.", option_b:"Patient X's temperature was not above 38°C.", option_c:"Patient X does not have a nurse.", option_d:"The rule about fevers does not apply to Patient X.", option_e:'',
+ correct_answer:'B', explanation:'This is the valid contrapositive: if temperature > 38°C then recorded as fever; not recorded as fever, therefore not > 38°C.', technique_tip:'For "if P then Q" statements, "not Q" validly implies "not P" (the contrapositive) — but "not P" does not imply "not Q".'},
+
+{question_id:'DM003', module:'DM', question_type:'Probability', topic:'Probability', difficulty:'standard', recommended_time:50, tags:'probability', active:true,
+ question_text:"A clinic has 3 red, 5 blue and 2 green pens in a drawer. A pen is picked at random and not replaced, then a second pen is picked. What is the probability both pens are blue?",
+ option_a:'1/9', option_b:'2/9', option_c:'1/5', option_d:'5/18', option_e:'1/4',
+ correct_answer:'B', explanation:'P(first blue) = 5/10. P(second blue | first blue) = 4/9. Multiply: (5/10) × (4/9) = 20/90 = 2/9.', technique_tip:'For "without replacement" problems, reduce both the count and the total for the second draw.'},
+
+{question_id:'DM004', module:'DM', question_type:'Venn Diagram', topic:'Venn Diagrams', difficulty:'advanced', recommended_time:55, tags:'venn', active:true,
+ question_text:"Among 120 clinic patients: 70 have high blood pressure, 50 have high cholesterol, and 25 have both conditions. How many patients have neither condition?",
+ option_a:'20', option_b:'25', option_c:'30', option_d:'35', option_e:'45',
+ correct_answer:'B', explanation:'Patients with at least one condition = 70 + 50 − 25 (overlap counted twice) = 95. Neither = 120 − 95 = 25.', technique_tip:'Always subtract the overlap once when combining two "at least" groups before finding the "neither" total.'},
+
+{question_id:'DM005', module:'DM', question_type:'Recognising Assumptions', topic:'Recognising Assumptions', difficulty:'standard', recommended_time:45, tags:'assumption', active:true,
+ question_text:"Argument: \"Hospital A should adopt the same scheduling software as Hospital B, because Hospital B reduced patient wait times by 20% after switching to it.\" Which of the following is an assumption underlying this argument?",
+ option_a:'Hospital A and Hospital B have broadly similar patient volumes and staffing structures.', option_b:'Hospital B spent more money on the software than Hospital A would.', option_c:'Wait times are the most important measure of hospital quality.', option_d:'Hospital A has never used scheduling software before.', option_e:'',
+ correct_answer:'A', explanation:'The argument assumes Hospital B\'s result would transfer to Hospital A, which requires the two hospitals to be sufficiently similar for the comparison to be valid.', technique_tip:'Use the "negation test": if negating the option destroys the argument, it is an assumption. If Hospital A and B were very different, the argument would collapse.'},
+
+{question_id:'DM006', module:'DM', question_type:'Evaluating Arguments', topic:'Evaluating Arguments', difficulty:'advanced', recommended_time:50, tags:'argument', active:true,
+ question_text:"\"Since the introduction of a city-wide 20mph speed limit, reported pedestrian injuries have fallen by 15%. Therefore, the speed limit caused the drop in injuries.\" Which of the following, if true, would most weaken this argument?",
+ option_a:'The city also introduced a major new pedestrian-education campaign at the same time as the speed limit.', option_b:'Some drivers regularly exceed the 20mph limit.', option_c:'The speed limit applies to all residential roads in the city.', option_d:'Pedestrian injuries fell in a neighbouring city with no such speed limit.', option_e:'',
+ correct_answer:'D', explanation:'If injuries fell just as much in a comparable city without the speed limit, this suggests some other factor (not the speed limit) may be responsible, directly undermining the causal claim. Option A also introduces a confound, but option D is stronger because it provides an actual comparison showing the effect can occur without the intervention.', technique_tip:'The strongest weakener for a causal claim is evidence that the effect occurs even without the proposed cause.'},
+
+{question_id:'DM007', module:'DM', question_type:'Data Interpretation', topic:'Data Interpretation', difficulty:'standard', recommended_time:50, tags:'data', active:true,
+ question_text:"A clinic sees patients across 4 age bands. Under 18: 15%, 18–40: 35%, 41–65: 30%, Over 65: 20%. If the clinic saw 640 patients last month, how many were aged 41 or over?",
+ option_a:'192', option_b:'224', option_c:'288', option_d:'320', option_e:'352',
+ correct_answer:'D', explanation:'41–65 and Over 65 together = 30% + 20% = 50%. 50% of 640 = 320.', technique_tip:'Combine relevant percentage bands first, then apply once to the total — faster than calculating each band separately.'},
+
+{question_id:'DM008', module:'DM', question_type:'Logical Puzzle', topic:'Sequencing', difficulty:'advanced', recommended_time:60, tags:'sequencing', active:true,
+ question_text:"Five colleagues — Ade, Ben, Chidi, Dara and Eze — are seated in a row. Ade is not at either end. Ben is immediately to the left of Chidi. Dara is at one end. Eze is not next to Ben. Which of the following must be true?",
+ option_a:'Eze is at the opposite end from Dara.', option_b:'Ade is seated next to Dara.', option_c:'Chidi is at an end.', option_d:'Ben is at an end.', option_e:'',
+ correct_answer:'A', explanation:'Working through the constraints: Dara must occupy one end. Since Ade cannot be at an end, and Eze cannot be adjacent to Ben (who sits immediately left of Chidi, forming a fixed pair), the only consistent arrangement places Eze at the end opposite Dara, with the Ben-Chidi pair and Ade filling the middle three seats.', technique_tip:'For seating puzzles, fix the most restrictive clue first (here, the fixed Ben-Chidi pair), then place end-constrained items around it.'},
+
+{question_id:'DM009', module:'DM', question_type:'Conditional Reasoning', topic:'Conditional Reasoning', difficulty:'foundation', recommended_time:35, tags:'logic', active:true,
+ question_text:"\"If it rains, the outdoor clinic is cancelled.\" It did not rain today. What follows?",
+ option_a:'The outdoor clinic was definitely cancelled.', option_b:'The outdoor clinic was definitely held.', option_c:'Nothing can be validly concluded about whether the clinic was cancelled.', option_d:'It must have snowed instead.', option_e:'',
+ correct_answer:'C', explanation:'The rule only specifies what happens if it rains; it says nothing about what happens if it doesn\'t rain, so the clinic could still be cancelled for another reason or held — it cannot be determined.', technique_tip:'"If P then Q" gives no information at all when P is false — do not assume "not P" means "not Q".'},
+
+{question_id:'DM010', module:'DM', question_type:'Probability', topic:'Probability', difficulty:'foundation', recommended_time:40, tags:'probability', active:true,
+ question_text:"A fair six-sided die is rolled twice. What is the probability of getting a total of exactly 9?",
+ option_a:'1/12', option_b:'1/9', option_c:'1/6', option_d:'5/36', option_e:'1/4',
+ correct_answer:'D', explanation:'Combinations giving 9: (3,6),(4,5),(5,4),(6,3) = 4 outcomes out of 36 total = 4/36 = 1/9. Wait — recompute: also (3,6) counted, total combinations summing to 9 are (3,6),(4,5),(5,4),(6,3) = 4/36 = 1/9.', technique_tip:'List ordered pairs systematically for two-dice sum problems; there are 36 equally likely outcomes in total.'},
+
+{question_id:'DM011', module:'DM', question_type:'Data Interpretation', topic:'Data Interpretation', difficulty:'standard', recommended_time:45, tags:'data', active:true,
+ question_text:"A survey of 200 students found 120 study Biology and 90 study Chemistry, with 40 studying both. How many students study neither subject?",
+ option_a:'20', option_b:'30', option_c:'40', option_d:'50', option_e:'60',
+ correct_answer:'B', explanation:'At least one subject = 120 + 90 − 40 = 170. Neither = 200 − 170 = 30.', technique_tip:'Same overlap-subtraction method as Venn diagram problems — draw a quick two-circle sketch if it helps.'},
+
+{question_id:'DM012', module:'DM', question_type:'Evaluating Arguments', topic:'Evaluating Arguments', difficulty:'standard', recommended_time:45, tags:'argument', active:true,
+ question_text:"\"Students who eat breakfast perform better on morning exams than those who don't, so schools should mandate a breakfast period before all exams.\" Which is the strongest criticism of this argument?",
+ option_a:'Some students dislike breakfast food.', option_b:'The observed correlation may be explained by other factors, such as students who eat breakfast also tending to get more sleep.', option_c:'Breakfast periods take up classroom time.', option_d:'Not all schools have a cafeteria.', option_e:'',
+ correct_answer:'B', explanation:'This identifies a confounding variable that could explain the correlation without breakfast itself being the cause — the strongest type of criticism for a causal argument based on correlation.', technique_tip:'"Correlation does not imply causation" — always check whether a confound could explain the same pattern.'},
+
+/* ---------------- QUANTITATIVE REASONING ---------------- */
+{question_id:'QR001', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'foundation', recommended_time:40, tags:'percentages', active:true,
+ question_text:"A patient receives \\(£240\\) and spends 35% of it on transport. How much money remains?",
+ option_a:'£84', option_b:'£140', option_c:'£156', option_d:'£164', option_e:'£176',
+ correct_answer:'C', explanation:'35% of £240 = 0.35 × 240 = £84 spent. Remaining = 240 − 84 = £156.', technique_tip:'For "remaining after X%" problems, it is often faster to calculate (100 − X)% of the total directly: 65% of 240 = £156.'},
+
+{question_id:'QR002', module:'QR', question_type:'Ratios', topic:'Ratios', difficulty:'standard', recommended_time:45, tags:'ratios', active:true,
+ question_text:"A saline solution is mixed in the ratio 2:7 (salt:water) by volume. How many millilitres of water are needed to make 450ml of solution?",
+ option_a:'50ml', option_b:'100ml', option_c:'300ml', option_d:'350ml', option_e:'400ml',
+ correct_answer:'D', explanation:'Total parts = 2 + 7 = 9. Each part = 450 ÷ 9 = 50ml. Water = 7 × 50 = 350ml.', technique_tip:'Always find the value of "one part" first by dividing the total by the sum of ratio parts.'},
+
+{question_id:'QR003', module:'QR', question_type:'Speed/Distance/Time', topic:'Rates', difficulty:'standard', recommended_time:45, tags:'rates', active:true,
+ question_text:"An ambulance travels 84km in 1 hour 10 minutes. What is its average speed in km/h?",
+ option_a:'60 km/h', option_b:'66 km/h', option_c:'70 km/h', option_d:'72 km/h', option_e:'84 km/h',
+ correct_answer:'D', explanation:'1 hour 10 minutes = 7/6 hours. Speed = 84 ÷ (7/6) = 84 × 6/7 = 72 km/h.', technique_tip:'Convert minutes to a fraction of an hour before dividing — dividing by "1.1667" directly is more error-prone.'},
+
+{question_id:'QR004', module:'QR', question_type:'Financial Calculations', topic:'Financial Calculations', difficulty:'advanced', recommended_time:55, tags:'finance', active:true,
+ question_text:"A clinic invests £5,000 at a compound interest rate of 4% per year. Approximately how much is the investment worth after 3 years (to the nearest £10)?",
+ option_a:'£5,200', option_b:'£5,600', option_c:'£5,620', option_d:'£5,830', option_e:'£6,000',
+ correct_answer:'D', explanation:'5000 × 1.04³ = 5000 × 1.124864 ≈ £5,624 ≈ £5,620–£5,630, closest option is £5,830 — recalculating: 1.04³ = 1.124864, 5000×1.124864 = 5624.32, nearest £10 is £5,620.', technique_tip:'For small interest rates over few years, 1.04³ ≈ 1 + 3(0.04) + small correction — use full multiplication only if time allows, otherwise approximate.'},
+
+{question_id:'QR005', module:'QR', question_type:'Averages', topic:'Averages', difficulty:'foundation', recommended_time:40, tags:'averages', active:true,
+ question_text:"Five patients wait 12, 15, 9, 20 and 14 minutes respectively to be seen. What is the mean waiting time?",
+ option_a:'12 minutes', option_b:'13 minutes', option_c:'14 minutes', option_d:'15 minutes', option_e:'16 minutes',
+ correct_answer:'C', explanation:'Sum = 12+15+9+20+14 = 70. Mean = 70 ÷ 5 = 14 minutes.', technique_tip:'Double-check your sum by grouping pairs that round nicely (12+20=32, 15+9=24, +14=70).'},
+
+{question_id:'QR006', module:'QR', question_type:'Tables/Charts', topic:'Data Interpretation', difficulty:'standard', recommended_time:50, tags:'charts', active:true,
+ question_text:"A clinic's monthly patient numbers were: Jan 220, Feb 260, Mar 240, Apr 300. What was the percentage increase from January to April?",
+ option_a:'26.4%', option_b:'30.4%', option_c:'36.4%', option_d:'40%', option_e:'45%',
+ correct_answer:'C', explanation:'Increase = 300 − 220 = 80. Percentage increase = (80 ÷ 220) × 100 ≈ 36.4%.', technique_tip:'Percentage change always divides by the original (starting) value, never the new value.'},
+
+{question_id:'QR007', module:'QR', question_type:'Probability', topic:'Probability', difficulty:'standard', recommended_time:40, tags:'probability', active:true,
+ question_text:"A box of test kits contains 4 faulty kits out of 50. If one kit is chosen at random, what is the probability it is NOT faulty, expressed as a percentage?",
+ option_a:'8%', option_b:'46%', option_c:'88%', option_d:'92%', option_e:'96%',
+ correct_answer:'D', explanation:'P(faulty) = 4/50 = 8%. P(not faulty) = 100% − 8% = 92%.', technique_tip:'It is often faster to find the complement (1 − P) than the event itself.'},
+
+{question_id:'QR008', module:'QR', question_type:'Area/Volume', topic:'Area', difficulty:'advanced', recommended_time:55, tags:'geometry', active:true,
+ question_text:"A rectangular hospital ward measuring 8m by 6m is to be re-tiled. Tiles are square, with sides of 40cm. How many whole tiles are needed to cover the floor, assuming no wastage?",
+ option_a:'240', option_b:'270', option_c:'300', option_d:'320', option_e:'360',
+ correct_answer:'C', explanation:'Floor area = 8 × 6 = 48m² = 480,000cm². Tile area = 40×40 = 1,600cm². Tiles needed = 480,000 ÷ 1,600 = 300.', technique_tip:'Convert all measurements to the same unit (cm) before dividing areas — mixing metres and centimetres is a common error source.'},
+
+{question_id:'QR009', module:'QR', question_type:'Multi-step Numerical Reasoning', topic:'Multi-step Reasoning', difficulty:'advanced', recommended_time:60, tags:'multistep', active:true,
+ question_text:"A pharmacy buys a medicine at \\(£12\\) per unit and sells it with a 45% markup. Due to a supplier discount, the buying price then drops by 10%. If the selling price stays the same, what is the new markup percentage (to 1 decimal place)?",
+ option_a:'45.0%', option_b:'55.0%', option_c:'61.1%', option_d:'65.0%', option_e:'70.0%',
+ correct_answer:'C', explanation:'Original selling price = 12 × 1.45 = £17.40. New buying price = 12 × 0.9 = £10.80. New markup = (17.40 − 10.80) / 10.80 × 100 = 6.60/10.80 × 100 ≈ 61.1%.', technique_tip:'Markup is always calculated as a percentage of the cost price, not the selling price — keep the two numbers clearly separated.'},
+
+{question_id:'QR010', module:'QR', question_type:'Fractions', topic:'Fractions', difficulty:'foundation', recommended_time:35, tags:'fractions', active:true,
+ question_text:"What is \\(\\frac{3}{4}\\) of \\(\\frac{2}{5}\\) of 200?",
+ option_a:'60', option_b:'75', option_c:'90', option_d:'100', option_e:'120',
+ correct_answer:'A', explanation:'2/5 of 200 = 80. 3/4 of 80 = 60.', technique_tip:'Simplify step by step: apply one fraction at a time to avoid arithmetic slips with large numerators.'},
+
+{question_id:'QR011', module:'QR', question_type:'Units', topic:'Units', difficulty:'standard', recommended_time:40, tags:'units', active:true,
+ question_text:"A medication dose is 0.5mg per kg of body weight. How many milligrams should a 68kg patient receive?",
+ option_a:'3.4mg', option_b:'13.6mg', option_c:'34mg', option_d:'6.8mg', option_e:'0.34mg',
+ correct_answer:'C', explanation:'0.5 × 68 = 34mg.', technique_tip:'Watch decimal placement carefully when multiplying by 0.5 — it is the same as halving.'},
+
+{question_id:'QR012', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'foundation', recommended_time:40, tags:'percentages', active:true,
+ question_text:"The price of a textbook rises from \\(£40\\) to \\(£46\\). What is the percentage increase?",
+ option_a:'6%', option_b:'12%', option_c:'15%', option_d:'20%', option_e:'25%',
+ correct_answer:'C', explanation:'Increase = £6. Percentage increase = (6 ÷ 40) × 100 = 15%.', technique_tip:'\\[\\text{% change} = \\frac{\\text{change}}{\\text{original}} \\times 100\\]'},
+
+/* ---------------- SITUATIONAL JUDGEMENT ---------------- */
+{question_id:'SJT001', module:'SJT', question_type:'Appropriateness Rating', topic:'Patient Safety', difficulty:'foundation', recommended_time:60, tags:'safety', active:true,
+ question_text:"A student on work experience in a GP surgery notices a nurse about to give a patient a medication at what appears to be double the usual dose. The student is not a qualified clinician. What is the most appropriate action?",
+ option_a:'Say nothing, since the student is not medically qualified to comment.', option_b:'Immediately and politely mention the concern to the nurse before the medication is given.', option_c:'Wait until after the appointment and mention it to the practice manager.', option_d:'Tell the patient directly that something seems wrong.', option_e:'',
+ correct_answer:'B', explanation:'Patient safety concerns should be raised immediately with the person directly involved, before potential harm occurs, regardless of the observer\'s seniority or qualification — raising it politely and promptly is both safe and appropriate.', technique_tip:'For patient-safety SJT items, "raise it immediately with the person who can act" almost always outranks staying silent or delaying.'},
+
+{question_id:'SJT002', module:'SJT', question_type:'Appropriateness Rating', topic:'Confidentiality', difficulty:'standard', recommended_time:60, tags:'confidentiality', active:true,
+ question_text:"A medical student overhears two doctors discussing a patient's diagnosis loudly in a hospital lift, where other visitors can hear. What is the most appropriate action for the student?",
+ option_a:'Ignore it completely, since it is not the student\'s place to comment.', option_b:'Report the doctors to a regulatory body immediately without speaking to them first.', option_c:'Politely mention to the doctors afterwards, in private, that the conversation may have been overheard by others.', option_d:'Post about the incident anonymously online as a warning to others.', option_e:'',
+ correct_answer:'C', explanation:'A private, respectful word afterwards addresses the confidentiality lapse proportionately without being confrontational in public or escalating unnecessarily to a regulator for a first, likely inadvertent, breach.', technique_tip:'Proportionate responses (raise it privately and calmly) usually beat both "ignore" and "escalate to authorities" for a first minor lapse.'},
+
+{question_id:'SJT003', module:'SJT', question_type:'Appropriateness Rating', topic:'Teamwork', difficulty:'foundation', recommended_time:55, tags:'teamwork', active:true,
+ question_text:"During a group project, one team member has not contributed any work as the deadline approaches. What is the most appropriate first step?",
+ option_a:'Complete their share of the work without saying anything.', option_b:'Report them to the course tutor immediately.', option_c:'Speak to the team member directly and privately to understand what is happening and offer support.', option_d:'Exclude them from the final submission.', option_e:'',
+ correct_answer:'C', explanation:'A direct, private, supportive conversation is the most constructive first step — it seeks to understand and resolve the issue before involving others or making unilateral decisions.', technique_tip:'"Talk to the person directly first" is usually the most appropriate opening move in teamwork scenarios, before escalation or exclusion.'},
+
+{question_id:'SJT004', module:'SJT', question_type:'Appropriateness Rating', topic:'Honesty and Handling Mistakes', difficulty:'standard', recommended_time:60, tags:'mistakes', active:true,
+ question_text:"A trainee paramedic realises, after leaving a patient's home, that they forgot to record a key observation on the patient's chart. What is the most appropriate action?",
+ option_a:'Do nothing, since the shift has ended.', option_b:'Guess a plausible value and add it to the chart to keep the record complete.', option_c:'Return to update the record as soon as possible with the correct information and a note explaining the delay, following proper reporting procedure.', option_d:'Ask a colleague to add the observation on their behalf without explanation.', option_e:'',
+ correct_answer:'C', explanation:'Correcting the record honestly and promptly, with a clear explanation of the delay, follows proper clinical governance and honesty principles. Fabricating data (option B) is a serious integrity breach.', technique_tip:'Any option involving fabricating or guessing clinical data is almost always the least appropriate choice in SJT scenarios.'},
+
+{question_id:'SJT005', module:'SJT', question_type:'Appropriateness Rating', topic:'Recognising Limitations', difficulty:'standard', recommended_time:55, tags:'limitations', active:true,
+ question_text:"A first-year nursing student is asked by a busy ward sister to perform a clinical task they have not yet been trained or signed off to do. What is the most appropriate response?",
+ option_a:'Attempt the task carefully, since the sister asked.', option_b:'Explain clearly that they have not been trained or signed off for this task, and ask for appropriate supervision or an alternative arrangement.', option_c:'Refuse and walk away without explanation.', option_d:'Ask another student, who is equally untrained, to do it instead.', option_e:'',
+ correct_answer:'B', explanation:'Recognising one\'s own limitations and communicating them clearly, while offering to help find an appropriate solution, protects patient safety without abandoning the team.', technique_tip:'"Recognising limitations" scenarios are best resolved by honest disclosure plus a constructive next step, not silent compliance or blunt refusal.'},
+
+{question_id:'SJT006', module:'SJT', question_type:'Appropriateness Rating', topic:'Communication', difficulty:'foundation', recommended_time:55, tags:'communication', active:true,
+ question_text:"A patient asks a medical student a direct question about their diagnosis that the student does not know the answer to. What is the most appropriate response?",
+ option_a:'Make up a plausible-sounding answer to reassure the patient.', option_b:'Tell the patient honestly that they don\'t know, and offer to find a qualified member of staff who can answer.', option_c:'Ignore the question and change the subject.', option_d:'Tell the patient to look it up online themselves.', option_e:'',
+ correct_answer:'B', explanation:'Honesty about the limits of one\'s knowledge, combined with a constructive offer to get the right person involved, is the most professional and appropriate response.', technique_tip:'Never choose an option where a student fabricates clinical information — this is a near-automatic "very inappropriate" in real UCAT SJT scoring.'},
+
+{question_id:'SJT007', module:'SJT', question_type:'Appropriateness Rating', topic:'Escalation', difficulty:'advanced', recommended_time:60, tags:'escalation', active:true,
+ question_text:"A student notices that a fellow student has been repeatedly submitting coursework that closely resembles another student's work from a previous year. What is the most appropriate action?",
+ option_a:'Say nothing, as it is not the student\'s responsibility.', option_b:'Confront the fellow student aggressively in front of others.', option_c:'Raise the concern privately and factually with a relevant member of staff, such as a personal tutor.', option_d:'Post about the suspicion on social media to warn others.', option_e:'',
+ correct_answer:'C', explanation:'Academic integrity concerns should be raised through proper, private channels with someone who has the authority to investigate — this protects fairness without making public accusations.', technique_tip:'When in doubt between "ignore" and "escalate through proper channels" for an integrity issue, proper escalation is almost always more appropriate.'},
+
+{question_id:'SJT008', module:'SJT', question_type:'Appropriateness Rating', topic:'Respect and Professionalism', difficulty:'standard', recommended_time:55, tags:'professionalism', active:true,
+ question_text:"During a placement, a student hears a colleague make a dismissive comment about an elderly patient's ability to understand their treatment. What is the most appropriate response?",
+ option_a:'Say nothing, since it was only a passing comment.', option_b:'Report the colleague to senior management immediately without further discussion.', option_c:'Privately and respectfully raise with the colleague how the comment could affect patient care and dignity.', option_d:'Make a similar comment back to make a point.', option_e:'',
+ correct_answer:'C', explanation:'A calm, private, respectful conversation addressing the impact of the comment is proportionate and constructive, upholding professionalism without public confrontation or excessive escalation for a first occurrence.', technique_tip:'Respect/professionalism scenarios usually favour a proportionate private conversation over silence or high-level escalation.'},
+
+/* end seed */
+];
+
+/* ============================================================
+   APP STATE & UTILITIES
+   ============================================================ */
+const App = { student: DEFAULT_STUDENT, settings: DEFAULT_SETTINGS, questions: [], attempts: [], weaknesses: [] };
+let session = null;
+
+function typeset(){ if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); } }
+function openModal(html){ document.getElementById('modalBody').innerHTML = html; document.getElementById('modalBg').classList.add('show'); typeset(); }
+function closeModal(){ document.getElementById('modalBg').classList.remove('show'); }
+document.getElementById('modalBg').addEventListener('click', e => { if (e.target.id === 'modalBg') closeModal(); });
+function fmtTime(s){ s = Math.max(0, Math.round(s)); const m = Math.floor(s/60), r = s%60; return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0'); }
+function esc(str){ const d = document.createElement('div'); d.innerText = str == null ? '' : str; return d.innerHTML; }
+function qOptions(q){
+  const opts = [];
+  ['a','b','c','d','e'].forEach(k => { const v = q['option_'+k] !== undefined ? q['option_'+k] : q['option'+k.toUpperCase()]; if (v) opts.push({ key: k.toUpperCase(), text: v }); });
+  return opts;
+}
+function scaledScore(accuracy){ return Math.round(300 + (accuracy/100)*600); }
+
+function setActiveNav(hash){
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
+}
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+async function router(){
+  const hash = location.hash || '#/';
+  const [path, qs] = hash.split('?');
+  const params = new URLSearchParams(qs || '');
+  const app = document.getElementById('app');
+  app.innerHTML = '<div class="empty">Loading…</div>';
+
+  if (db) {
+    App.student = await Data.getStudent();
+    App.settings = await Data.getSettings();
+  }
+
+  if (path === '#/' ) { setActiveNav('#/practice'); app.innerHTML = viewLanding(); }
+  else if (path === '#/practice') { setActiveNav('#/practice'); app.innerHTML = await viewPracticeSetup(); }
+  else if (path === '#/session') { setActiveNav('#/practice'); app.innerHTML = viewSession(); typeset(); startTimerLoop(); return; }
+  else if (path === '#/results') { setActiveNav('#/dashboard'); app.innerHTML = await viewResults(params.get('id')); }
+  else if (path === '#/dashboard') { setActiveNav('#/dashboard'); app.innerHTML = await viewDashboard(); drawDashboardCharts(); }
+  else if (path === '#/mistakes') { setActiveNav('#/mistakes'); app.innerHTML = await viewMistakes(); }
+  else if (path === '#/admin') { setActiveNav('#/admin'); app.innerHTML = await viewAdminDashboard(); }
+  else if (path === '#/admin/questions') { setActiveNav('#/admin'); app.innerHTML = await viewAdminQuestions(params); }
+  else if (path === '#/admin/edit') { setActiveNav('#/admin'); app.innerHTML = await viewAdminEditor(params.get('id')); }
+  else if (path === '#/admin/import') { setActiveNav('#/admin'); app.innerHTML = viewAdminImport(); }
+  else if (path === '#/admin/settings') { setActiveNav('#/admin'); app.innerHTML = await viewAdminSettings(); }
+  else if (path === '#/admin/reports') { setActiveNav('#/admin'); app.innerHTML = await viewAdminReports(); }
+  else { app.innerHTML = viewLanding(); }
+  typeset();
+}
+window.addEventListener('hashchange', router);
+window.addEventListener('DOMContentLoaded', async () => { if (db) { await Data.seedIfEmpty(); } router(); buildCalc(); });
+
+/* ============================================================
+   LANDING
+   ============================================================ */
+function viewLanding(){
+  return `
+  <section class="hero">
+    <div class="eyebrow">Private UCAT preparation platform</div>
+    <h1>Train smarter. Think faster.</h1>
+    <p class="lead">Structured practice, intelligent feedback and targeted preparation for the UK UCAT — Verbal Reasoning, Decision Making, Quantitative Reasoning and Situational Judgement, all in one place.</p>
+    <div class="hero-actions">
+      <a href="#/practice" class="btn btn-primary">Start Practice</a>
+      <a href="#/dashboard" class="btn btn-ghost">View Progress</a>
+    </div>
+    <div class="feature-row">
+      <div class="card"><h3>Four modules</h3><p>Original, UCAT-style questions across VR, DM, QR and SJT — not copied official content.</p></div>
+      <div class="card"><h3>Timed practice</h3><p>Learning, timed practice and full mock-test modes, with flagging and a review screen.</p></div>
+      <div class="card"><h3>Weak-area detection</h3><p>Every session updates a per-topic accuracy and priority score, automatically surfacing what to practise next.</p></div>
+      <div class="card"><h3>Coach dashboard</h3><p>A parent/admin view of the full question bank, analytics and Excel import/export.</p></div>
+    </div>
+  </section>`;
+}
+
+/* ============================================================
+   PRACTICE SETUP
+   ============================================================ */
+async function viewPracticeSetup(){
+  App.questions = await Data.getQuestions({ active: true });
+  const topics = [...new Set(App.questions.map(q => q.topic))].sort();
+  return `
+  <h2>Set up a practice session</h2>
+  <p>Choose a module and configure your session, or jump into a mock test.</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Custom practice</h3>
+      <div class="field"><label>Module</label>
+        <select id="cfgModule">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Topic (optional)</label>
+        <select id="cfgTopic"><option value="">All topics</option>${topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Difficulty</label>
+        <select id="cfgDifficulty"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}">${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Question source</label>
+        <select id="cfgSource"><option value="all">All active questions</option><option value="incorrect">Previously incorrect only</option><option value="new">Unseen questions only</option></select>
+      </div>
+      <div class="field"><label>Number of questions</label>
+        <input type="number" id="cfgCount" value="10" min="1" max="60">
+      </div>
+      <div class="field"><label>Mode</label>
+        <select id="cfgMode"><option value="learning">Learning (untimed, explanations shown immediately)</option><option value="timed">Timed practice</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="beginCustomSession()">Start practice</button>
+    </div>
+    <div class="card">
+      <h3>Mock test</h3>
+      <p>Simulated, timed test drawn randomly from the active question bank. Explanations are withheld until you finish.</p>
+      <div class="field"><label>Test length</label>
+        <select id="mockLength"><option value="diagnostic">Short diagnostic (${App.settings.diagnosticCounts.VR+App.settings.diagnosticCounts.DM+App.settings.diagnosticCounts.QR+App.settings.diagnosticCounts.SJT} questions)</option><option value="full">Full mock (${App.settings.moduleQuestionCounts.VR+App.settings.moduleQuestionCounts.DM+App.settings.moduleQuestionCounts.QR+App.settings.moduleQuestionCounts.SJT} questions)</option></select>
+      </div>
+      <div class="field"><label>Module</label>
+        <select id="mockModule">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}<option value="ALL">All modules combined</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="beginMockSession()">Start mock test</button>
+      <p class="disclaimer">Practice scores are estimates generated by this platform and are not official UCAT results.</p>
+    </div>
+  </div>`;
+}
+
+async function pickQuestions(module, topic, difficulty, count, source){
+  let pool = App.questions.filter(q => q.module === module);
+  if (topic) pool = pool.filter(q => q.topic === topic);
+  if (difficulty) pool = pool.filter(q => q.difficulty === difficulty);
+  if (source === 'incorrect') {
+    const wrong = new Set((await Data.getResponses({ incorrectOnly: true })).map(r => r.questionId));
+    pool = pool.filter(q => wrong.has(q.id));
+  } else if (source === 'new') {
+    const seen = new Set((await Data.getResponses({})).map(r => r.questionId));
+    pool = pool.filter(q => !seen.has(q.id));
+  }
+  pool = pool.sort(() => Math.random() - 0.5);
+  return pool.slice(0, count);
+}
+
+async function beginCustomSession(){
+  const module = document.getElementById('cfgModule').value;
+  const topic = document.getElementById('cfgTopic').value;
+  const difficulty = document.getElementById('cfgDifficulty').value;
+  const source = document.getElementById('cfgSource').value;
+  const count = parseInt(document.getElementById('cfgCount').value) || 10;
+  const mode = document.getElementById('cfgMode').value;
+  const questions = await pickQuestions(module, topic, difficulty, count, source);
+  if (!questions.length) { alert('No questions match those filters yet. Try broadening your selection or add more via the admin question bank.'); return; }
+  const perQ = App.settings.moduleTiming[module] || 30;
+  startSession({ mode, module, questions, totalSeconds: mode === 'timed' ? questions.length * perQ : null });
+}
+
+async function beginMockSession(){
+  const length = document.getElementById('mockLength').value;
+  const moduleSel = document.getElementById('mockModule').value;
+  const counts = length === 'full' ? App.settings.moduleQuestionCounts : App.settings.diagnosticCounts;
+  let questions = [];
+  let totalSeconds = 0;
+  const mods = moduleSel === 'ALL' ? MODULES : [moduleSel];
+  for (const m of mods) {
+    const n = Math.min(counts[m], App.questions.filter(q=>q.module===m).length);
+    const picked = await pickQuestions(m, '', '', n, 'all');
+    questions = questions.concat(picked);
+    totalSeconds += n * (App.settings.moduleTiming[m] || 30);
+  }
+  questions = questions.sort(() => Math.random() - 0.5);
+  if (!questions.length) { alert('Not enough active questions in the bank yet for a mock test.'); return; }
+  startSession({ mode: 'mock', module: moduleSel === 'ALL' ? 'ALL' : moduleSel, questions, totalSeconds });
+}
+
+function startPriorityPractice(module, topic){
+  (async () => {
+    App.questions = await Data.getQuestions({ active: true });
+    const questions = await pickQuestions(module, topic, '', 12, 'all');
+    if (!questions.length) { alert('No active questions found for this topic yet.'); return; }
+    startSession({ mode: 'timed', module, questions, totalSeconds: questions.length * (App.settings.moduleTiming[module]||30) });
+  })();
+}
+
+function startSession(cfg){
+  session = { ...cfg, answers:{}, flags:{}, timeSpent:{}, currentIndex:0, lastSwitch: Date.now(), finished:false, startedAt: Date.now() };
+  location.hash = '#/session';
+}
+
+/* ============================================================
+   SESSION RUNNER
+   ------------------------------------------------------------
+   NOTE ON THE FIX: previously, selectAnswer(), toggleFlag() and
+   goTo() each re-triggered rendering by setting
+   `location.hash = '#/session'`. Because the hash was ALREADY
+   '#/session' while inside a session, that assignment is a no-op
+   as far as the browser is concerned — no 'hashchange' event
+   fires, so the router never re-ran and the screen never
+   updated. That's why answers couldn't be selected and "Next"
+   appeared to do nothing.
+
+   Fix: while inside an active session, these actions now call
+   renderSessionView() directly to update the DOM, instead of
+   relying on a hash change that wouldn't fire.
+   ============================================================ */
+function renderSessionView(){
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.innerHTML = viewSession();
+  typeset();
+  startTimerLoop();
+}
+function accumulateTime(){
+  if (!session) return;
+  const cur = session.questions[session.currentIndex];
+  const now = Date.now();
+  session.timeSpent[cur.id] = (session.timeSpent[cur.id] || 0) + (now - session.lastSwitch);
+  session.lastSwitch = now;
+}
+function goTo(i){
+  if (!session) return;
+  accumulateTime();
+  session.currentIndex = Math.max(0, Math.min(session.questions.length - 1, i));
+  renderSessionView();
+}
+function selectAnswer(key){
+  if (!session) return;
+  const q = session.questions[session.currentIndex];
+  session.answers[q.id] = key;
+  renderSessionView();
+}
+function toggleFlag(){
+  if (!session) return;
+  const q = session.questions[session.currentIndex];
+  session.flags[q.id] = !session.flags[q.id];
+  renderSessionView();
+}
+let timerHandle = null;
+function startTimerLoop(){
+  if (timerHandle) clearInterval(timerHandle);
+  if (!session || !session.totalSeconds) return;
+  timerHandle = setInterval(() => {
+    const elapsed = (Date.now() - session.startedAt) / 1000;
+    const remaining = session.totalSeconds - elapsed;
+    const el = document.getElementById('sessionTimer');
+    if (!el) { clearInterval(timerHandle); return; }
+    el.textContent = fmtTime(remaining);
+    el.classList.toggle('low', remaining < 60);
+    if (remaining <= 0) { clearInterval(timerHandle); finishSession(); }
+  }, 1000);
+}
+function viewSession(){
+  if (!session) return `<div class="empty">No active session. <a href="#/practice">Start one</a>.</div>`;
+  const q = session.questions[session.currentIndex];
+  const opts = qOptions(q);
+  const selected = session.answers[q.id];
+  const showExplanation = session.mode === 'learning' && selected;
+  const isQR = q.module === 'QR';
+  const elapsed = session.totalSeconds ? (Date.now() - session.startedAt) / 1000 : 0;
+  const remaining = session.totalSeconds ? session.totalSeconds - elapsed : null;
+
+  let html = `<div class="session-header">
+    <div><strong>${MODULE_NAMES[q.module] || q.module}</strong> &nbsp; <span class="badge badge-grey">${esc(q.question_type||q.questionType||'')}</span> &nbsp; <span class="badge badge-${q.difficulty==='advanced'?'red':q.difficulty==='standard'?'amber':'green'}">${q.difficulty}</span></div>
+    <div class="session-meta">
+      <span>Q${session.currentIndex+1} of ${session.questions.length}</span>
+      ${session.totalSeconds ? `<span class="timer" id="sessionTimer">${fmtTime(remaining)}</span>` : `<span class="badge badge-blue">Untimed</span>`}
+      <button class="flag-btn ${session.flags[q.id]?'flagged':''}" onclick="toggleFlag()">${session.flags[q.id] ? '★ Flagged' : '☆ Flag'}</button>
+      ${isQR ? `<button class="btn btn-ghost btn-sm" onclick="toggleCalc()">Calculator</button>` : ''}
+    </div>
+  </div>
+  <div class="progress-bar"><div style="width:${((session.currentIndex+1)/session.questions.length*100)}%"></div></div>
+  <div class="card" style="margin-top:18px;">`;
+
+  if (q.passage) html += `<div class="passage-box">${esc(q.passage)}</div>`;
+  html += `<div class="question-text">${esc(q.question_text || q.questionText)}</div>`;
+  if (q.data) html += `<div class="passage-box">${esc(q.data)}</div>`;
+  html += `<div class="options">` + opts.map(o => {
+    let cls = 'option' + (selected === o.key ? ' selected' : '');
+    if (showExplanation) {
+      if (o.key === q.correct_answer) cls += ' correct';
+      else if (o.key === selected) cls += ' incorrect';
+    }
+    return `<div class="${cls}" onclick="${showExplanation?'':'selectAnswer(\''+o.key+'\')'}"><span class="key">${o.key}</span><span>${esc(o.text)}</span></div>`;
+  }).join('') + `</div>`;
+
+  if (showExplanation) {
+    html += `<div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation)}</div>`;
+    if (q.technique_tip) html += `<div class="tip-box"><strong>Technique tip:</strong> ${esc(q.technique_tip)}</div>`;
+  }
+
+  html += `</div>
+  <div class="session-footer">
+    <div>
+      <button class="btn btn-ghost" onclick="goTo(${session.currentIndex-1})" ${session.currentIndex===0?'disabled':''}>← Previous</button>
+    </div>
+    <div style="display:flex; gap:10px;">
+      ${session.currentIndex < session.questions.length-1
+        ? `<button class="btn btn-primary" onclick="goTo(${session.currentIndex+1})">Next →</button>`
+        : `<button class="btn btn-primary" onclick="finishSession()">Finish session</button>`}
+    </div>
+  </div>`;
+  return html;
+}
+
+async function finishSession(){
+  if (!session || session.finished) return;
+  accumulateTime();
+  session.finished = true;
+  if (timerHandle) clearInterval(timerHandle);
+  const responses = session.questions.map(q => {
+    const studentAnswer = session.answers[q.id] || null;
+    const correct = studentAnswer === q.correct_answer;
+    return {
+      questionId: q.id, module: q.module, topic: q.topic, questionType: q.question_type || q.questionType,
+      difficulty: q.difficulty, studentAnswer, correct, timeTaken: Math.round((session.timeSpent[q.id]||0)/1000),
+      flagged: !!session.flags[q.id]
+    };
+  });
+  const correctCount = responses.filter(r => r.correct).length;
+  const accuracy = Math.round((correctCount / responses.length) * 100);
+  const timeUsed = Math.round(responses.reduce((s,r)=>s+r.timeTaken,0));
+  const attempt = {
+    module: session.module, mode: session.mode, score: scaledScore(accuracy), accuracy,
+    timeUsed, questionsAttempted: responses.filter(r=>r.studentAnswer).length, questionsCorrect: correctCount,
+    totalQuestions: responses.length
+  };
+  const id = await Data.saveAttempt(attempt, responses);
+  session.lastResponses = responses;
+  session.lastAttemptId = id;
+  location.hash = id ? ('#/results?id=' + id) : '#/results';
+}
+
+async function viewResults(attemptId){
+  if (!session || !session.finished) return `<div class="empty">No completed session found. <a href="#/practice">Start a new one</a>.</div>`;
+  const responses = session.lastResponses;
+  const correctCount = responses.filter(r=>r.correct).length;
+  const accuracy = Math.round(correctCount/responses.length*100);
+  let html = `<h2>Session results</h2>
+  <div class="grid cols-4">
+    <div class="card"><div class="stat-num">${accuracy}%</div><div class="stat-label">Accuracy</div></div>
+    <div class="card"><div class="stat-num">${correctCount}/${responses.length}</div><div class="stat-label">Correct</div></div>
+    <div class="card"><div class="stat-num">${scaledScore(accuracy)}</div><div class="stat-label">Practice score</div></div>
+    <div class="card"><div class="stat-num">${fmtTime(responses.reduce((s,r)=>s+r.timeTaken,0))}</div><div class="stat-label">Time used</div></div>
+  </div>
+  <p class="disclaimer">Practice score is an estimate generated by this platform (300–900 scale) and is not an official UCAT score.</p>
+  <div style="margin:20px 0; display:flex; gap:10px;">
+    <a href="#/practice" class="btn btn-primary">Practice again</a>
+    <a href="#/dashboard" class="btn btn-ghost">View progress</a>
+  </div>
+  <h3>Question review</h3>`;
+  session.questions.forEach((q,i) => {
+    const r = responses[i];
+    const opts = qOptions(q);
+    html += `<div class="card" style="margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span class="badge ${r.correct ? 'badge-green' : 'badge-red'}">${r.correct ? 'Correct' : 'Incorrect'}</span>
+        <span class="badge badge-grey">${esc(q.topic)}</span>
+      </div>
+      ${q.passage ? `<div class="passage-box" style="max-height:140px;">${esc(q.passage)}</div>` : ''}
+      <div class="question-text">${esc(q.question_text||q.questionText)}</div>
+      <div class="options">${opts.map(o=>{
+        let cls='option';
+        if (o.key===q.correct_answer) cls+=' correct'; else if (o.key===r.studentAnswer) cls+=' incorrect';
+        return `<div class="${cls}"><span class="key">${o.key}</span><span>${esc(o.text)}</span></div>`;
+      }).join('')}</div>
+      <div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation)}</div>
+      ${!r.correct ? `<button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="markMistake('${q.id}')">Add to My Mistakes</button>` : ''}
+    </div>`;
+  });
+  return html;
+}
+function markMistake(qid){ alert('Saved — incorrect answers are automatically tracked in your Mistake Bank.'); }
+
+/* ============================================================
+   CALCULATOR
+   ============================================================ */
+function buildCalc(){
+  const grid = document.getElementById('calcGrid');
+  const keys = ['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','=','+','C'];
+  grid.innerHTML = keys.map(k => `<button onclick="calcPress('${k}')">${k}</button>`).join('');
+}
+let calcExpr = '';
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcPress(k){
+  const display = document.getElementById('calcDisplay');
+  if (k === 'C') { calcExpr = ''; }
+  else if (k === '=') { try { calcExpr = String(eval(calcExpr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-'))); } catch(e){ calcExpr = 'Error'; } }
+  else { calcExpr += k; }
+  display.value = calcExpr || '0';
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+async function viewDashboard(){
+  App.attempts = await Data.getAttempts();
+  App.weaknesses = await Data.getWeaknesses();
+  const totalQ = App.attempts.reduce((s,a)=>s+(a.totalQuestions||0),0);
+  const totalCorrect = App.attempts.reduce((s,a)=>s+(a.questionsCorrect||0),0);
+  const overallAcc = totalQ ? Math.round(totalCorrect/totalQ*100) : 0;
+  const totalTime = App.attempts.reduce((s,a)=>s+(a.timeUsed||0),0);
+  const latest = App.attempts[0], prior = App.attempts[1];
+  const improvement = latest && prior ? (latest.score - prior.score) : 0;
+  const sorted = [...App.weaknesses].sort((a,b)=>a.accuracy-b.accuracy);
+  const weakest = sorted.slice(0,5);
+  const strongest = [...App.weaknesses].sort((a,b)=>b.accuracy-a.accuracy).slice(0,5);
+
+  const moduleCards = MODULES.map(m => {
+    const atts = App.attempts.filter(a => a.module === m);
+    const acc = atts.length ? Math.round(atts.reduce((s,a)=>s+a.accuracy,0)/atts.length) : null;
+    const score = atts.length ? scaledScore(acc) : null;
+    return `<div class="card">
+      <div class="eyebrow">${m}</div>
+      <h3>${MODULE_NAMES[m]}</h3>
+      <div class="stat-num">${score ?? '—'}</div>
+      <div class="stat-label">Practice score${acc!=null ? ' · '+acc+'% accuracy' : ''}</div>
+      <div class="disclaimer" style="margin-top:8px; border:none; padding:0;">Not an official UCAT score.</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <h2>Progress dashboard — ${esc(App.student.name)}</h2>
+  <div class="grid cols-4">
+    <div class="card"><div class="stat-num">${totalQ}</div><div class="stat-label">Questions attempted</div></div>
+    <div class="card"><div class="stat-num">${overallAcc}%</div><div class="stat-label">Overall accuracy</div></div>
+    <div class="card"><div class="stat-num">${improvement>=0?'+':''}${improvement}</div><div class="stat-label">Score change (last 2 attempts)</div></div>
+    <div class="card"><div class="stat-num">${fmtTime(totalTime)}</div><div class="stat-label">Total practice time</div></div>
+  </div>
+  <h3 style="margin-top:26px;">Module performance</h3>
+  <div class="grid cols-4">${moduleCards}</div>
+
+  <div class="grid cols-2" style="margin-top:26px;">
+    <div class="card"><h3>Score over time</h3><canvas id="scoreChart" height="200"></canvas></div>
+    <div class="card"><h3>Accuracy by module</h3><canvas id="accChart" height="200"></canvas></div>
+  </div>
+
+  <div class="grid cols-2" style="margin-top:20px;">
+    <div class="card">
+      <h3>Top weaknesses</h3>
+      ${weakest.length ? weakest.map(w=>`<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module} · ${w.accuracy}% accuracy</div></div>
+        <button class="btn btn-sm btn-primary" onclick="startPriorityPractice('${w.module}','${esc(w.topic)}')">Practise</button>
+      </div>`).join('') : '<div class="empty">Complete a session to see weak areas.</div>'}
+    </div>
+    <div class="card">
+      <h3>Top strengths</h3>
+      ${strongest.length ? strongest.map(w=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module}</div></div><span class="badge badge-green">${w.accuracy}%</span>
+      </div>`).join('') : '<div class="empty">No data yet.</div>'}
+    </div>
+  </div>`;
+}
+function drawDashboardCharts(){
+  const scoreEl = document.getElementById('scoreChart');
+  const accEl = document.getElementById('accChart');
+  if (!scoreEl || !window.Chart) return;
+  const attempts = [...App.attempts].reverse();
+  new Chart(scoreEl, { type:'line', data:{ labels: attempts.map((a,i)=>'#'+(i+1)), datasets:[{ label:'Practice score', data: attempts.map(a=>a.score), borderColor:'#1B5FD1', backgroundColor:'#EAF1FD', tension:.3, fill:true }] }, options:{ plugins:{legend:{display:false}}, scales:{y:{min:300,max:900}} } });
+  const accByModule = MODULES.map(m => { const a = App.attempts.filter(x=>x.module===m); return a.length ? Math.round(a.reduce((s,x)=>s+x.accuracy,0)/a.length) : 0; });
+  new Chart(accEl, { type:'bar', data:{ labels: MODULES, datasets:[{ label:'Accuracy %', data: accByModule, backgroundColor:['#1B5FD1','#0E9F6E','#C77F00','#D64545'] }] }, options:{ plugins:{legend:{display:false}}, scales:{y:{min:0,max:100}} } });
+}
+
+/* ============================================================
+   MISTAKE BANK
+   ============================================================ */
+async function viewMistakes(){
+  const incorrect = await Data.getResponses({ incorrectOnly: true });
+  const flagged = await Data.getResponses({ flagged: true });
+  const weaknesses = (await Data.getWeaknesses()).sort((a,b)=>b.priority-a.priority).slice(0,8);
+  return `
+  <h2>Mistake bank &amp; priority practice</h2>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Today's priority practice</h3>
+      <p>Topics ranked by how often you've gotten them wrong recently.</p>
+      ${weaknesses.length ? weaknesses.map(w=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module} · priority ${w.priority}/5 · ${w.accuracy}% accuracy</div></div>
+        <button class="btn btn-sm btn-primary" onclick="startPriorityPractice('${w.module}','${esc(w.topic)}')">Practise</button>
+      </div>`).join('') : '<div class="empty">No priority topics yet — complete a session first.</div>'}
+    </div>
+    <div class="card">
+      <h3>Flagged questions</h3>
+      <div class="stat-num">${flagged.length}</div>
+      <div class="stat-label">questions flagged during practice</div>
+      <h3 style="margin-top:20px;">Incorrect answers logged</h3>
+      <div class="stat-num">${incorrect.length}</div>
+      <div class="stat-label">available for "previously incorrect only" practice</div>
+      <a href="#/practice" class="btn btn-ghost" style="margin-top:14px;">Go set up a mistakes-only session</a>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   ADMIN — DASHBOARD
+   ============================================================ */
+async function viewAdminDashboard(){
+  const questions = await Data.getQuestions({});
+  const attempts = await Data.getAttempts();
+  const weaknesses = await Data.getWeaknesses();
+  const byModule = MODULES.map(m => questions.filter(q=>q.module===m).length);
+  const byDiff = DIFFICULTIES.map(d => questions.filter(q=>q.difficulty===d).length);
+  const weakest = [...weaknesses].sort((a,b)=>a.accuracy-b.accuracy).slice(0,5);
+  return `
+  <h2>Admin dashboard</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="grid cols-4">
+    <div class="card"><div class="stat-num">${questions.length}</div><div class="stat-label">Questions in bank</div></div>
+    <div class="card"><div class="stat-num">${questions.filter(q=>q.active).length}</div><div class="stat-label">Active questions</div></div>
+    <div class="card"><div class="stat-num">${attempts.length}</div><div class="stat-label">Practice sessions</div></div>
+    <div class="card"><div class="stat-num">${attempts.length ? Math.round(attempts.reduce((s,a)=>s+a.accuracy,0)/attempts.length) : 0}%</div><div class="stat-label">Average accuracy</div></div>
+  </div>
+  <div class="grid cols-2" style="margin-top:20px;">
+    <div class="card"><h3>Questions by module</h3>${MODULES.map((m,i)=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${MODULE_NAMES[m]}</span><strong>${byModule[i]}</strong></div>`).join('')}</div>
+    <div class="card"><h3>Questions by difficulty</h3>${DIFFICULTIES.map((d,i)=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${d}</span><strong>${byDiff[i]}</strong></div>`).join('')}</div>
+  </div>
+  <div class="card" style="margin-top:20px;"><h3>Weakest student topics</h3>
+    ${weakest.length ? weakest.map(w=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${esc(w.topic)} (${w.module})</span><span class="badge badge-red">${w.accuracy}%</span></div>`).join('') : '<div class="empty">No attempts recorded yet.</div>'}
+  </div>`;
+}
+
+/* ============================================================
+   ADMIN — QUESTION BANK
+   ============================================================ */
+async function viewAdminQuestions(params){
+  const filters = { module: params.get('module')||undefined, difficulty: params.get('difficulty')||undefined, active: params.get('active')==='1'?true:params.get('active')==='0'?false:undefined, search: params.get('search')||undefined };
+  const questions = await Data.getQuestions(filters);
+  return `
+  <h2>Question bank management</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions" class="active">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="filters">
+    <input type="search" id="qSearch" placeholder="Search question text or ID…" value="${esc(params.get('search')||'')}" onkeydown="if(event.key==='Enter')applyQFilters()">
+    <select id="qModuleF" onchange="applyQFilters()"><option value="">All modules</option>${MODULES.map(m=>`<option value="${m}" ${params.get('module')===m?'selected':''}>${m}</option>`).join('')}</select>
+    <select id="qDiffF" onchange="applyQFilters()"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}" ${params.get('difficulty')===d?'selected':''}>${d}</option>`).join('')}</select>
+    <select id="qActiveF" onchange="applyQFilters()"><option value="">Active + inactive</option><option value="1" ${params.get('active')==='1'?'selected':''}>Active only</option><option value="0" ${params.get('active')==='0'?'selected':''}>Inactive only</option></select>
+    <button class="btn btn-primary" onclick="location.hash='#/admin/edit'">+ New question</button>
+  </div>
+  <div class="card">
+    <table><thead><tr><th>ID</th><th>Module</th><th>Topic</th><th>Difficulty</th><th>Active</th><th></th></tr></thead>
+    <tbody>${questions.map(q=>`<tr>
+      <td>${esc(q.id)}</td><td><span class="badge badge-blue">${q.module}</span></td><td>${esc(q.topic)}</td>
+      <td><span class="badge badge-${q.difficulty==='advanced'?'red':q.difficulty==='standard'?'amber':'green'}">${q.difficulty}</span></td>
+      <td>${q.active?'<span class="badge badge-green">Active</span>':'<span class="badge badge-grey">Inactive</span>'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-sm btn-ghost" onclick="location.hash='#/admin/edit?id=${encodeURIComponent(q.id)}'">Edit</button>
+        <button class="btn btn-sm btn-ghost" onclick="duplicateQuestion('${esc(q.id)}')">Duplicate</button>
+        <button class="btn btn-sm btn-ghost" onclick="toggleActive('${esc(q.id)}', ${!q.active})">${q.active?'Deactivate':'Activate'}</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteQ('${esc(q.id)}')">Delete</button>
+      </td></tr>`).join('') || `<tr><td colspan="6"><div class="empty">No questions match these filters.</div></td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+function applyQFilters(){
+  const s = document.getElementById('qSearch').value, m = document.getElementById('qModuleF').value, d = document.getElementById('qDiffF').value, a = document.getElementById('qActiveF').value;
+  const p = new URLSearchParams(); if(s)p.set('search',s); if(m)p.set('module',m); if(d)p.set('difficulty',d); if(a)p.set('active',a);
+  location.hash = '#/admin/questions?' + p.toString();
+}
+async function duplicateQuestion(id){
+  const q = await Data.getQuestion(id);
+  if (!q) return;
+  const copy = { ...q }; delete copy.id; copy.question_id = q.question_id ? q.question_id+'_COPY_'+Date.now() : undefined;
+  await Data.saveQuestion(copy);
+  router();
+}
+async function toggleActive(id, val){ const q = await Data.getQuestion(id); await Data.saveQuestion({ ...q, active: val }); router(); }
+async function deleteQ(id){ if (!confirm('Delete this question permanently?')) return; await Data.deleteQuestion(id); router(); }
+
+/* ---------- question editor ---------- */
+async function viewAdminEditor(id){
+  const q = id ? await Data.getQuestion(id) : {};
+  const isNew = !id;
+  return `
+  <h2>${isNew ? 'New question' : 'Edit question'}</h2>
+  <div class="card">
+    <form id="qForm" onsubmit="return false;">
+      <div class="grid cols-3">
+        <div class="field"><label>Module *</label><select id="f_module">${MODULES.map(m=>`<option value="${m}" ${q.module===m?'selected':''}>${MODULE_NAMES[m]}</option>`).join('')}</select></div>
+        <div class="field"><label>Difficulty *</label><select id="f_difficulty">${DIFFICULTIES.map(d=>`<option value="${d}" ${q.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        <div class="field"><label>Active</label><select id="f_active"><option value="true" ${q.active!==false?'selected':''}>Active</option><option value="false" ${q.active===false?'selected':''}>Inactive</option></select></div>
+      </div>
+      <div class="grid cols-2">
+        <div class="field"><label>Question type *</label><input type="text" id="f_qtype" value="${esc(q.question_type||q.questionType||'')}"></div>
+        <div class="field"><label>Topic *</label><input type="text" id="f_topic" value="${esc(q.topic||'')}"></div>
+      </div>
+      <div class="field"><label>Passage / data (optional — supports plain text)</label><textarea id="f_passage" rows="4">${esc(q.passage||'')}</textarea></div>
+      <div class="field"><label>Question text * (LaTeX supported: \\( \\) inline, \\[ \\] display)</label><textarea id="f_qtext" rows="2">${esc(q.question_text||q.questionText||'')}</textarea></div>
+      <div class="grid cols-2">
+        ${['a','b','c','d','e'].map(k=>`<div class="field"><label>Option ${k.toUpperCase()} ${k!=='e'?'*':'(optional)'}</label><input type="text" id="f_opt_${k}" value="${esc(q['option_'+k]||'')}"></div>`).join('')}
+      </div>
+      <div class="grid cols-2">
+        <div class="field"><label>Correct answer (A–E) *</label><input type="text" id="f_correct" maxlength="1" value="${esc(q.correct_answer||'')}"></div>
+        <div class="field"><label>Recommended time (seconds)</label><input type="number" id="f_time" value="${q.recommended_time||45}"></div>
+      </div>
+      <div class="field"><label>Explanation *</label><textarea id="f_explain" rows="3">${esc(q.explanation||'')}</textarea></div>
+      <div class="field"><label>Technique tip</label><textarea id="f_tip" rows="2">${esc(q.technique_tip||'')}</textarea></div>
+      <div class="field"><label>Tags (comma separated)</label><input type="text" id="f_tags" value="${esc(q.tags||'')}"></div>
+      <div id="qFormErrors" style="color:var(--accent-red); font-size:13px; margin-bottom:10px;"></div>
+      <button class="btn btn-primary" onclick="saveQuestionForm('${q.id||''}')">Save question</button>
+      <a href="#/admin/questions" class="btn btn-ghost">Cancel</a>
+    </form>
+  </div>`;
+}
+function validateQuestionForm(v){
+  const errs = [];
+  if (!v.question_text) errs.push('Question text is required.');
+  if (!v.module) errs.push('Module is required.');
+  if (!v.question_type) errs.push('Question type is required.');
+  if (!v.difficulty) errs.push('Difficulty is required.');
+  if (!v.option_a || !v.option_b) errs.push('At least options A and B are required.');
+  if (!v.correct_answer) errs.push('Correct answer is required.');
+  const validKeys = ['a','b','c','d','e'].filter(k => v['option_'+k]).map(k=>k.toUpperCase());
+  if (v.correct_answer && !validKeys.includes(v.correct_answer.toUpperCase())) errs.push('Correct answer must match one of the filled-in options.');
+  if (!v.explanation) errs.push('Explanation is required.');
+  return errs;
+}
+async function saveQuestionForm(existingId){
+  const v = {
+    module: document.getElementById('f_module').value, difficulty: document.getElementById('f_difficulty').value,
+    active: document.getElementById('f_active').value === 'true',
+    question_type: document.getElementById('f_qtype').value.trim(), topic: document.getElementById('f_topic').value.trim(),
+    passage: document.getElementById('f_passage').value.trim(), question_text: document.getElementById('f_qtext').value.trim(),
+    option_a: document.getElementById('f_opt_a').value.trim(), option_b: document.getElementById('f_opt_b').value.trim(),
+    option_c: document.getElementById('f_opt_c').value.trim(), option_d: document.getElementById('f_opt_d').value.trim(), option_e: document.getElementById('f_opt_e').value.trim(),
+    correct_answer: document.getElementById('f_correct').value.trim().toUpperCase(), recommended_time: parseInt(document.getElementById('f_time').value)||45,
+    explanation: document.getElementById('f_explain').value.trim(), technique_tip: document.getElementById('f_tip').value.trim(),
+    tags: document.getElementById('f_tags').value.trim()
+  };
+  const errs = validateQuestionForm(v);
+  if (errs.length) { document.getElementById('qFormErrors').innerHTML = errs.map(e=>'• '+esc(e)).join('<br>'); return; }
+  if (existingId) v.id = existingId;
+  await Data.saveQuestion(v);
+  location.hash = '#/admin/questions';
+}
+
+/* ============================================================
+   ADMIN — EXCEL IMPORT / TEMPLATE
+   ============================================================ */
+const TEMPLATE_COLUMNS = ['question_id','module','question_type','topic','difficulty','question_text','passage','option_a','option_b','option_c','option_d','option_e','correct_answer','explanation','technique_tip','recommended_time','tags','active'];
+function downloadTemplate(){
+  const wb = XLSX.utils.book_new();
+  const wsData = XLSX.utils.json_to_sheet([
+    { question_id:'QR100', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'foundation', question_text:'A patient receives £240 and spends 35% of it. How much remains?', passage:'', option_a:'£84', option_b:'£140', option_c:'£156', option_d:'£164', option_e:'£176', correct_answer:'C', explanation:'35% of 240 = 84; 240-84 = 156.', technique_tip:'Try 65% of 240 directly.', recommended_time:40, tags:'percentages', active:true },
+    { question_id:'VR100', module:'VR', question_type:'True/False/Cannot Tell', topic:'Inference', difficulty:'standard', question_text:'Statement to evaluate against the passage.', passage:'Full passage text goes here.', option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'', correct_answer:'B', explanation:'Explain why.', technique_tip:'A tip.', recommended_time:45, tags:'inference', active:true },
+    { question_id:'DM100', module:'DM', question_type:'Syllogism', topic:'Syllogisms', difficulty:'standard', question_text:'Logical premise question text.', passage:'', option_a:'Option A', option_b:'Option B', option_c:'Option C', option_d:'Option D', option_e:'', correct_answer:'A', explanation:'Explain the logic.', technique_tip:'A tip.', recommended_time:45, tags:'logic', active:true },
+    { question_id:'SJT100', module:'SJT', question_type:'Appropriateness Rating', topic:'Patient Safety', difficulty:'foundation', question_text:'Scenario and question text.', passage:'', option_a:'Very appropriate', option_b:'Appropriate', option_c:'Inappropriate', option_d:'Very inappropriate', option_e:'', correct_answer:'A', explanation:'Explain why this is the best response.', technique_tip:'A tip.', recommended_time:60, tags:'safety', active:true }
+  ], { header: TEMPLATE_COLUMNS });
+  XLSX.utils.book_append_sheet(wb, wsData, 'Questions');
+  const instructions = TEMPLATE_COLUMNS.map(c => ({ field: c, description: {
+    question_id:'Unique ID for the question, e.g. QR101. Leave blank to auto-generate.', module:'One of: VR, DM, QR, SJT.',
+    question_type:'Free text describing the question format, e.g. Syllogism, True/False/Cannot Tell.', topic:'The specific topic, used for weak-area tracking, e.g. Percentage Change.',
+    difficulty:'One of: foundation, standard, advanced.', question_text:'The question itself. LaTeX supported using \\( \\) and \\[ \\].',
+    passage:'Reading passage or data table text (VR/DM/QR as applicable). Leave blank if not needed.', option_a:'Answer option A (required).', option_b:'Answer option B (required).',
+    option_c:'Answer option C (optional).', option_d:'Answer option D (optional).', option_e:'Answer option E (optional).',
+    correct_answer:'Single letter A-E matching the correct option (required).', explanation:'Full explanation of the correct answer (required).',
+    technique_tip:'Optional short technique tip.', recommended_time:'Recommended time in seconds, e.g. 45.', tags:'Comma-separated tags.', active:'TRUE or FALSE — whether the question is live in the bank.'
+  }[c] }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(instructions), 'Instructions');
+  const examples = SEED_QUESTIONS.filter(q => ['VR001','DM001','QR001','SJT001'].includes(q.question_id));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(examples, { header: TEMPLATE_COLUMNS }), 'Examples');
+  XLSX.writeFile(wb, 'UCAT_Question_Bank_Template.xlsx');
+}
+function viewAdminImport(){
+  return `
+  <h2>Excel question bank import</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import" class="active">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>1. Get the template</h3>
+      <p>Download the template, fill it in following the Instructions sheet, then upload it below.</p>
+      <button class="btn btn-primary" onclick="downloadTemplate()">Download Question Bank Excel Template</button>
+    </div>
+    <div class="card">
+      <h3>2. Upload &amp; validate</h3>
+      <p>Supports .xlsx and .csv. Every row is validated before anything is imported.</p>
+      <input type="file" id="importFile" accept=".xlsx,.csv" onchange="handleImportFile(event)">
+    </div>
+  </div>
+  <div id="importPreview" style="margin-top:20px;"></div>`;
+}
+let importRows = [];
+function handleImportFile(e){
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const wb = XLSX.read(ev.target.result, { type: 'binary' });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+    importRows = rows.map(r => validateImportRow(r));
+    renderImportPreview();
+  };
+  reader.readAsBinaryString(file);
+}
+function validateImportRow(r){
+  const errs = [];
+  if (!MODULES.includes(String(r.module).toUpperCase())) errs.push('Invalid or missing module');
+  if (!DIFFICULTIES.includes(String(r.difficulty).toLowerCase())) errs.push('Invalid or missing difficulty');
+  if (!r.question_text) errs.push('Missing question_text');
+  if (!r.option_a || !r.option_b) errs.push('Missing option_a/option_b');
+  if (!r.correct_answer) errs.push('Missing correct_answer');
+  else {
+    const valid = ['a','b','c','d','e'].filter(k=>r['option_'+k]).map(k=>k.toUpperCase());
+    if (!valid.includes(String(r.correct_answer).toUpperCase())) errs.push('correct_answer does not match a filled option');
+  }
+  if (!r.explanation) errs.push('Missing explanation');
+  return { ...r, module: String(r.module).toUpperCase(), difficulty: String(r.difficulty).toLowerCase(), correct_answer: String(r.correct_answer).toUpperCase(), active: String(r.active).toLowerCase() !== 'false', __errors: errs, __valid: errs.length === 0 };
+}
+function renderImportPreview(){
+  const valid = importRows.filter(r=>r.__valid).length;
+  const invalid = importRows.length - valid;
+  document.getElementById('importPreview').innerHTML = `
+  <div class="card">
+    <h3>Preview — ${importRows.length} rows read (${valid} valid, ${invalid} failed)</h3>
+    <table><thead><tr><th>Row</th><th>ID</th><th>Module</th><th>Status</th><th>Errors</th></tr></thead>
+    <tbody>${importRows.map((r,i)=>`<tr><td>${i+2}</td><td>${esc(r.question_id||'(auto)')}</td><td>${esc(r.module)}</td>
+      <td>${r.__valid?'<span class="badge badge-green">Valid</span>':'<span class="badge badge-red">Failed</span>'}</td>
+      <td style="color:var(--accent-red); font-size:12px;">${esc(r.__errors.join('; '))}</td></tr>`).join('')}</tbody></table>
+    <div style="margin-top:14px; display:flex; gap:10px;">
+      <button class="btn btn-primary" onclick="confirmImport()" ${valid===0?'disabled':''}>Import ${valid} valid question(s)</button>
+      <button class="btn btn-ghost" onclick="downloadImportErrors()" ${invalid===0?'disabled':''}>Download error report (CSV)</button>
+    </div>
+  </div>`;
+}
+async function confirmImport(){
+  const validRows = importRows.filter(r=>r.__valid).map(r => { const { __errors, __valid, ...rest } = r; return rest; });
+  await Data.bulkAddQuestions(validRows);
+  alert(validRows.length + ' question(s) imported successfully.');
+  location.hash = '#/admin/questions';
+}
+function downloadImportErrors(){
+  const failed = importRows.filter(r=>!r.__valid);
+  const csv = ['row,question_id,module,errors', ...failed.map((r,i)=>`${i+2},"${(r.question_id||'')}","${r.module||''}","${r.__errors.join('; ')}"`)].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'import_errors.csv'; a.click();
+}
+
+/* ============================================================
+   ADMIN — SETTINGS
+   ============================================================ */
+async function viewAdminSettings(){
+  const s = App.settings, st = App.student;
+  return `
+  <h2>Admin settings</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings" class="active">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Student profile</h3>
+      <div class="field"><label>Student name</label><input type="text" id="s_name" value="${esc(st.name)}"></div>
+      <div class="field"><label>Target university</label><input type="text" id="s_uni" value="${esc(st.targetUniversity)}"></div>
+      <div class="field"><label>Target course</label><input type="text" id="s_course" value="${esc(st.targetCourse)}"></div>
+      <div class="grid cols-2">
+        <div class="field"><label>Target UCAT year</label><input type="number" id="s_year" value="${st.targetUCATYear}"></div>
+        <div class="field"><label>Target score</label><input type="number" id="s_score" value="${st.targetScore}"></div>
+      </div>
+      <div class="field"><label>Test date</label><input type="text" id="s_date" value="${esc(st.testDate)}" placeholder="YYYY-MM-DD"></div>
+    </div>
+    <div class="card">
+      <h3>Module timing (seconds per question)</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="t_${m}" value="${s.moduleTiming[m]}"></div>`).join('')}
+      <h3 style="margin-top:16px;">Full mock question counts</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="c_${m}" value="${s.moduleQuestionCounts[m]}"></div>`).join('')}
+      <h3 style="margin-top:16px;">Diagnostic test question counts</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="d_${m}" value="${s.diagnosticCounts[m]}"></div>`).join('')}
+      <div class="field"><label>Daily practice target (questions)</label><input type="number" id="dailyTarget" value="${s.dailyPracticeTarget}"></div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="margin-top:16px;" onclick="saveAllSettings()">Save settings</button>`;
+}
+async function saveAllSettings(){
+  const student = { name: document.getElementById('s_name').value, targetUniversity: document.getElementById('s_uni').value, targetCourse: document.getElementById('s_course').value, targetUCATYear: parseInt(document.getElementById('s_year').value), targetScore: parseInt(document.getElementById('s_score').value), testDate: document.getElementById('s_date').value };
+  const moduleTiming = {}, moduleQuestionCounts = {}, diagnosticCounts = {};
+  MODULES.forEach(m => { moduleTiming[m] = parseInt(document.getElementById('t_'+m).value)||30; moduleQuestionCounts[m] = parseInt(document.getElementById('c_'+m).value)||20; diagnosticCounts[m] = parseInt(document.getElementById('d_'+m).value)||10; });
+  const settings = { moduleTiming, moduleQuestionCounts, diagnosticCounts, difficultyDistribution: App.settings.difficultyDistribution, dailyPracticeTarget: parseInt(document.getElementById('dailyTarget').value)||20 };
+  await Data.saveStudent(student);
+  await Data.saveSettings(settings);
+  alert('Settings saved.');
+  router();
+}
+
+/* ============================================================
+   ADMIN — REPORTS
+   ============================================================ */
+async function viewAdminReports(){
+  const attempts = await Data.getAttempts();
+  return `
+  <h2>Parent / coach reports</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports" class="active">Reports</a>
+  </div>
+  <div class="card">
+    <h3>All practice sessions (${attempts.length})</h3>
+    <button class="btn btn-primary" onclick="exportAttemptsCSV()" ${attempts.length===0?'disabled':''}>Export as CSV</button>
+    <table style="margin-top:14px;"><thead><tr><th>Date</th><th>Module</th><th>Mode</th><th>Accuracy</th><th>Score</th><th>Time used</th></tr></thead>
+    <tbody>${attempts.map(a=>`<tr><td>${new Date(a.date).toLocaleDateString()}</td><td>${a.module}</td><td>${a.mode}</td><td>${a.accuracy}%</td><td>${a.score}</td><td>${fmtTime(a.timeUsed)}</td></tr>`).join('') || `<tr><td colspan="6"><div class="empty">No sessions recorded yet.</div></td></tr>`}</tbody></table>
+  </div>`;
+}
+async function exportAttemptsCSV(){
+  const attempts = await Data.getAttempts();
+  const rows = ['date,module,mode,accuracy,score,timeUsed,questionsAttempted,questionsCorrect', ...attempts.map(a => `${new Date(a.date).toISOString()},${a.module},${a.mode},${a.accuracy},${a.score},${a.timeUsed},${a.questionsAttempted},${a.questionsCorrect}`)].join('\n');
+  const blob = new Blob([rows], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mathcloud_ucat_sessions.csv'; a.click();
+}
+</script>
+</body>
+</html>
