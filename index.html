@@ -265,21 +265,15 @@ tr:hover td{background:#FAFBFE;}
    data will not persist.
    ============================================================ */
 const firebaseConfig = {
-  apiKey: "AIzaSyClpc-ybBzSALYXtPHDw8cox8i1xEKxSao",
-  authDomain: "memory-87b65.firebaseapp.com",
-  projectId: "memory-87b65",
-  storageBucket: "memory-87b65.firebasestorage.app",
-  messagingSenderId: "123213603131",
-  appId: "1:123213603131:web:e2e385481ee08a760d171e",
-  /* NOTE: Realtime Database requires a databaseURL. This is the default
-     pattern Firebase assigns for a project's default RTDB instance. If your
-     database was created in a specific region, open Firebase Console →
-     Realtime Database and copy the exact URL shown there into this field —
-     it may instead look like:
-     https://memory-87b65-default-rtdb.<region>.firebasedatabase.app */
-  databaseURL: "https://memory-87b65-default-rtdb.firebaseio.com"
-};
-
+    apiKey: "AIzaSyCL3vOyJlD6CfpU43SRxKTPo_rDqoEgfc8",
+    authDomain: "comprehension-5b15d.firebaseapp.com",
+    databaseURL: "https://comprehension-5b15d-default-rtdb.firebaseio.com",
+    projectId: "comprehension-5b15d",
+    storageBucket: "comprehension-5b15d.firebasestorage.app",
+    messagingSenderId: "999712774012",
+    appId: "1:999712774012:web:a3df9b0f32f5cfb3f076f9"
+  };
+     
 const FIREBASE_READY = firebaseConfig.apiKey !== "YOUR_API_KEY";
 let db = null;
 if (FIREBASE_READY) {
