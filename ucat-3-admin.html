@@ -334,13 +334,14 @@ tr:hover td{background:#FAFBFE;}
    data will not persist.
    ============================================================ */
 const firebaseConfig = {
-  apiKey: "AIzaSyB78-XIa4cPsOAQMWefhzGYkMGAlwNtJx8",
-  authDomain: "set-3-6e04d.firebaseapp.com",
-  databaseURL: "https://set-3-6e04d-default-rtdb.firebaseio.com",
-  projectId: "set-3-6e04d",
-  storageBucket: "set-3-6e04d.firebasestorage.app",
-  messagingSenderId: "906900598918",
-  appId: "1:906900598918:web:bf83e8df4f13147fe02107"
+  apiKey: "AIzaSyB6tWe0xxeg9-A8rfv3ouRAWHkJzM1klzU",
+  authDomain: "upload-2f843.firebaseapp.com",
+  databaseURL: "https://upload-2f843-default-rtdb.firebaseio.com",
+  projectId: "upload-2f843",
+  storageBucket: "upload-2f843.appspot.com",
+  messagingSenderId: "111629636560",
+  appId: "1:111629636560:web:873b63fc4f0c3709391fd5",
+  measurementId: "G-BH95TYF6VY"
 };
 
 const FIREBASE_READY = firebaseConfig.apiKey !== "YOUR_API_KEY";
@@ -494,7 +495,7 @@ const Data = {
   async seedIfEmpty() {
     if (!db) return;
 
-    const CURRENT_QUESTION_BANK_VERSION = 'clinical-2026-v3';
+    const CURRENT_QUESTION_BANK_VERSION = 'clinical-2026-v4-advanced';
     const settingsSnap = await db.ref('settings').once('value');
     const existingSettings = settingsSnap.exists() ? settingsSnap.val() : {};
     const bankVersion = existingSettings.questionBankVersion || '';
@@ -4294,7 +4295,6 @@ const SEED_QUESTIONS = [
     "explanation": "The best rating is very appropriate. The judgement is based on integrity, confidentiality, appropriate escalation, respect and staying within role.",
     "technique_tip": "Use only the information provided; avoid assumptions."
   },
-[
   {
     "question_id": "VRX011",
     "module": "VR",
@@ -6494,630 +6494,2984 @@ const SEED_QUESTIONS = [
     "correct_answer": "D",
     "explanation": "Complaining to people who cannot resolve the issue is unhelpful and unprofessional.",
     "technique_tip": "Use only the information provided and avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR001",
+    "module": "VR",
+    "question_type": "True/False/Cannot Tell",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A regional hospital reviewed 2,400 outpatient appointments. Before a reminder system was introduced, 18% were missed. Six months later, the missed-appointment rate was 12%. The hospital reported that the reduction was largest among patients aged under 30. However, it did not record whether the same patients were compared before and after the intervention.",
+    "question_text": "the reminder system reduced missed appointments among every age group.",
+    "option_a": "True",
+    "option_b": "False",
+    "option_c": "Can't Tell",
+    "option_d": "Not stated in the passage",
+    "option_e": "",
+    "correct_answer": "F",
+    "explanation": "The passage only says the reduction was largest among under-30s; it does not establish a reduction in every age group.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR002",
+    "module": "VR",
+    "question_type": "True/False/Cannot Tell",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A study of reusable surgical gowns found that laundering them at a specified temperature removed more than 99% of a particular bacterial marker. The investigators tested gowns after repeated laundering cycles. They concluded that the material remained suitable for reuse after 50 cycles, although the study did not assess whether the gowns were equally comfortable for staff.",
+    "question_text": "Comfort was assessed after 50 laundering cycles.",
+    "option_a": "True",
+    "option_b": "False",
+    "option_c": "Can't Tell",
+    "option_d": "Not stated in the passage",
+    "option_e": "",
+    "correct_answer": "F",
+    "explanation": "The passage explicitly says comfort was not assessed.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR003",
+    "module": "VR",
+    "question_type": "True/False/Cannot Tell",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A city introduced protected cycle lanes on three major roads. Average weekday cycling counts on those roads increased by 27% over the following year. Car traffic also fell slightly. The researchers cautioned that fuel prices changed substantially during the same period, so the effect of the cycle lanes could not be isolated.",
+    "question_text": "Fuel prices were the sole reason car traffic fell.",
+    "option_a": "True",
+    "option_b": "False",
+    "option_c": "Can't Tell",
+    "option_d": "Not stated in the passage",
+    "option_e": "",
+    "correct_answer": "F",
+    "explanation": "The passage does not establish the sole cause.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR004",
+    "module": "VR",
+    "question_type": "True/False/Cannot Tell",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A university compared two methods for teaching anatomy. Students using method X scored higher on a final test, but students had chosen their preferred method before the course began. The researchers therefore stated that the results demonstrated an association rather than proof that method X caused better performance.",
+    "question_text": "Students were randomly assigned to the two teaching methods.",
+    "option_a": "True",
+    "option_b": "False",
+    "option_c": "Can't Tell",
+    "option_d": "Not stated in the passage",
+    "option_e": "",
+    "correct_answer": "F",
+    "explanation": "Students chose their method.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR005",
+    "module": "VR",
+    "question_type": "True/False/Cannot Tell",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A vaccination clinic offered evening appointments. Attendance among people who worked standard daytime hours increased. Attendance among retirees changed little. The clinic did not collect information about why individual patients selected particular appointment times.",
+    "question_text": "Every patient who worked daytime hours attended an evening appointment.",
+    "option_a": "True",
+    "option_b": "False",
+    "option_c": "Can't Tell",
+    "option_d": "Not stated in the passage",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "The passage gives an attendance increase, not the appointment choice of every individual.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR006",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A laboratory introduced a barcode system for specimens. Mislabelled samples fell from 14 per 10,000 to 6 per 10,000. The laboratory also changed its induction programme during the same quarter. The report said the barcode system was likely to have contributed to the improvement, but could not quantify its independent effect.",
+    "question_text": "Which conclusion is best supported?",
+    "option_a": "The barcode system definitely caused the entire reduction.",
+    "option_b": "The barcode system probably contributed, but its independent effect cannot be quantified.",
+    "option_c": "The induction programme had no effect.",
+    "option_d": "Mislabelled samples became impossible.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The report supports contribution, not exclusive causation.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR007",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A coastal wetland was restored over five years. Bird species richness rose from 41 to 57 species. The survey team noted that two particularly wet years occurred near the end of the period. They therefore recommended continued monitoring before attributing the whole increase to restoration.",
+    "question_text": "Why did the team recommend continued monitoring?",
+    "option_a": "The restoration had failed.",
+    "option_b": "The wet years may have influenced the observed increase.",
+    "option_c": "Bird species richness cannot be measured.",
+    "option_d": "The wetland contained fewer than 41 species.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The passage identifies unusually wet years as a possible confounding influence.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR008",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A clinic found that patients who received text reminders were more likely to attend appointments. The reminders were offered preferentially to patients who had previously missed appointments. The authors warned that attendance differences might partly reflect underlying differences between the groups.",
+    "question_text": "Which factor could weaken a simple causal interpretation?",
+    "option_a": "Patients were contacted by text.",
+    "option_b": "The groups were not necessarily comparable at baseline.",
+    "option_c": "Attendance was measured.",
+    "option_d": "Appointments existed.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Preferential allocation creates a baseline difference.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR009",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A manufacturing plant replaced a machine with a newer model. Output per hour increased by 11%, while electricity use per unit fell by 8%. The new machine also required more specialist maintenance. The report concluded that productivity gains came with an additional staffing requirement.",
+    "question_text": "Which statement is supported?",
+    "option_a": "The new machine increased electricity use per unit.",
+    "option_b": "The new machine reduced output.",
+    "option_c": "The new machine improved output per hour but created a maintenance requirement.",
+    "option_d": "The new machine required no specialist staff.",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "Both effects are explicitly stated.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR010",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "Researchers examined whether sleep duration predicted exam performance. Students who slept seven to eight hours had the highest mean scores. The authors emphasised that students were not assigned sleep schedules and that stress levels were not measured.",
+    "question_text": "Which statement is most justified?",
+    "option_a": "Seven to eight hours of sleep causes the highest scores.",
+    "option_b": "There is an association between reported sleep duration and mean scores.",
+    "option_c": "Stress has no relationship with performance.",
+    "option_d": "All students sleeping seven to eight hours passed.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The observational design supports association, not causation.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR011",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A public library extended opening hours on Sundays. Visits increased by 19%, but membership applications did not change. The library did not ask visitors whether the new hours influenced their decision to attend.",
+    "question_text": "What cannot be concluded?",
+    "option_a": "Sunday visits increased.",
+    "option_b": "Membership applications were unchanged.",
+    "option_c": "The new hours caused the increase in visits.",
+    "option_d": "The library opened longer on Sundays.",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "The passage does not establish causation.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR012",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "An agricultural trial compared two fertilisers. Fertiliser A produced a higher mean yield, but its results varied more between fields. Fertiliser B produced a slightly lower mean yield with less variation.",
+    "question_text": "Which is a reasonable interpretation?",
+    "option_a": "A always outperformed B.",
+    "option_b": "B produced identical yields in every field.",
+    "option_c": "A had a higher average yield but less consistent results.",
+    "option_d": "Variation was absent with A.",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "This matches the reported mean and variability.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR013",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A hospital introduced electronic prescribing. Prescription transcription errors fell by 35%. However, the hospital simultaneously increased pharmacist review of prescriptions. The authors stated that both changes could have contributed.",
+    "question_text": "What is the strongest conclusion?",
+    "option_a": "Electronic prescribing alone caused the reduction.",
+    "option_b": "Pharmacist review alone caused the reduction.",
+    "option_c": "The reduction may reflect one or both interventions.",
+    "option_d": "No reduction occurred.",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "The concurrent interventions prevent attribution to one alone.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR014",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A survey found that 72% of respondents supported remote consultations. Response rates were lower among people over 75. The researchers warned that the sample might underrepresent older patients.",
+    "question_text": "What concern does this create?",
+    "option_a": "The survey necessarily included only older people.",
+    "option_b": "The reported support may not represent the views of the whole population.",
+    "option_c": "Remote consultations were unavailable.",
+    "option_d": "The sample was larger than the population.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Differential response can affect representativeness.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR015",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A research team reported that a treatment reduced average recovery time by two days. The confidence interval around the estimated reduction included zero. The authors described the result as suggestive but inconclusive.",
+    "question_text": "Why was the result described as inconclusive?",
+    "option_a": "The treatment was never administered.",
+    "option_b": "The uncertainty interval included no reduction.",
+    "option_c": "Recovery time cannot be measured.",
+    "option_d": "The treatment increased recovery time in every patient.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "An interval including zero means the data do not clearly establish a reduction.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR016",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A hospital's waiting time fell after a new triage protocol was introduced. At the same time, the number of referrals decreased by 15%.",
+    "question_text": "Which additional information would most help assess whether the protocol caused the fall?",
+    "option_a": "The colour of the hospital walls.",
+    "option_b": "Waiting times at a comparable service without the new protocol.",
+    "option_c": "The names of the triage staff.",
+    "option_d": "The age of the building.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "A comparator helps separate intervention effects from broader changes.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR017",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A survey of clinicians reported that 64% preferred simulation training. The survey was distributed through a professional group whose members frequently attend simulation courses.",
+    "question_text": "Which limitation is most relevant?",
+    "option_a": "The questionnaire had options.",
+    "option_b": "The respondents may not represent clinicians who do not belong to that group.",
+    "option_c": "Simulation training exists.",
+    "option_d": "64% is a percentage.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The recruitment route may create selection bias.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR018",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A hospital reduced routine blood testing for stable patients. The number of blood tests fell by 22%, while the number of tests ordered for clinically deteriorating patients remained similar.",
+    "question_text": "Which conclusion is supported?",
+    "option_a": "All blood testing was reduced.",
+    "option_b": "The reduction mainly affected routine testing.",
+    "option_c": "Deteriorating patients never received blood tests.",
+    "option_d": "The policy increased routine testing.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The passage distinguishes routine from deterioration-related testing.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR019",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "An experiment found that participants exposed to a particular noise level completed a task more slowly. The researchers did not measure participants' baseline hearing sensitivity.",
+    "question_text": "What remains uncertain?",
+    "option_a": "Whether the task had a completion time.",
+    "option_b": "Whether differences in hearing sensitivity influenced performance.",
+    "option_c": "Whether participants heard any noise.",
+    "option_d": "Whether the experiment had participants.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Unmeasured baseline hearing sensitivity could influence the result.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVVR020",
+    "module": "VR",
+    "question_type": "Passage inference",
+    "topic": "critical evaluation",
+    "difficulty": "advanced",
+    "recommended_time": 30,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A medical school introduced peer mentoring. First-year students reported greater confidence after six months, but there was no pre-intervention confidence measurement.",
+    "question_text": "What is the main limitation?",
+    "option_a": "There was no mentoring.",
+    "option_b": "Confidence was never measured.",
+    "option_c": "The change in confidence cannot be compared directly with a baseline measurement.",
+    "option_d": "Six months is a period of time.",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "Without baseline data, the magnitude of change cannot be established.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM001",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "All analysts who are certified have completed the advanced course. Some people who completed the advanced course are interns. No interns are certified. Which conclusion must be true?",
+    "option_a": "Some certified analysts are interns.",
+    "option_b": "No certified analyst is an intern.",
+    "option_c": "All course completers are analysts.",
+    "option_d": "Some interns are certified.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Certified analysts cannot be interns because interns are not certified.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM002",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A committee must choose exactly three of A, B, C and D. If A is chosen, B cannot be chosen. If C is chosen, D must be chosen. Which set is possible?",
+    "option_a": "A, B, C",
+    "option_b": "A, C, D",
+    "option_c": "B, C, A",
+    "option_d": "A, B, D",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "A,C,D satisfies both conditions.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM003",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A diagnostic test has sensitivity 0.90 and specificity 0.80. In a population of 1,000, 10% have the condition. How many true positives are expected?",
+    "option_a": "90",
+    "option_b": "100",
+    "option_c": "180",
+    "option_d": "720",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "100 people have the condition and 90% test positive: 90.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM004",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A bag contains 5 red, 3 blue and 2 green tokens. Two tokens are drawn without replacement. What is the probability both are blue?",
+    "option_a": "1/15",
+    "option_b": "1/10",
+    "option_c": "2/15",
+    "option_d": "1/5",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "3/10 × 2/9 = 1/15.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM005",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "Five students J,K,L,M,N sit in a row. J must sit left of K. L cannot sit next to M. Which arrangement is possible?",
+    "option_a": "K J L N M",
+    "option_b": "J K L M N",
+    "option_c": "M L J K N",
+    "option_d": "N M L K J",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "J is left of K and L is not next to M.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM006",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A hospital has 12 wards. Exactly 7 use protocol X, 5 use protocol Y, and 3 use both. How many use at least one protocol?",
+    "option_a": "9",
+    "option_b": "12",
+    "option_c": "15",
+    "option_d": "8",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "At least one = 7 + 5 − 3 = 9.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM007",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "Four machines P,Q,R,S must be inspected one at a time. P is before R; Q is immediately before S. Which sequence is possible?",
+    "option_a": "R P Q S",
+    "option_b": "P R Q S",
+    "option_c": "Q P S R",
+    "option_d": "S Q P R",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "P precedes R and Q is immediately before S.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM008",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "If a statement is true: 'Every participant who completed module A completed module B.' Which statement must also be true?",
+    "option_a": "Anyone who completed B completed A.",
+    "option_b": "Anyone who did not complete B did not complete A.",
+    "option_c": "Anyone who completed A did not complete B.",
+    "option_d": "No one completed B without A.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "A completed implies B completed; therefore not B implies not A.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM009",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A box contains 4 defective and 16 non-defective items. Two are selected without replacement. Probability first is defective and second is non-defective?",
+    "option_a": "4/95",
+    "option_b": "16/95",
+    "option_c": "64/380",
+    "option_d": "1/5",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "4/20 × 16/19 = 64/380 = 16/95.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM010",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "Five treatments have rankings 1 to 5. A ranks higher than B. C ranks lower than D. E ranks higher than A. Which ranking is possible?",
+    "option_a": "E,A,B,D,C",
+    "option_b": "A,E,B,D,C",
+    "option_c": "E,B,A,C,D",
+    "option_d": "D,C,E,A,B",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "E>A>B and D>C.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM011",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A logic rule states: If X then Y; if Y then Z. Which must follow?",
+    "option_a": "If Z then X.",
+    "option_b": "If X then Z.",
+    "option_c": "If not X then not Z.",
+    "option_d": "X and Z cannot both occur.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "X implies Y and Y implies Z, so X implies Z.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM012",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A coin is biased so P(heads)=0.6. It is tossed twice independently. Probability of exactly one head?",
+    "option_a": "0.24",
+    "option_b": "0.36",
+    "option_c": "0.48",
+    "option_d": "0.60",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "2 × 0.6 × 0.4 = 0.48.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM013",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A class has 60 students. 35 study chemistry, 28 study biology, and 12 study both. How many study neither?",
+    "option_a": "9",
+    "option_b": "21",
+    "option_c": "37",
+    "option_d": "47",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "At least one = 35+28−12=51; neither=9.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM014",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "Four tasks W,X,Y,Z must be scheduled. W is earlier than X. Y is earlier than Z. X cannot be first. Which could be first?",
+    "option_a": "X",
+    "option_b": "Z",
+    "option_c": "W",
+    "option_d": "Y",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "W can be first while W<X and Y<Z.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM015",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A five-member panel must contain exactly two clinicians and three non-clinicians. There are four clinicians A-D and four non-clinicians E-H. If A is selected, B cannot be selected. If E is selected, F must be selected. Which panel is possible?",
+    "option_a": "A,B,E,F,G",
+    "option_b": "A,C,E,F,G",
+    "option_c": "B,C,E,G,H",
+    "option_d": "A,D,E,G,H",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "A,C plus E,F,G meets all conditions.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM016",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "An argument says: 'The clinic should extend Saturday hours because the weekday waiting room is overcrowded.' Which assumption is most necessary?",
+    "option_a": "Saturday is always busy.",
+    "option_b": "Some patients would use Saturday appointments instead of weekday appointments.",
+    "option_c": "All staff prefer Saturdays.",
+    "option_d": "The clinic has no weekday appointments.",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "The argument depends on Saturday hours diverting some demand.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM017",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A study reports that 4 of 5 randomly selected samples tested positive. If the same probability applies independently, what is the probability exactly 3 of the next 4 are positive?",
+    "option_a": "256/625",
+    "option_b": "128/625",
+    "option_c": "64/625",
+    "option_d": "16/625",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Exactly three positives = 4 × (4/5)^3 × (1/5) = 256/625.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM018",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A delivery route visits A,B,C,D,E once. B is immediately after A. D is before C. E is not first. Which route is possible?",
+    "option_a": "B A D C E",
+    "option_b": "A B D C E",
+    "option_c": "D C A E B",
+    "option_d": "E A B C D",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "A-B, D-C, and E is not first.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM019",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A screening programme identifies 95% of affected patients and falsely identifies 5% of unaffected patients. If prevalence is 2%, in 10,000 people how many false positives are expected?",
+    "option_a": "50",
+    "option_b": "98",
+    "option_c": "490",
+    "option_d": "950",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "9,800 unaffected × 5% = 490.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVDM020",
+    "module": "DM",
+    "question_type": "Decision Making",
+    "topic": "advanced logical reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 63,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A set contains numbers 2,4,6,8,10. One number is chosen at random. A second is chosen independently. Probability their sum is 12?",
+    "option_a": "1/5",
+    "option_b": "1/4",
+    "option_c": "1/3",
+    "option_d": "2/5",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Pairs (2,10),(4,8),(6,6),(8,4),(10,2): 5 of 25 = 1/5.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR001",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A clinic receives 480 referrals in a month. 35% are urgent. Of urgent referrals, 25% require same-day review. How many urgent referrals require same-day review?",
+    "option_a": "42",
+    "option_b": "48",
+    "option_c": "60",
+    "option_d": "84",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "480 × 0.35 × 0.25 = 42.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR002",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A service's monthly cost is £18,400. Staffing accounts for 62.5% of the cost. What is the staffing cost?",
+    "option_a": "£10,500",
+    "option_b": "£11,500",
+    "option_c": "£11,750",
+    "option_d": "£12,250",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "18,400 × 0.625 = £11,500.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR003",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A laboratory processes 1,260 samples over 7 equal working days. On day 1 it processes 15% of the weekly total. How many samples are processed on day 1?",
+    "option_a": "126",
+    "option_b": "168",
+    "option_c": "189",
+    "option_d": "210",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "1,260 × 0.15 = 189.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR004",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A hospital's average waiting time falls from 52 minutes to 39 minutes. What is the percentage decrease?",
+    "option_a": "20%",
+    "option_b": "25%",
+    "option_c": "30%",
+    "option_d": "33%",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "13/52 ×100 = 25%.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR005",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A drug is supplied at 40 mg/mL. A patient needs 0.075 g. What volume is required?",
+    "option_a": "0.75 mL",
+    "option_b": "1.5 mL",
+    "option_c": "1.875 mL",
+    "option_d": "3.0 mL",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "75 mg ÷ 40 mg/mL = 1.875 mL.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR006",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A study recruits 360 participants. The ratio of adults to adolescents is 7:2. How many adolescents are recruited?",
+    "option_a": "72",
+    "option_b": "80",
+    "option_c": "90",
+    "option_d": "120",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "There are 9 parts; 360/9=40 and 2 parts = 80.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR007",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A department has 20 nurses. 3/5 work full-time. Of the remaining nurses, half work three shifts weekly. How many part-time nurses work three shifts weekly?",
+    "option_a": "2",
+    "option_b": "4",
+    "option_c": "6",
+    "option_d": "8",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Part-time = 8; half = 4.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR008",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A hospital's electricity use is 84,000 kWh per month. A 12% reduction is achieved, followed by a further 5% reduction on the reduced amount. What is the final use?",
+    "option_a": "70,224 kWh",
+    "option_b": "71,064 kWh",
+    "option_c": "73,920 kWh",
+    "option_d": "74,760 kWh",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "84,000 × 0.88 × 0.95 = 70,224 kWh.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR009",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A research grant of £240,000 is divided in the ratio 5:3:2 among three departments. How much does the second department receive?",
+    "option_a": "£48,000",
+    "option_b": "£72,000",
+    "option_c": "£96,000",
+    "option_d": "£120,000",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "3/10 of £240,000 = £72,000.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR010",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A screening test is positive in 7% of 3,500 people. Of those positive results, 60% are confirmed on further testing. How many are not confirmed?",
+    "option_a": "49",
+    "option_b": "98",
+    "option_c": "140",
+    "option_d": "245",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "245 positive; 40% are not confirmed = 98.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR011",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A patient's weight rises from 64 kg to 68.8 kg. What is the percentage increase?",
+    "option_a": "5%",
+    "option_b": "7.5%",
+    "option_c": "8%",
+    "option_d": "9.5%",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Occupied beds = 36×5/6 = 30; isolation = 30×20% = 6; non-isolation = 24.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR012",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A team completes 3/8 of a dataset in 6 hours at a constant rate. How long would the whole dataset take?",
+    "option_a": "12 hours",
+    "option_b": "14 hours",
+    "option_c": "16 hours",
+    "option_d": "18 hours",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "6 ÷ 3/8 = 16 hours.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR013",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A chart shows monthly admissions of 420, 510, 480 and 590. What is the ratio of the highest to the lowest, simplified?",
+    "option_a": "59:42",
+    "option_b": "42:59",
+    "option_c": "19:14",
+    "option_d": "14:19",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "590:420 simplifies by 10 to 59:42.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR014",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A manufacturer offers a 15% discount followed by an additional 10% discount on the discounted price. What single percentage discount is equivalent?",
+    "option_a": "£780",
+    "option_b": "£792",
+    "option_c": "£810",
+    "option_d": "£900",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Remaining fraction = 0.85×0.90=0.765, so discount = 23.5%.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR015",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A ward has 36 beds. On average 5/6 are occupied. Of occupied beds, 20% are used by patients requiring isolation. How many occupied beds are not isolation beds?",
+    "option_a": "16.0",
+    "option_b": "17.0",
+    "option_c": "17.5",
+    "option_d": "18.0",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Occupied = 30; isolation = 6; non-isolation = 24. Correct A.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR016",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A machine produces 480 units in 3.2 hours. At the same rate, how many units are produced in 7.5 hours?",
+    "option_a": "900",
+    "option_b": "1,050",
+    "option_c": "1,125",
+    "option_d": "1,200",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "Rate 150/hour; 150×7.5 = 1,125.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR017",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A survey has 1,800 respondents. 42% select option A, 35% select B, and the rest select C. How many select C?",
+    "option_a": "396",
+    "option_b": "414",
+    "option_c": "432",
+    "option_d": "450",
+    "option_e": "",
+    "correct_answer": "C",
+    "explanation": "Remaining = 23%; 1,800×0.23=414. Correct B.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR018",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A hospital orders 24 boxes at £37.50 each. The supplier gives a 12% bulk discount. What is the final cost?",
+    "option_a": "£792",
+    "option_b": "£792.00",
+    "option_c": "£810",
+    "option_d": "£900",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "24×37.50=900; 12% discount = 108; final £792.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR019",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A dataset has a mean of 18 across 25 observations. One observation of 42 is removed. What is the new mean?",
+    "option_a": "16.5",
+    "option_b": "17",
+    "option_c": "17.0",
+    "option_d": "17.5",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "Total 450; minus 42 = 408; 408/24=17.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVQR020",
+    "module": "QR",
+    "question_type": "Numerical problem solving",
+    "topic": "advanced quantitative reasoning",
+    "difficulty": "advanced",
+    "recommended_time": 43,
+    "tags": "advanced_practice",
+    "active": true,
+    "question_text": "A treatment success rate rises from 64% to 76%. What is the relative percentage increase in the success rate?",
+    "option_a": "12%",
+    "option_b": "18.75%",
+    "option_c": "20%",
+    "option_d": "23.5%",
+    "option_e": "",
+    "correct_answer": "B",
+    "explanation": "12/64 ×100 = 18.75%.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT001",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "During a placement, you realise that a colleague has documented a procedure as completed, but you have reason to believe it was not performed.",
+    "question_text": "How appropriate is it to: Raise the discrepancy with the colleague and, if unresolved or safety-critical, escalate through the appropriate supervisor.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "The record should be addressed promptly and through appropriate channels; altering another person's record without authority is inappropriate.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT002",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A patient asks you a question about a treatment. You are unsure of the answer and your supervisor is temporarily unavailable.",
+    "question_text": "How appropriate is it to: Explain that you are unsure and seek an appropriate qualified person to provide accurate information.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "It is safer and more professional to acknowledge uncertainty and obtain appropriate advice.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT003",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You notice a team member repeatedly arriving late to a teaching session, causing others to wait.",
+    "question_text": "How appropriate is it to: Privately ask whether there is a problem and encourage them to discuss persistent difficulties with the appropriate person.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Private, respectful discussion is preferable to public criticism.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT004",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A friend asks you to send them a screenshot containing a patient's name because they are curious about an unusual case.",
+    "question_text": "How appropriate is it to: Refuse to share identifiable information and explain the confidentiality concern.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Identifiable patient information must not be shared without appropriate justification.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT005",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You make a calculation error in a piece of work that has already been submitted to your supervisor.",
+    "question_text": "How appropriate is it to: Inform the supervisor promptly, explain the error and provide the corrected calculation.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Prompt disclosure and correction demonstrate integrity.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT006",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A colleague seems unusually distressed after receiving critical feedback.",
+    "question_text": "How appropriate is it to: Privately check whether they are okay and, if appropriate, encourage them to seek support.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "A discreet supportive check-in is appropriate.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT007",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You are asked to perform a task you have never been trained to perform independently.",
+    "question_text": "How appropriate is it to: Explain that you have not been trained and ask for appropriate supervision or instruction.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Working within competence and seeking supervision protects safety.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT008",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You overhear a staff member making a dismissive comment about a patient who is not present.",
+    "question_text": "How appropriate is it to: If appropriate, challenge the comment respectfully and keep the focus on respectful patient care.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Professional respect should be maintained even when the patient is absent.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT009",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You discover that two appointment records appear to have been accidentally merged.",
+    "question_text": "How appropriate is it to: Flag the possible data error promptly and avoid making unsupported changes.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Potential patient-identification errors require prompt, authorised handling.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT010",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A supervisor gives you feedback that you initially think is unfair.",
+    "question_text": "How appropriate is it to: Listen, ask for specific examples and reflect before deciding whether further clarification is needed.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Openly receiving feedback and seeking specific evidence is constructive.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT011",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You are running late for a scheduled teaching activity because of an unexpected delay.",
+    "question_text": "How appropriate is it to: Notify the relevant person as soon as reasonably possible and give a realistic update.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Prompt communication allows the team to manage the disruption.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT012",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You notice that a shared document contains confidential information that is accessible to people who should not see it.",
+    "question_text": "How appropriate is it to: Alert the appropriate person promptly and avoid further unnecessary access or distribution.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "The access problem should be escalated appropriately without widening disclosure.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT013",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A teammate asks you to sign a form confirming attendance at an activity you did not attend.",
+    "question_text": "How appropriate is it to: Decline to sign and explain that you cannot confirm something you did not witness.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Signing an inaccurate record compromises integrity.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT014",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You are asked to give a presentation but realise the data supplied contain a potentially important inconsistency shortly beforehand.",
+    "question_text": "How appropriate is it to: Flag the inconsistency and explain its potential significance before relying on the data.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Important data-quality concerns should be made explicit.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT015",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A patient becomes frustrated because a conversation is taking longer than expected.",
+    "question_text": "How appropriate is it to: Acknowledge the frustration, remain calm and seek appropriate assistance if the issue cannot be resolved.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Calm communication and appropriate support are preferable.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT016",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A fellow student repeatedly asks you for answers during a formal assessment.",
+    "question_text": "How appropriate is it to: Refuse to provide answers and, if the behaviour continues, follow the assessment's reporting procedure.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Academic integrity requires refusing assistance and using the stated process if needed.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT017",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You are unsure whether a minor incident needs to be reported.",
+    "question_text": "How appropriate is it to: Check the relevant reporting guidance or ask an appropriate supervisor rather than guessing.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "When unsure, use the relevant policy or seek guidance promptly.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT018",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A colleague asks you to conceal that a task was completed late because they fear criticism.",
+    "question_text": "How appropriate is it to: Decline to conceal it and encourage accurate reporting through the appropriate channel.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Accurate records and honest reporting are essential.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT019",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "You receive a message containing patient information that was clearly intended for someone else.",
+    "question_text": "How appropriate is it to: Avoid further distribution and notify the sender or appropriate information-governance contact.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Minimise disclosure and notify the appropriate person.",
+    "technique_tip": "Use only the information given; avoid assumptions."
+  },
+  {
+    "question_id": "ADVSJT020",
+    "module": "SJT",
+    "question_type": "Appropriateness Rating",
+    "topic": "advanced professionalism and judgement",
+    "difficulty": "advanced",
+    "recommended_time": 23,
+    "tags": "advanced_practice",
+    "active": true,
+    "passage": "A team meeting is dominated by one confident member, while a quieter member appears to have relevant information.",
+    "question_text": "How appropriate is it to: Invite the quieter member to contribute and ensure the discussion remains respectful and focused.",
+    "option_a": "Very appropriate",
+    "option_b": "Appropriate, but not ideal",
+    "option_c": "Inappropriate, but not awful",
+    "option_d": "Very inappropriate",
+    "option_e": "",
+    "correct_answer": "A",
+    "explanation": "Inclusive teamwork allows relevant information to be heard.",
+    "technique_tip": "Use only the information given; avoid assumptions."
   }
-]
-]
-</script>
+];;
 
-<script>
 /* ============================================================
-   MATHCLOUD UCAT APPLICATION / ROUTER
-   The original file ended immediately after SEED_QUESTIONS.
-   This block supplies the missing application layer.
+   APP STATE & UTILITIES
    ============================================================ */
+const App = { student: DEFAULT_STUDENT, settings: DEFAULT_SETTINGS, questions: [], attempts: [], weaknesses: [] };
+let session = null;
 
-const AppState = {
-  route: 'practice',
-  module: 'VR',
-  difficulty: '',
-  search: '',
-  questions: [],
-  currentIndex: 0,
-  answers: {},
-  flags: {},
-  startedAt: null,
-  questionStartedAt: null,
-  timer: null,
-  attemptModule: 'VR',
-  attemptQuestions: [],
-  lastResult: null
+function typeset(){ if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise(); } }
+function openModal(html){ document.getElementById('modalBody').innerHTML = html; document.getElementById('modalBg').classList.add('show'); typeset(); }
+function closeModal(){ document.getElementById('modalBg').classList.remove('show'); }
+document.getElementById('modalBg').addEventListener('click', e => { if (e.target.id === 'modalBg') closeModal(); });
+function fmtTime(s){ s = Math.max(0, Math.round(s)); const m = Math.floor(s/60), r = s%60; return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0'); }
+function esc(str){ const d = document.createElement('div'); d.innerText = str == null ? '' : str; return d.innerHTML; }
+function qOptions(q){
+  const opts = [];
+  ['a','b','c','d','e'].forEach(k => { const v = q['option_'+k] !== undefined ? q['option_'+k] : q['option'+k.toUpperCase()]; if (v) opts.push({ key: k.toUpperCase(), text: v }); });
+  return opts;
+}
+function scaledScore(accuracy){ return Math.round(300 + (accuracy/100)*600); }
+function bandForSJT(accuracy){
+  if (accuracy >= 90) return 1;
+  if (accuracy >= 75) return 2;
+  if (accuracy >= 55) return 3;
+  return 4;
+}
+const SJT_BAND_LABEL = {
+  1: 'Band 1 — Excellent', 2: 'Band 2 — Good', 3: 'Band 3 — Moderate', 4: 'Band 4 — Needs improvement'
 };
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+/* ============================================================
+   PLACEMENT SCORE
+   ------------------------------------------------------------
+   Mirrors the real UCAT's own scoring structure: Verbal
+   Reasoning, Decision Making and Quantitative Reasoning are each
+   scored 300–900, and the reported total is the sum of those
+   three (900–2700). Situational Judgement is reported separately
+   as a Band (1 best – 4 needs improvement) rather than on the
+   900–2700 scale.
 
-function routeFromHash() {
-  const raw = location.hash.replace(/^#\/?/, '').split('?')[0].trim();
-  return raw || 'practice';
-}
-
-function setRoute(route) {
-  location.hash = '#/' + route;
-}
-
-function formatDate(ts) {
-  if (!ts) return '—';
-  try { return new Date(ts).toLocaleString(); } catch (_) { return '—'; }
-}
-
-function formatSeconds(sec) {
-  sec = Math.max(0, Number(sec) || 0);
-  const m = Math.floor(sec / 60);
-  const s = sec % 60;
-  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-}
-
-function notify(message, type = 'info') {
-  let box = document.getElementById('toast');
-  if (!box) {
-    box = document.createElement('div');
-    box.id = 'toast';
-    box.className = 'toast';
-    document.body.appendChild(box);
+   Here, "placement score" = the student's personal-best (highest
+   ever) practice score in each of VR/DM/QR, summed — not an
+   average of every attempt — so it reflects how close their best
+   demonstrated performance is to their target, and updates live
+   as soon as a new best is set.
+   ============================================================ */
+/* Pulls one module's result out of an attempt, regardless of whether the
+   attempt was a single-module session (module === m, top-level score/
+   accuracy/sjtBand) or a combined mock ('ALL', with a moduleResults
+   breakdown). This is what makes full mock attempts count toward the
+   placement score instead of silently vanishing. */
+function getModuleRecord(attempt, m){
+  if (attempt.moduleResults && attempt.moduleResults[m]) return attempt.moduleResults[m];
+  if (attempt.module === m) {
+    if (m === 'SJT') return { accuracy: attempt.accuracy, band: attempt.sjtBand != null ? attempt.sjtBand : bandForSJT(attempt.accuracy) };
+    return { accuracy: attempt.accuracy, score: attempt.score != null ? attempt.score : scaledScore(attempt.accuracy) };
   }
-  box.textContent = message;
-  box.dataset.type = type;
-  box.classList.add('show');
-  clearTimeout(notify._timer);
-  notify._timer = setTimeout(() => box.classList.remove('show'), 3200);
+  return null;
 }
 
-function showFirebaseStatus() {
-  const banner = document.getElementById('setupBanner');
-  if (!banner) return;
-  if (!FIREBASE_READY) {
-    banner.classList.add('show');
-    return;
-  }
-  banner.classList.remove('show');
+async function computePlacementScore(){
+  const attempts = await Data.getAttempts(); // sorted most-recent-first
+  const bestByModule = {}, latestByModule = {};
+  MODULES.forEach(m => {
+    let best = null, latest = null;
+    attempts.forEach(a => {
+      const r = getModuleRecord(a, m);
+      if (!r) return;
+      if (latest === null) latest = r; // first hit is the most recent, since attempts are sorted desc
+      if (m === 'SJT') { if (best === null || r.band < best.band) best = r; } // lower band = better
+      else { if (best === null || r.score > best.score) best = r; }
+    });
+    bestByModule[m] = best;
+    latestByModule[m] = latest;
+  });
+  const cognitive = ['VR','DM','QR'];
+  const bestComposite = cognitive.every(m => bestByModule[m]) ? cognitive.reduce((s,m) => s + bestByModule[m].score, 0) : null;
+  const latestComposite = cognitive.every(m => latestByModule[m]) ? cognitive.reduce((s,m) => s + latestByModule[m].score, 0) : null;
+  return {
+    bestByModule, latestByModule,
+    totalPlacement: bestComposite, latestPlacement: latestComposite,
+    sjtBand: bestByModule.SJT ? bestByModule.SJT.band : null,
+    sjtLabel: bestByModule.SJT ? SJT_BAND_LABEL[bestByModule.SJT.band] : '',
+    sjtLatestBand: latestByModule.SJT ? latestByModule.SJT.band : null,
+    sjtLatestLabel: latestByModule.SJT ? SJT_BAND_LABEL[latestByModule.SJT.band] : ''
+  };
 }
 
-function currentQuestion() {
-  return AppState.attemptQuestions[AppState.currentIndex] || null;
+function setActiveNav(hash){
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
 }
 
-function questionText(q) {
-  return q?.question_text || q?.questionText || '';
-}
-
-function questionType(q) {
-  return q?.questionType || q?.question_type || '';
-}
-
-function optionsFor(q) {
-  if (!q) return [];
-  return ['a','b','c','d','e']
-    .map(k => ({ key: k.toUpperCase(), text: q['option_' + k] }))
-    .filter(x => String(x.text || '').trim() !== '');
-}
-
-function normalizeAnswer(value) {
-  return String(value || '').trim().toUpperCase();
-}
-
-function optionText(q, key) {
-  const k = String(key || '').toLowerCase();
-  return q && q['option_' + k] ? q['option_' + k] : '';
-}
-
-function appShell(content) {
+/* ============================================================
+   ROUTER
+   ============================================================ */
+async function router(){
+  const hash = location.hash || '#/';
+  const [path, qs] = hash.split('?');
+  const params = new URLSearchParams(qs || '');
   const app = document.getElementById('app');
-  if (!app) return;
-  app.innerHTML = content;
-  if (window.MathJax?.typesetPromise) {
-    window.MathJax.typesetPromise([app]).catch(() => {});
-  }
-}
-
-function renderHome() {
-  appShell(`
-    <section class="hero-card">
-      <div>
-        <div class="eyebrow">MATHCLOUD UCAT COACHING</div>
-        <h1>Prepare with structure, not guesswork.</h1>
-        <p>Practice UCAT-style questions, review your performance, and identify the topics that need the most attention.</p>
-        <div class="hero-actions">
-          <button class="btn primary" onclick="setRoute('practice')">Start Practice</button>
-          <button class="btn secondary" onclick="setRoute('dashboard')">View Progress</button>
-        </div>
-      </div>
-      <div class="hero-stat"><strong>184</strong><span>embedded preparation questions</span></div>
-    </section>
-    <div class="stat-grid">
-      <div class="stat-card"><strong>44</strong><span>Verbal Reasoning</span></div>
-      <div class="stat-card"><strong>35</strong><span>Decision Making</span></div>
-      <div class="stat-card"><strong>36</strong><span>Quantitative Reasoning</span></div>
-      <div class="stat-card"><strong>69</strong><span>Situational Judgement</span></div>
-    </div>
-  `);
-}
-
-function renderPractice() {
-  const modules = MODULES || ['VR','DM','QR','SJT'];
-  appShell(`
-    <section class="page-head">
-      <div>
-        <div class="eyebrow">PRACTICE</div>
-        <h1>Choose a practice set</h1>
-        <p>Start a focused session using the embedded question bank or questions already stored in Firebase.</p>
-      </div>
-    </section>
-
-    <section class="practice-config card">
-      <div class="field-group">
-        <label>Module</label>
-        <div class="module-grid">
-          ${modules.map(m => `<button class="module-btn ${AppState.module === m ? 'active' : ''}" onclick="chooseModule('${m}')"><strong>${m}</strong><span>${escapeHtml(MODULE_NAMES?.[m] || m)}</span></button>`).join('')}
-        </div>
-      </div>
-      <div class="filters-row">
-        <label>Difficulty
-          <select id="difficultySelect" onchange="AppState.difficulty=this.value">
-            <option value="" ${!AppState.difficulty?'selected':''}>All difficulties</option>
-            ${(DIFFICULTIES || ['foundation','standard','advanced']).map(d => `<option value="${d}" ${AppState.difficulty===d?'selected':''}>${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}
-          </select>
-        </label>
-        <label>Number of questions
-          <select id="questionCount">
-            <option value="10">10</option>
-            <option value="20" selected>20</option>
-            <option value="30">30</option>
-            <option value="44">Full available set</option>
-          </select>
-        </label>
-      </div>
-      <div class="practice-start">
-        <button class="btn primary large" onclick="startPractice()">Start ${escapeHtml(AppState.module)} Practice</button>
-      </div>
-    </section>
-
-    <section class="card info-card">
-      <h2>Question bank</h2>
-      <p>The embedded bank contains clinical-context UCAT-style preparation questions. Firebase is used for persistent questions, attempts, responses, weaknesses, student profile and settings.</p>
-      <div id="firebaseHealth" class="status-line">Checking Firebase…</div>
-    </section>
-  `);
-  checkFirebaseHealth();
-}
-
-function chooseModule(module) {
-  AppState.module = module;
-  renderPractice();
-}
-
-async function checkFirebaseHealth() {
-  const el = document.getElementById('firebaseHealth');
-  if (!el) return;
-  if (!db) {
-    el.textContent = 'Firebase is not connected. The embedded question bank is still available for practice.';
-    el.className = 'status-line warning';
-    return;
-  }
-  try {
-    await db.ref('.info/connected').once('value');
-    el.textContent = 'Firebase is configured and reachable.';
-    el.className = 'status-line success';
-  } catch (err) {
-    el.textContent = 'Firebase configuration loaded, but the database could not be read. Check Realtime Database rules/database URL.';
-    el.className = 'status-line warning';
-    console.error('Firebase health check:', err);
-  }
-}
-
-function selectPracticeQuestions() {
-  let list = Array.isArray(SEED_QUESTIONS) ? [...SEED_QUESTIONS] : [];
-  list = list.filter(q => String(q.module || '').toUpperCase() === AppState.module);
-  if (AppState.difficulty) {
-    list = list.filter(q => String(q.difficulty || '').toLowerCase() === AppState.difficulty);
-  }
-  for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [list[i], list[j]] = [list[j], list[i]];
-  }
-  return list;
-}
-
-async function startPractice() {
-  const countEl = document.getElementById('questionCount');
-  const requested = Number(countEl?.value || 20);
-  let list = selectPracticeQuestions();
+  app.innerHTML = '<div class="empty">Loading…</div>';
 
   if (db) {
-    try {
-      const firebaseQuestions = await Data.getQuestions({ module: AppState.module, difficulty: AppState.difficulty || undefined, active: true });
-      if (firebaseQuestions.length) {
-        const embeddedById = new Map(list.map(q => [q.question_id || q.id, q]));
-        const merged = [...firebaseQuestions];
-        list.forEach(q => {
-          const id = q.question_id || q.id;
-          if (!merged.some(x => (x.question_id || x.id) === id) && embeddedById.has(id)) merged.push(q);
-        });
-        list = merged;
-      }
-    } catch (err) {
-      console.warn('Firebase questions unavailable; using embedded bank.', err);
+    App.student = await Data.getStudent();
+    App.settings = await Data.getSettings();
+  }
+
+  if (path === '#/' ) { setActiveNav('#/practice'); app.innerHTML = viewLanding(); }
+  else if (path === '#/practice') { setActiveNav('#/practice'); app.innerHTML = await viewPracticeSetup(); await onModuleChange(); }
+  else if (path === '#/session') { setActiveNav('#/practice'); app.innerHTML = viewSession(); typeset(); startTimerLoop(); return; }
+  else if (path === '#/results') { setActiveNav('#/dashboard'); app.innerHTML = await viewResults(params.get('id')); }
+  else if (path === '#/dashboard') { setActiveNav('#/dashboard'); app.innerHTML = await viewDashboard(); drawDashboardCharts(); }
+  else if (path === '#/mistakes') { setActiveNav('#/mistakes'); app.innerHTML = await viewMistakes(); }
+  else if (path === '#/admin') { setActiveNav('#/admin'); app.innerHTML = await viewAdminDashboard(); }
+  else if (path === '#/admin/questions') { setActiveNav('#/admin'); app.innerHTML = await viewAdminQuestions(params); }
+  else if (path === '#/admin/edit') { setActiveNav('#/admin'); app.innerHTML = await viewAdminEditor(params.get('id')); }
+  else if (path === '#/admin/import') { setActiveNav('#/admin'); app.innerHTML = viewAdminImport(); }
+  else if (path === '#/admin/settings') { setActiveNav('#/admin'); app.innerHTML = await viewAdminSettings(); }
+  else if (path === '#/admin/reports') { setActiveNav('#/admin'); app.innerHTML = await viewAdminReports(); }
+  else { app.innerHTML = viewLanding(); }
+  typeset();
+}
+window.addEventListener('hashchange', router);
+window.addEventListener('DOMContentLoaded', async () => { if (db) { await Data.seedIfEmpty(); } router(); buildCalc(); });
+
+/* ============================================================
+   LANDING
+   ============================================================ */
+function viewLanding(){
+  return `
+  <section class="hero">
+    <div class="eyebrow">Private UCAT preparation platform</div>
+    <h1>Train smarter. Think faster.</h1>
+    <p class="lead">Structured practice, intelligent feedback and targeted preparation for the UK UCAT — Verbal Reasoning, Decision Making, Quantitative Reasoning and Situational Judgement, all in one place.</p>
+    <div class="hero-actions">
+      <a href="#/practice" class="btn btn-primary">Start Practice</a>
+      <a href="#/dashboard" class="btn btn-ghost">View Progress</a>
+    </div>
+    <div class="feature-row">
+      <div class="card"><h3>Four modules</h3><p>Original, UCAT-style questions across VR, DM, QR and SJT — not copied official content.</p></div>
+      <div class="card"><h3>Timed practice</h3><p>Learning, timed practice and full mock-test modes, with flagging and a review screen.</p></div>
+      <div class="card"><h3>Weak-area detection</h3><p>Every session updates a per-topic accuracy and priority score, automatically surfacing what to practise next.</p></div>
+      <div class="card"><h3>Coach dashboard</h3><p>A parent/admin view of the full question bank, analytics and Excel import/export.</p></div>
+    </div>
+  </section>`;
+}
+
+/* ============================================================
+   PRACTICE SETUP
+   ============================================================ */
+async function viewPracticeSetup(){
+  App.questions = await Data.getQuestions({ active: true });
+  const topics = [...new Set(App.questions.map(q => q.topic))].sort();
+  return `
+  <h2>Set up a practice session</h2>
+  <p>Choose a module and configure your session, or jump into a mock test.</p>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Custom practice</h3>
+      <div class="field"><label>Module</label>
+        <select id="cfgModule" onchange="onModuleChange()">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Topic (optional)</label>
+        <select id="cfgTopic" onchange="updateAvailableCount()"><option value="">All topics</option>${topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Difficulty</label>
+        <select id="cfgDifficulty" onchange="updateAvailableCount()"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}">${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Question source</label>
+        <select id="cfgSource" onchange="updateAvailableCount()"><option value="all">All active questions</option><option value="incorrect">Previously incorrect only</option><option value="new">Unseen questions only</option></select>
+      </div>
+      <div class="field"><label>Number of questions</label>
+        <input type="number" id="cfgCount" value="10" min="1" max="60" oninput="clampCfgCount()">
+        <small id="cfgAvailableInfo" style="display:block; margin-top:5px; color:var(--ink-soft);">Checking available questions…</small>
+      </div>
+      <div class="field"><label>Mode</label>
+        <select id="cfgMode"><option value="learning">Learning (untimed, explanations shown immediately)</option><option value="timed">Timed practice</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="beginCustomSession()">Start practice</button>
+    </div>
+    <div class="card">
+      <h3>Mock test</h3>
+      <p>Simulated, timed test drawn randomly from the active question bank, at the exact question counts and section timings used by the real UCAT. Explanations are withheld until you finish.</p>
+      <div class="field"><label>Test length</label>
+        <select id="mockLength"><option value="diagnostic">Short diagnostic (${App.settings.diagnosticCounts.VR+App.settings.diagnosticCounts.DM+App.settings.diagnosticCounts.QR+App.settings.diagnosticCounts.SJT} questions)</option><option value="full">Full mock — official UCAT length (${App.settings.moduleQuestionCounts.VR+App.settings.moduleQuestionCounts.DM+App.settings.moduleQuestionCounts.QR+App.settings.moduleQuestionCounts.SJT} questions)</option></select>
+      </div>
+      <div class="field"><label>Module</label>
+        <select id="mockModule">${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}<option value="ALL">All modules combined</option></select>
+      </div>
+      <button class="btn btn-primary" onclick="beginMockSession()">Start mock test</button>
+      <div style="margin-top:12px; padding:10px 12px; background:var(--primary-tint); border-radius:8px; font-size:12.5px; color:var(--ink-soft);">
+        <strong>Bank depth vs official UCAT length:</strong><br>
+        ${MODULES.map(m => {
+          const have = App.questions.filter(q=>q.module===m).length;
+          const need = App.settings.moduleQuestionCounts[m];
+          return `${m}: ${have}/${need} unique questions${have<need ? ' (a full mock will use all '+have+' available — never repeats)' : ' (enough for a full mock with zero repeats)'}`;
+        }).join('<br>')}
+      </div>
+      <p class="disclaimer">Practice scores are estimates generated by this platform and are not official UCAT results.</p>
+    </div>
+  </div>`;
+}
+
+async function filterPool(module, topic, difficulty, source){
+  // App.questions is the normalised active bank loaded by the practice view.
+  // Treat ALL/blank as every module and normalise legacy field casing.
+  const wantedModule = String(module || '').toUpperCase();
+  let pool = App.questions.filter(q => {
+    if (q.active === false) return false;
+    if (!wantedModule || wantedModule === 'ALL') return true;
+    return String(q.module || '').toUpperCase() === wantedModule;
+  });
+  if (topic) pool = pool.filter(q => (q.topic || '') === topic);
+  if (difficulty) pool = pool.filter(q => String(q.difficulty || '').toLowerCase() === String(difficulty).toLowerCase());
+  if (source === 'incorrect') {
+    const wrong = new Set((await Data.getResponses({ incorrectOnly: true })).map(r => r.questionId));
+    pool = pool.filter(q => wrong.has(q.id));
+  } else if (source === 'new') {
+    const seen = new Set((await Data.getResponses({})).map(r => r.questionId));
+    pool = pool.filter(q => !seen.has(q.id));
+  }
+  return pool;
+}
+async function pickQuestions(module, topic, difficulty, count, source){
+  let pool = await filterPool(module, topic, difficulty, source);
+  pool = pool.sort(() => Math.random() - 0.5);
+  return pool.slice(0, count);
+}
+
+/* ---------- available-question limiter for Custom practice ---------- */
+function populateTopicsForModule(module){
+  const sel = document.getElementById('cfgTopic');
+  if (!sel) return;
+  const current = sel.value;
+  const topics = [...new Set(App.questions.filter(q => q.module === module).map(q => q.topic))].sort();
+  sel.innerHTML = '<option value="">All topics</option>' + topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+  if (topics.includes(current)) sel.value = current;
+}
+async function computeAvailableCount(){
+  const module = document.getElementById('cfgModule').value;
+  const topic = document.getElementById('cfgTopic').value;
+  const difficulty = document.getElementById('cfgDifficulty').value;
+  const source = document.getElementById('cfgSource').value;
+  const pool = await filterPool(module, topic, difficulty, source);
+  return pool.length;
+}
+async function updateAvailableCount(){
+  const n = await computeAvailableCount();
+  const info = document.getElementById('cfgAvailableInfo');
+  const countInput = document.getElementById('cfgCount');
+  if (info) {
+    info.textContent = n === 0
+      ? 'No questions available with these filters — try broadening your selection.'
+      : `${n} question${n === 1 ? '' : 's'} available with these filters (max you can select).`;
+    info.style.color = n === 0 ? 'var(--accent-red)' : 'var(--ink-soft)';
+  }
+  if (countInput) {
+    countInput.max = Math.max(n, 1);
+    countInput.dataset.available = n;
+    if (n === 0) { countInput.value = 0; }
+    else if (parseInt(countInput.value) > n || !countInput.value) { countInput.value = n; }
+  }
+}
+function clampCfgCount(){
+  const countInput = document.getElementById('cfgCount');
+  if (!countInput) return;
+  const max = parseInt(countInput.dataset.available || countInput.max) || 60;
+  if (parseInt(countInput.value) > max) countInput.value = max;
+}
+async function onModuleChange(){
+  populateTopicsForModule(document.getElementById('cfgModule').value);
+  await updateAvailableCount();
+}
+
+async function beginCustomSession(){
+  const module = document.getElementById('cfgModule').value;
+  const topic = document.getElementById('cfgTopic').value;
+  const difficulty = document.getElementById('cfgDifficulty').value;
+  const source = document.getElementById('cfgSource').value;
+  let count = parseInt(document.getElementById('cfgCount').value) || 10;
+  const mode = document.getElementById('cfgMode').value;
+  const available = await computeAvailableCount();
+  if (available === 0) { alert('No questions match those filters yet. Try broadening your selection or add more via the admin question bank.'); return; }
+  if (count > available) {
+    count = available;
+    alert(`Only ${available} question${available===1?'':'s'} are available with these filters — starting a session with ${available}.`);
+  }
+  const questions = await pickQuestions(module, topic, difficulty, count, source);
+  if (!questions.length) { alert('No questions match those filters yet. Try broadening your selection or add more via the admin question bank.'); return; }
+  const perQ = App.settings.moduleTiming[module] || 30;
+  startSession({ mode, module, questions, totalSeconds: mode === 'timed' ? questions.length * perQ : null });
+}
+
+async function beginMockSession(){
+  const length = document.getElementById('mockLength').value;
+  const moduleSel = document.getElementById('mockModule').value;
+  const counts = length === 'full' ? App.settings.moduleQuestionCounts : App.settings.diagnosticCounts;
+  let questions = [];
+  let totalSeconds = 0;
+  const mods = moduleSel === 'ALL' ? MODULES : [moduleSel];
+  for (const m of mods) {
+    const available = App.questions.filter(q=>q.module===m).length;
+    const required = counts[m];
+    if (length === 'full' && available < required) {
+      alert(`${MODULE_NAMES[m]} needs ${required} active questions for a full UCAT mock, but only ${available} are currently available. Add more questions before starting the full mock.`);
+      return;
     }
+    const n = Math.min(required, available);
+    const picked = await pickQuestions(m, '', '', n, 'all');
+    if (picked.length < n) {
+      alert(`${MODULE_NAMES[m]} could not supply the required ${n} unique questions for this mock.`);
+      return;
+    }
+    questions = questions.concat(picked);
+    totalSeconds += n * (App.settings.moduleTiming[m] || 30);
   }
-
-  if (!list.length) {
-    notify('No questions are available for this module/difficulty.', 'error');
-    return;
-  }
-
-  AppState.attemptModule = AppState.module;
-  AppState.attemptQuestions = list.slice(0, requested === 44 ? list.length : requested);
-  AppState.currentIndex = 0;
-  AppState.answers = {};
-  AppState.flags = {};
-  AppState.startedAt = Date.now();
-  AppState.questionStartedAt = Date.now();
-  clearInterval(AppState.timer);
-  setRoute('session');
+  questions = questions.sort(() => Math.random() - 0.5);
+  if (!questions.length) { alert('Not enough active questions in the bank yet for a mock test.'); return; }
+  startSession({ mode: 'mock', module: moduleSel === 'ALL' ? 'ALL' : moduleSel, questions, totalSeconds });
 }
 
-function renderSession() {
-  const q = currentQuestion();
-  if (!q) { setRoute('practice'); return; }
-  const total = AppState.attemptQuestions.length;
-  const answer = AppState.answers[q.question_id || q.id] || '';
-  const elapsed = AppState.startedAt ? Math.floor((Date.now() - AppState.startedAt) / 1000) : 0;
-  const options = optionsFor(q);
-
-  appShell(`
-    <section class="session-head">
-      <div>
-        <div class="eyebrow">${escapeHtml(AppState.attemptModule)} · QUESTION ${AppState.currentIndex + 1} OF ${total}</div>
-        <h1>${escapeHtml(MODULE_NAMES?.[AppState.attemptModule] || AppState.attemptModule)}</h1>
-      </div>
-      <div class="session-timer" id="sessionTimer">${formatSeconds(elapsed)}</div>
-    </section>
-    <div class="progress"><div style="width:${((AppState.currentIndex+1)/total)*100}%"></div></div>
-
-    <section class="question-card card">
-      <div class="question-meta">
-        <span>${escapeHtml(questionType(q))}</span>
-        <span>${escapeHtml(q.topic || 'General')}</span>
-        <span>${escapeHtml(q.difficulty || '')}</span>
-        <button class="flag-btn ${AppState.flags[q.question_id || q.id] ? 'flagged' : ''}" onclick="toggleFlag()">⚑ ${AppState.flags[q.question_id || q.id] ? 'Flagged' : 'Flag'}</button>
-      </div>
-      ${q.passage ? `<div class="passage"><h3>Passage</h3><p>${escapeHtml(q.passage)}</p></div>` : ''}
-      <h2 class="question-text">${escapeHtml(questionText(q))}</h2>
-      <div class="options">
-        ${options.map(o => `
-          <button class="option ${answer === o.key ? 'selected' : ''}" onclick="answerQuestion('${o.key}')">
-            <span class="option-key">${o.key}</span><span>${escapeHtml(o.text)}</span>
-          </button>`).join('')}
-      </div>
-      <div class="session-actions">
-        <button class="btn secondary" onclick="previousQuestion()" ${AppState.currentIndex===0?'disabled':''}>Previous</button>
-        <button class="btn secondary" onclick="setRoute('review')">Review</button>
-        ${AppState.currentIndex < total - 1
-          ? `<button class="btn primary" onclick="nextQuestion()">Next</button>`
-          : `<button class="btn primary" onclick="finishPractice()">Finish & Score</button>`}
-      </div>
-    </section>
-  `);
-
-  startSessionClock();
+function startPriorityPractice(module, topic){
+  (async () => {
+    App.questions = await Data.getQuestions({ active: true });
+    const questions = await pickQuestions(module, topic, '', 12, 'all');
+    if (!questions.length) { alert('No active questions found for this topic yet.'); return; }
+    startSession({ mode: 'timed', module, questions, totalSeconds: questions.length * (App.settings.moduleTiming[module]||30) });
+  })();
 }
 
-function startSessionClock() {
-  clearInterval(AppState.timer);
-  AppState.timer = setInterval(() => {
+function startSession(cfg){
+  session = { ...cfg, answers:{}, flags:{}, timeSpent:{}, currentIndex:0, lastSwitch: Date.now(), finished:false, startedAt: Date.now() };
+  location.hash = '#/session';
+}
+
+/* ============================================================
+   SESSION RUNNER
+   ------------------------------------------------------------
+   NOTE ON THE FIX: previously, selectAnswer(), toggleFlag() and
+   goTo() each re-triggered rendering by setting
+   `location.hash = '#/session'`. Because the hash was ALREADY
+   '#/session' while inside a session, that assignment is a no-op
+   as far as the browser is concerned — no 'hashchange' event
+   fires, so the router never re-ran and the screen never
+   updated. That's why answers couldn't be selected and "Next"
+   appeared to do nothing.
+
+   Fix: while inside an active session, these actions now call
+   renderSessionView() directly to update the DOM, instead of
+   relying on a hash change that wouldn't fire.
+   ============================================================ */
+function renderSessionView(){
+  const app = document.getElementById('app');
+  if (!app) return;
+  app.innerHTML = viewSession();
+  typeset();
+  startTimerLoop();
+}
+function accumulateTime(){
+  if (!session) return;
+  const cur = session.questions[session.currentIndex];
+  const now = Date.now();
+  session.timeSpent[cur.id] = (session.timeSpent[cur.id] || 0) + (now - session.lastSwitch);
+  session.lastSwitch = now;
+}
+function goTo(i){
+  if (!session) return;
+  accumulateTime();
+  session.currentIndex = Math.max(0, Math.min(session.questions.length - 1, i));
+  renderSessionView();
+}
+function selectAnswer(key){
+  if (!session) return;
+  const q = session.questions[session.currentIndex];
+  session.answers[q.id] = key;
+  renderSessionView();
+}
+function toggleFlag(){
+  if (!session) return;
+  const q = session.questions[session.currentIndex];
+  session.flags[q.id] = !session.flags[q.id];
+  renderSessionView();
+}
+let timerHandle = null;
+function startTimerLoop(){
+  if (timerHandle) clearInterval(timerHandle);
+  if (!session || !session.totalSeconds) return;
+  timerHandle = setInterval(() => {
+    const elapsed = (Date.now() - session.startedAt) / 1000;
+    const remaining = session.totalSeconds - elapsed;
     const el = document.getElementById('sessionTimer');
-    if (!el || !AppState.startedAt) return;
-    el.textContent = formatSeconds(Math.floor((Date.now() - AppState.startedAt) / 1000));
+    if (!el) { clearInterval(timerHandle); return; }
+    el.textContent = fmtTime(remaining);
+    el.classList.toggle('low', remaining < 60);
+    if (remaining <= 0) { clearInterval(timerHandle); finishSession(); }
   }, 1000);
 }
 
-function answerQuestion(key) {
-  const q = currentQuestion();
-  if (!q) return;
-  AppState.answers[q.question_id || q.id] = key;
-  renderSession();
+
+function getLastQuestionIndex(){
+  return session ? session.questions.length - 1 : 0;
 }
 
-function toggleFlag() {
-  const q = currentQuestion();
-  if (!q) return;
-  const id = q.question_id || q.id;
-  AppState.flags[id] = !AppState.flags[id];
-  renderSession();
+function reviewQuestionStatus(q){
+  if (!session) return 'unseen';
+  if (session.answers[q.id]) return session.flags[q.id] ? 'flagged-complete' : 'complete';
+  return session.flags[q.id] ? 'flagged-incomplete' : 'incomplete';
 }
 
-function previousQuestion() {
-  if (AppState.currentIndex <= 0) return;
-  AppState.currentIndex--;
-  AppState.questionStartedAt = Date.now();
-  renderSession();
-}
+function renderReviewScreen(){
+  if (!session) return;
+  if (timerHandle) clearInterval(timerHandle);
+  accumulateTime();
 
-function nextQuestion() {
-  if (AppState.currentIndex >= AppState.attemptQuestions.length - 1) return;
-  AppState.currentIndex++;
-  AppState.questionStartedAt = Date.now();
-  renderSession();
-}
+  const flagged = session.questions.map((q,i)=>({q,i})).filter(x=>session.flags[x.q.id]);
+  const incomplete = session.questions.map((q,i)=>({q,i})).filter(x=>!session.answers[x.q.id]);
+  const all = session.questions.map((q,i)=>({q,i}));
 
-function renderReview() {
-  const total = AppState.attemptQuestions.length;
-  const answered = Object.keys(AppState.answers).length;
-  const flagged = Object.values(AppState.flags).filter(Boolean).length;
-  appShell(`
-    <section class="page-head review-header">
-      <div><div class="eyebrow">REVIEW</div><h1>Check your answers</h1><p>Review unanswered and flagged questions before submitting.</p></div>
-      <div class="review-summary">
-        <div><strong>${total}</strong><span>Total</span></div>
-        <div><strong>${answered}</strong><span>Answered</span></div>
-        <div><strong>${total-answered}</strong><span>Unanswered</span></div>
-        <div><strong>${flagged}</strong><span>Flagged</span></div>
+  document.getElementById('app').innerHTML = `
+    <div class="review-screen">
+      <div class="card review-card">
+        <div class="review-header">
+          <div>
+            <h2>Review your answers</h2>
+            <p class="muted">Review your questions before ending this ${MODULE_NAMES[session.module] || 'assessment'}.</p>
+          </div>
+          <div class="review-time" id="reviewTimer">${fmtTime(Math.max(0,session.totalSeconds-(Date.now()-session.startedAt)/1000))}</div>
+        </div>
+
+        <div class="review-summary">
+          <div><strong>${session.questions.length}</strong><span>Total</span></div>
+          <div><strong>${session.questions.length-incomplete.length}</strong><span>Answered</span></div>
+          <div><strong>${incomplete.length}</strong><span>Incomplete</span></div>
+          <div><strong>${flagged.length}</strong><span>Flagged</span></div>
+        </div>
+
+        <div class="review-actions">
+          <button class="btn btn-primary" onclick="openReviewList('all')">Review all questions</button>
+          <button class="btn btn-ghost" onclick="openReviewList('incomplete')">Review incomplete</button>
+          <button class="flag-btn ${flagged.length?'flagged':''}" onclick="openReviewList('flagged')" ${flagged.length?'':'disabled'}>
+            ★ Review flagged (${flagged.length})
+          </button>
+        </div>
+
+        <div id="review-list-area"></div>
+
+        <div class="review-final-actions">
+          <button class="btn btn-ghost" onclick="returnToLastQuestion()">← Return to Q${getLastQuestionIndex()+1}</button>
+          <button class="btn btn-primary" onclick="finishSession()">End assessment</button>
+        </div>
       </div>
-    </section>
-    <section class="card">
-      <div class="review-grid">
-        ${AppState.attemptQuestions.map((q,i) => {
-          const id=q.question_id||q.id;
-          const state = AppState.flags[id] ? 'is-flagged' : (AppState.answers[id] ? 'is-answered' : 'is-incomplete');
-          return `<button class="review-q ${state}" onclick="jumpToQuestion(${i})">${i+1}<small>${AppState.answers[id] || '—'}</small></button>`;
-        }).join('')}
-      </div>
-      <div class="review-final-actions">
-        <button class="btn secondary" onclick="setRoute('session')">Back to Question</button>
-        <button class="btn primary" onclick="finishPractice()">Submit & Score</button>
-      </div>
-    </section>
-  `);
+    </div>`;
+
+  typeset();
+  startReviewTimer();
 }
 
-function jumpToQuestion(index) {
-  AppState.currentIndex = index;
-  AppState.questionStartedAt = Date.now();
-  setRoute('session');
+let reviewTimerHandle=null;
+function startReviewTimer(){
+  if(reviewTimerHandle) clearInterval(reviewTimerHandle);
+  reviewTimerHandle=setInterval(()=>{
+    if(!session || session.finished){
+      clearInterval(reviewTimerHandle); return;
+    }
+    const remaining=Math.max(0,session.totalSeconds-(Date.now()-session.startedAt)/1000);
+    const el=document.getElementById('reviewTimer');
+    if(el) el.textContent=fmtTime(remaining);
+    if(remaining<=0){
+      clearInterval(reviewTimerHandle);
+      finishSession();
+    }
+  },1000);
 }
 
-async function finishPractice() {
-  clearInterval(AppState.timer);
-  const now = Date.now();
-  const responses = [];
-  let correct = 0;
+function openReviewList(type){
+  if(!session) return;
+  const area=document.getElementById('review-list-area');
+  if(!area) return;
 
-  AppState.attemptQuestions.forEach((q, index) => {
-    const id = q.question_id || q.id;
-    const selected = normalizeAnswer(AppState.answers[id]);
-    const expected = normalizeAnswer(q.correct_answer || q.correctAnswer);
-    const isCorrect = !!selected && selected === expected;
-    if (isCorrect) correct++;
-    responses.push({
-      questionId: id,
-      module: q.module || AppState.attemptModule,
-      topic: q.topic || '',
-      selectedAnswer: selected,
-      correctAnswer: expected,
-      correct: isCorrect,
-      flagged: !!AppState.flags[id],
-      timeTaken: Math.max(0, Math.round((now - (AppState.startedAt || now)) / 1000 / Math.max(1, AppState.attemptQuestions.length)))
-    });
+  let items=session.questions.map((q,i)=>({q,i}));
+  if(type==='flagged') items=items.filter(x=>session.flags[x.q.id]);
+  if(type==='incomplete') items=items.filter(x=>!session.answers[x.q.id]);
+
+  area.innerHTML=`
+    <div class="review-list-title">
+      ${type==='flagged'?'Flagged questions':type==='incomplete'?'Incomplete questions':'All questions'}
+    </div>
+    <div class="review-grid">
+      ${items.length ? items.map(x=>`
+        <button type="button" class="review-q ${session.flags[x.q.id]?'is-flagged':''} ${session.answers[x.q.id]?'is-answered':'is-incomplete'}"
+          onclick="returnFromReviewToQuestion(${x.i})">
+          Q${x.i+1}
+          <small>${session.answers[x.q.id]?'Answered':'Incomplete'}${session.flags[x.q.id]?' • Flagged':''}</small>
+        </button>`).join('') : '<div class="muted">There are no questions in this list.</div>'}
+    </div>`;
+}
+
+function returnFromReviewToQuestion(index){
+  if(!session) return;
+  session.reviewMode=true;
+  session.reviewReturnIndex=getLastQuestionIndex();
+  goTo(index);
+}
+
+function returnToLastQuestion(){
+  if(!session) return;
+  session.reviewMode=false;
+  goTo(getLastQuestionIndex());
+}
+
+function viewSession(){
+  if (!session) return `<div class="empty">No active session. <a href="#/practice">Start one</a>.</div>`;
+  const q = session.questions[session.currentIndex];
+  const opts = qOptions(q);
+  const selected = session.answers[q.id];
+  const showExplanation = session.mode === 'learning' && selected;
+  const isQR = q.module === 'QR';
+  const elapsed = session.totalSeconds ? (Date.now() - session.startedAt) / 1000 : 0;
+  const remaining = session.totalSeconds ? session.totalSeconds - elapsed : null;
+
+  let html = `<div class="session-header">
+    <div><strong>${MODULE_NAMES[q.module] || q.module}</strong> &nbsp; <span class="badge badge-grey">${esc(q.question_type||q.questionType||'')}</span> &nbsp; <span class="badge badge-${q.difficulty==='advanced'?'red':q.difficulty==='standard'?'amber':'green'}">${q.difficulty}</span></div>
+    <div class="session-meta">
+      <span>Q${session.currentIndex+1} of ${session.questions.length}</span>
+      ${session.totalSeconds ? `<span class="timer" id="sessionTimer">${fmtTime(remaining)}</span>` : `<span class="badge badge-blue">Untimed</span>`}
+      <button class="flag-btn ${session.flags[q.id]?'flagged':''}" onclick="toggleFlag()">${session.flags[q.id] ? '★ Flagged' : '☆ Flag'}</button>
+      ${isQR ? `<button class="btn btn-ghost btn-sm" onclick="toggleCalc()">Calculator</button>` : ''}
+    </div>
+  </div>
+  <div class="progress-bar"><div style="width:${((session.currentIndex+1)/session.questions.length*100)}%"></div></div>
+  <div class="card" style="margin-top:18px;">`;
+
+  if (q.passage) html += `<div class="passage-box">${esc(q.passage)}</div>`;
+  html += `<div class="question-text">${esc(q.question_text || q.questionText)}</div>`;
+  if (q.data) html += `<div class="passage-box">${esc(q.data)}</div>`;
+  html += `<div class="options">` + opts.map(o => {
+    let cls = 'option' + (selected === o.key ? ' selected' : '');
+    if (showExplanation) {
+      if (o.key === q.correct_answer) cls += ' correct';
+      else if (o.key === selected) cls += ' incorrect';
+    }
+    return `<div class="${cls}" onclick="${showExplanation?'':'selectAnswer(\''+o.key+'\')'}"><span class="key">${o.key}</span><span>${esc(o.text)}</span></div>`;
+  }).join('') + `</div>`;
+
+  if (showExplanation) {
+    html += `<div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation)}</div>`;
+    if (q.technique_tip) html += `<div class="tip-box"><strong>Technique tip:</strong> ${esc(q.technique_tip)}</div>`;
+  }
+
+  html += `</div>
+  <div class="session-footer">
+    <div>
+      <button class="btn btn-ghost" onclick="goTo(${session.currentIndex-1})" ${session.currentIndex===0?'disabled':''}>← Previous</button>
+    </div>
+    <div style="display:flex; gap:10px;">
+      ${session.reviewMode
+        ? `<button class="btn btn-ghost" onclick="renderReviewScreen()">← Back to review</button>`
+        : (session.currentIndex < session.questions.length-1
+          ? `<button class="btn btn-primary" onclick="goTo(${session.currentIndex+1})">Next →</button>`
+          : `<button class="btn btn-primary" onclick="renderReviewScreen()">Review answers →</button>`)}
+    </div>
+  </div>`;
+  return html;
+}
+
+async function finishSession(){
+  if (!session || session.finished) return;
+  accumulateTime();
+  session.finished = true;
+  if (timerHandle) clearInterval(timerHandle);
+  const responses = session.questions.map(q => {
+    const studentAnswer = session.answers[q.id] || null;
+    const correct = studentAnswer === q.correct_answer;
+    return {
+      questionId: q.id, module: q.module, topic: q.topic, questionType: q.question_type || q.questionType,
+      difficulty: q.difficulty, studentAnswer, correct, timeTaken: Math.round((session.timeSpent[q.id]||0)/1000),
+      flagged: !!session.flags[q.id]
+    };
+  });
+  const correctCount = responses.filter(r => r.correct).length;
+  const accuracy = Math.round((correctCount / responses.length) * 100);
+  const timeUsed = Math.round(responses.reduce((s,r)=>s+r.timeTaken,0));
+
+  /* Per-module breakdown — computed for EVERY attempt, whether it's a
+     single-module custom session or a combined mock covering several
+     modules. This is what lets a full mock's VR/DM/QR/SJT results feed
+     into the placement score and dashboards, instead of being invisible
+     just because session.module is 'ALL'. */
+  const moduleResults = {};
+  MODULES.forEach(m => {
+    const rs = responses.filter(r => r.module === m);
+    if (!rs.length) return;
+    const c = rs.filter(r=>r.correct).length;
+    const acc = Math.round((c/rs.length)*100);
+    if (m === 'SJT') moduleResults[m] = { correct:c, total:rs.length, accuracy:acc, band: bandForSJT(acc) };
+    else moduleResults[m] = { correct:c, total:rs.length, accuracy:acc, score: scaledScore(acc) };
   });
 
-  const total = AppState.attemptQuestions.length;
-  const percentage = total ? Math.round(correct / total * 100) : 0;
-  AppState.lastResult = {
-    module: AppState.attemptModule,
-    total,
-    correct,
-    incorrect: total - correct,
-    percentage,
-    date: now,
-    responses
+  const attempt = {
+    module: session.module, mode: session.mode, accuracy, moduleResults,
+    timeUsed, questionsAttempted: responses.filter(r=>r.studentAnswer).length, questionsCorrect: correctCount,
+    totalQuestions: responses.length,
+    // score/sjtBand: only meaningful for single-module sessions; for 'ALL'
+    // mock sessions, per-module figures live in moduleResults instead.
+    score: session.module === 'SJT' ? null : scaledScore(accuracy),
+    sjtBand: session.module === 'SJT' ? bandForSJT(accuracy) : (moduleResults.SJT ? moduleResults.SJT.band : null)
   };
-
-  if (db) {
-    try {
-      await Data.saveAttempt({
-        module: AppState.attemptModule,
-        total,
-        correct,
-        percentage,
-        questionCount: total,
-        flaggedCount: Object.values(AppState.flags).filter(Boolean).length
-      }, responses);
-    } catch (err) {
-      console.error('Could not save attempt:', err);
-      notify('Score calculated, but Firebase could not save this attempt.', 'warning');
-    }
-  }
-  setRoute('result');
+  const id = await Data.saveAttempt(attempt, responses);
+  session.lastResponses = responses;
+  session.lastAttemptId = id;
+  location.hash = id ? ('#/results?id=' + id) : '#/results';
 }
 
-function renderResult() {
-  const r = AppState.lastResult;
-  if (!r) { setRoute('practice'); return; }
-  appShell(`
-    <section class="result-card card">
-      <div class="eyebrow">PRACTICE COMPLETE</div>
-      <h1>${r.percentage}%</h1>
-      <p>You answered <strong>${r.correct}</strong> of <strong>${r.total}</strong> questions correctly.</p>
-      <div class="result-grid">
-        <div><strong>${r.correct}</strong><span>Correct</span></div>
-        <div><strong>${r.incorrect}</strong><span>Incorrect / unanswered</span></div>
-        <div><strong>${r.total}</strong><span>Total</span></div>
+async function viewResults(attemptId){
+  if (!session || !session.finished) return `<div class="empty">No completed session found. <a href="#/practice">Start a new one</a>.</div>`;
+  const responses = session.lastResponses;
+  const correctCount = responses.filter(r=>r.correct).length;
+  const accuracy = Math.round(correctCount/responses.length*100);
+  const isSJTOnly = session.module === 'SJT';
+  const isMixed = session.module === 'ALL' && new Set(responses.map(r=>r.module)).size > 1;
+
+  let scoreCardHtml;
+  if (isSJTOnly) {
+    const band = bandForSJT(accuracy);
+    scoreCardHtml = `<div class="card"><div class="stat-num">Band ${band}</div><div class="stat-label">${esc(SJT_BAND_LABEL[band])}</div></div>`;
+  } else if (isMixed) {
+    scoreCardHtml = MODULES.filter(m => responses.some(r=>r.module===m)).map(m => {
+      const rs = responses.filter(r=>r.module===m);
+      const acc = Math.round(rs.filter(r=>r.correct).length/rs.length*100);
+      const label = m === 'SJT' ? 'Band '+bandForSJT(acc) : scaledScore(acc);
+      return `<div class="card"><div class="eyebrow">${m}</div><div class="stat-num" style="font-size:24px;">${label}</div><div class="stat-label">${acc}% accuracy</div></div>`;
+    }).join('');
+  } else {
+    scoreCardHtml = `<div class="card"><div class="stat-num">${scaledScore(accuracy)}</div><div class="stat-label">Practice score</div></div>`;
+  }
+
+  let html = `<h2>Session results</h2>
+  <div class="grid ${isMixed ? 'cols-4' : 'cols-4'}">
+    <div class="card"><div class="stat-num">${accuracy}%</div><div class="stat-label">Overall accuracy</div></div>
+    <div class="card"><div class="stat-num">${correctCount}/${responses.length}</div><div class="stat-label">Correct</div></div>
+    ${isMixed ? '' : scoreCardHtml}
+    <div class="card"><div class="stat-num">${fmtTime(responses.reduce((s,r)=>s+r.timeTaken,0))}</div><div class="stat-label">Time used</div></div>
+  </div>
+  ${isMixed ? `<h3 style="margin-top:18px;">By section</h3><div class="grid cols-4">${scoreCardHtml}</div>` : ''}
+  <p class="disclaimer">${isSJTOnly ? 'Situational Judgement is reported as a Band 1–4 (never a 300–900 score), matching how the real UCAT scores SJT.' : 'Practice score is an estimate generated by this platform (300–900 scale) and is not an official UCAT score. SJT is always reported as a Band, not a score.'}</p>
+  <div style="margin:20px 0; display:flex; gap:10px;">
+    <a href="#/practice" class="btn btn-primary">Practice again</a>
+    <a href="#/dashboard" class="btn btn-ghost">View progress</a>
+  </div>
+  <h3>Question review</h3>`;
+  session.questions.forEach((q,i) => {
+    const r = responses[i];
+    const opts = qOptions(q);
+    html += `<div class="card" style="margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span class="badge ${r.correct ? 'badge-green' : 'badge-red'}">${r.correct ? 'Correct' : 'Incorrect'}</span>
+        <span class="badge badge-grey">${esc(q.topic)}</span>
       </div>
-      <div class="hero-actions">
-        <button class="btn primary" onclick="setRoute('practice')">Practice Again</button>
-        <button class="btn secondary" onclick="setRoute('mistakes')">Review Mistakes</button>
-        <button class="btn secondary" onclick="setRoute('dashboard')">View Progress</button>
-      </div>
-    </section>
-    <section class="card">
-      <h2>Question review</h2>
-      <div class="answer-review">
-        ${r.responses.map((x,i) => {
-          const q = AppState.attemptQuestions[i];
-          return `<div class="answer-row ${x.correct?'correct':'incorrect'}"><strong>${i+1}. ${x.correct?'Correct':'Needs review'}</strong><span>Your answer: ${escapeHtml(x.selectedAnswer || 'Not answered')} · Correct: ${escapeHtml(x.correctAnswer || '—')}</span><small>${escapeHtml(q?.topic || '')}</small></div>`;
-        }).join('')}
-      </div>
-    </section>
-  `);
+      ${q.passage ? `<div class="passage-box" style="max-height:140px;">${esc(q.passage)}</div>` : ''}
+      <div class="question-text">${esc(q.question_text||q.questionText)}</div>
+      <div class="options">${opts.map(o=>{
+        let cls='option';
+        if (o.key===q.correct_answer) cls+=' correct'; else if (o.key===r.studentAnswer) cls+=' incorrect';
+        return `<div class="${cls}"><span class="key">${o.key}</span><span>${esc(o.text)}</span></div>`;
+      }).join('')}</div>
+      <div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation)}</div>
+      ${!r.correct ? `<button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="markMistake('${q.id}')">Add to My Mistakes</button>` : ''}
+    </div>`;
+  });
+  return html;
+}
+function markMistake(qid){ alert('Saved — incorrect answers are automatically tracked in your Mistake Bank.'); }
+
+/* ============================================================
+   CALCULATOR
+   ============================================================ */
+function buildCalc(){
+  const grid = document.getElementById('calcGrid');
+  const keys = ['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','=','+','C'];
+  grid.innerHTML = keys.map(k => `<button onclick="calcPress('${k}')">${k}</button>`).join('');
+}
+let calcExpr = '';
+function toggleCalc(){ document.getElementById('calc').classList.toggle('show'); }
+function calcPress(k){
+  const display = document.getElementById('calcDisplay');
+  if (k === 'C') { calcExpr = ''; }
+  else if (k === '=') { try { calcExpr = String(eval(calcExpr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-'))); } catch(e){ calcExpr = 'Error'; } }
+  else { calcExpr += k; }
+  display.value = calcExpr || '0';
 }
 
-async function renderDashboard() {
-  appShell('<section class="loading-card">Loading progress…</section>');
-  let attempts = [];
-  let student = DEFAULT_STUDENT;
-  try {
-    if (db) {
-      [attempts, student] = await Promise.all([Data.getAttempts(), Data.getStudent()]);
-    } else if (AppState.lastResult) {
-      attempts = [AppState.lastResult];
-    }
-  } catch (err) {
-    console.error(err);
-  }
-  const totalAttempts = attempts.length;
-  const avg = totalAttempts ? Math.round(attempts.reduce((s,a)=>s+Number(a.percentage||0),0)/totalAttempts) : 0;
-  const best = totalAttempts ? Math.max(...attempts.map(a=>Number(a.percentage||0))) : 0;
-  appShell(`
-    <section class="page-head"><div><div class="eyebrow">PROGRESS</div><h1>${escapeHtml(student.name || 'Student')} Dashboard</h1><p>Track practice performance and recent attempts.</p></div></section>
-    <div class="stat-grid">
-      <div class="stat-card"><strong>${totalAttempts}</strong><span>Attempts</span></div>
-      <div class="stat-card"><strong>${avg}%</strong><span>Average</span></div>
-      <div class="stat-card"><strong>${best}%</strong><span>Best score</span></div>
-      <div class="stat-card"><strong>${escapeHtml(student.targetScore || 2500)}</strong><span>Target score</span></div>
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+async function viewDashboard(){
+  App.attempts = await Data.getAttempts();
+  App.weaknesses = await Data.getWeaknesses();
+  const totalQ = App.attempts.reduce((s,a)=>s+(a.totalQuestions||0),0);
+  const totalCorrect = App.attempts.reduce((s,a)=>s+(a.questionsCorrect||0),0);
+  const overallAcc = totalQ ? Math.round(totalCorrect/totalQ*100) : 0;
+  const totalTime = App.attempts.reduce((s,a)=>s+(a.timeUsed||0),0);
+  const latest = App.attempts[0], prior = App.attempts[1];
+  const improvement = latest && prior ? (latest.score - prior.score) : 0;
+  const sorted = [...App.weaknesses].sort((a,b)=>a.accuracy-b.accuracy);
+  const weakest = sorted.slice(0,5);
+  const strongest = [...App.weaknesses].sort((a,b)=>b.accuracy-a.accuracy).slice(0,5);
+
+  const moduleCards = MODULES.map(m => {
+    const records = App.attempts.map(a => getModuleRecord(a, m)).filter(Boolean);
+    const acc = records.length ? Math.round(records.reduce((s,r)=>s+r.accuracy,0)/records.length) : null;
+    const display = !records.length ? '—' : (m === 'SJT' ? 'Band ' + bandForSJT(acc) : scaledScore(acc));
+    return `<div class="card">
+      <div class="eyebrow">${m}</div>
+      <h3>${MODULE_NAMES[m]}</h3>
+      <div class="stat-num">${display}</div>
+      <div class="stat-label">${m==='SJT'?'Average band':'Practice score'}${acc!=null ? ' · '+acc+'% accuracy' : ''}</div>
+      <div class="disclaimer" style="margin-top:8px; border:none; padding:0;">${m==='SJT'?'Estimated band, not official.':'Not an official UCAT score.'}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <h2>Progress dashboard — ${esc(App.student.name)}</h2>
+  <div class="grid cols-4">
+    <div class="card"><div class="stat-num">${totalQ}</div><div class="stat-label">Questions attempted</div></div>
+    <div class="card"><div class="stat-num">${overallAcc}%</div><div class="stat-label">Overall accuracy</div></div>
+    <div class="card"><div class="stat-num">${improvement>=0?'+':''}${improvement}</div><div class="stat-label">Score change (last 2 attempts)</div></div>
+    <div class="card"><div class="stat-num">${fmtTime(totalTime)}</div><div class="stat-label">Total practice time</div></div>
+  </div>
+  <h3 style="margin-top:26px;">Module performance</h3>
+  <div class="grid cols-4">${moduleCards}</div>
+
+  <div class="grid cols-2" style="margin-top:26px;">
+    <div class="card chart-card"><h3>Score over time</h3><div class="chart-wrap"><canvas id="scoreChart"></canvas></div></div>
+    <div class="card chart-card"><h3>Accuracy by module</h3><div class="chart-wrap"><canvas id="accChart"></canvas></div></div>
+  </div>
+
+  <div class="grid cols-2" style="margin-top:20px;">
+    <div class="card">
+      <h3>Top weaknesses</h3>
+      ${weakest.length ? weakest.map(w=>`<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module} · ${w.accuracy}% accuracy</div></div>
+        <button class="btn btn-sm btn-primary" onclick="startPriorityPractice('${w.module}','${esc(w.topic)}')">Practise</button>
+      </div>`).join('') : '<div class="empty">Complete a session to see weak areas.</div>'}
     </div>
-    <section class="card">
-      <div class="section-title"><h2>Recent attempts</h2><button class="btn secondary small" onclick="setRoute('practice')">New Practice</button></div>
-      ${attempts.length ? `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Module</th><th>Questions</th><th>Correct</th><th>Score</th></tr></thead><tbody>${attempts.slice(0,20).map(a=>`<tr><td>${escapeHtml(formatDate(a.date))}</td><td>${escapeHtml(a.module||'—')}</td><td>${a.total||a.questionCount||'—'}</td><td>${a.correct??'—'}</td><td><strong>${a.percentage??0}%</strong></td></tr>`).join('')}</tbody></table></div>` : '<div class="empty">No attempts have been recorded yet.</div>'}
-    </section>
-    <section class="card profile-card"><h2>Student profile</h2><div class="profile-grid"><div><span>Name</span><strong>${escapeHtml(student.name||'Student')}</strong></div><div><span>Target university</span><strong>${escapeHtml(student.targetUniversity||'Not set')}</strong></div><div><span>Target course</span><strong>${escapeHtml(student.targetCourse||'Not set')}</strong></div><div><span>UCAT year</span><strong>${escapeHtml(student.targetUCATYear||'—')}</strong></div></div></section>
-  `);
+    <div class="card">
+      <h3>Top strengths</h3>
+      ${strongest.length ? strongest.map(w=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module}</div></div><span class="badge badge-green">${w.accuracy}%</span>
+      </div>`).join('') : '<div class="empty">No data yet.</div>'}
+    </div>
+  </div>`;
 }
+function drawDashboardCharts(){
+  const scoreEl = document.getElementById('scoreChart');
+  const accEl = document.getElementById('accChart');
+  if (!scoreEl || !accEl || !window.Chart) return;
 
-async function renderMistakes() {
-  appShell('<section class="loading-card">Loading mistake bank…</section>');
-  let rows = [];
-  try { if (db) rows = await Data.getResponses({ incorrectOnly: true }); } catch (err) { console.error(err); }
-  const latest = rows.slice(-100).reverse();
-  appShell(`
-    <section class="page-head"><div><div class="eyebrow">MISTAKE BANK</div><h1>Review incorrect answers</h1><p>Use your mistakes to identify recurring topics and improve accuracy.</p></div></section>
-    <section class="card">
-      ${latest.length ? `<div class="mistake-list">${latest.map(r=>`<div class="mistake-item"><div><strong>${escapeHtml(r.module||'')}</strong><span>${escapeHtml(r.topic||'General')}</span></div><div><span>Your answer: ${escapeHtml(r.selectedAnswer||'—')}</span><span>Correct: ${escapeHtml(r.correctAnswer||'—')}</span></div></div>`).join('')}</div>` : '<div class="empty">No incorrect responses have been saved yet.</div>'}
-    </section>
-  `);
-}
+  [scoreEl, accEl].forEach(el => {
+    const existing = Chart.getChart(el);
+    if (existing) existing.destroy();
+  });
 
-async function renderAdmin() {
-  appShell('<section class="loading-card">Loading admin panel…</section>');
-  let questions=[];
-  let settings=DEFAULT_SETTINGS;
-  try {
-    if (db) [questions, settings] = await Promise.all([Data.getQuestions(), Data.getSettings()]);
-    else questions = SEED_QUESTIONS.map(q=>({...q,id:q.question_id}));
-  } catch(err) { console.error(err); }
-  const counts = MODULES.reduce((o,m)=>{o[m]=questions.filter(q=>q.module===m).length;return o;},{});
-  appShell(`
-    <section class="page-head"><div><div class="eyebrow">ADMIN</div><h1>Question bank management</h1><p>Inspect the question bank, refresh the embedded seed data, and monitor database status.</p></div></section>
-    <div class="stat-grid">${MODULES.map(m=>`<div class="stat-card"><strong>${counts[m]||0}</strong><span>${escapeHtml(MODULE_NAMES?.[m]||m)}</span></div>`).join('')}</div>
-    <section class="card admin-toolbar"><button class="btn primary" onclick="runSeedRepair()">Repair / Seed Question Bank</button><button class="btn secondary" onclick="exportQuestions()">Export Questions JSON</button><button class="btn secondary" onclick="setRoute('practice')">Practice</button></section>
-    <section class="card"><div class="section-title"><h2>Question bank</h2><input class="search-input" id="adminSearch" placeholder="Search question, topic or ID" oninput="filterAdminQuestions()"></div><div id="adminQuestionList"></div></section>
-  `);
-  window._adminQuestions = questions;
-  renderAdminQuestions(questions.slice(0,100));
-}
+  const attempts = [...(App.attempts || [])].reverse();
 
-function renderAdminQuestions(list) {
-  const el=document.getElementById('adminQuestionList'); if(!el)return;
-  el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>ID</th><th>Module</th><th>Topic</th><th>Difficulty</th><th>Question</th><th>Active</th></tr></thead><tbody>${list.map(q=>`<tr><td><code>${escapeHtml(q.id||q.question_id||'')}</code></td><td>${escapeHtml(q.module||'')}</td><td>${escapeHtml(q.topic||'')}</td><td>${escapeHtml(q.difficulty||'')}</td><td>${escapeHtml(questionText(q).slice(0,120))}</td><td>${q.active===false?'No':'Yes'}</td></tr>`).join('')}</tbody></table></div>`;
-}
+  // Keep the score graph on the familiar 300–900 UCAT cognitive-score scale.
+  // For a full mock, use the average of VR + DM + QR rather than 300–2700.
+  const scorePoints = attempts.map(a => {
+    const vr = getModuleRecord(a, 'VR');
+    const dm = getModuleRecord(a, 'DM');
+    const qr = getModuleRecord(a, 'QR');
 
-function filterAdminQuestions() {
-  const s=(document.getElementById('adminSearch')?.value||'').toLowerCase();
-  const rows=(window._adminQuestions||[]).filter(q => [q.id,q.question_id,q.topic,q.module,questionText(q)].some(v=>String(v||'').toLowerCase().includes(s)));
-  renderAdminQuestions(rows.slice(0,100));
-}
-
-async function runSeedRepair() {
-  if (!db) { notify('Firebase is not connected.', 'error'); return; }
-  try { await Data.seedIfEmpty(); notify('Question bank repair completed.', 'success'); await renderAdmin(); }
-  catch(err) { console.error(err); notify('Question bank repair failed. Check Firebase rules.', 'error'); }
-}
-
-function exportQuestions() {
-  const data = window._adminQuestions || SEED_QUESTIONS;
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='mathcloud-ucat-questions.json'; a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-async function renderRoute() {
-  AppState.route = routeFromHash();
-  showFirebaseStatus();
-  switch(AppState.route) {
-    case 'home':
-    case '': renderHome(); break;
-    case 'practice': renderPractice(); break;
-    case 'session': renderSession(); break;
-    case 'review': renderReview(); break;
-    case 'result': renderResult(); break;
-    case 'dashboard': await renderDashboard(); break;
-    case 'mistakes': await renderMistakes(); break;
-    case 'admin': await renderAdmin(); break;
-    default: setRoute('practice'); break;
-  }
-}
-
-async function initialiseApplication() {
-  showFirebaseStatus();
-  if (db) {
-    try {
-      await Data.seedIfEmpty();
-    } catch (err) {
-      console.error('Firebase initialization/seed failed:', err);
-      notify('Firebase is connected, but the initial data check failed. The page will still work with the embedded bank.', 'warning');
+    if (vr && dm && qr) {
+      return Math.round((vr.score + dm.score + qr.score) / 3);
     }
-  }
-  await renderRoute();
+
+    const m = ['VR','DM','QR'].find(x => a.module === x);
+    if (m) {
+      const r = getModuleRecord(a, m);
+      return r ? r.score : null;
+    }
+    return null;
+  });
+
+  new Chart(scoreEl, {
+    type:'line',
+    data:{
+      labels: attempts.map((a,i) => 'Attempt ' + (i+1)),
+      datasets:[{
+        label:'Cognitive score',
+        data:scorePoints,
+        borderColor:'#1B5FD1',
+        backgroundColor:'#EAF1FD',
+        tension:.3,
+        fill:true,
+        spanGaps:true,
+        pointRadius:4,
+        pointHoverRadius:6
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:true,position:'top'},
+        tooltip:{
+          callbacks:{
+            label:(ctx)=> ctx.parsed.y == null
+              ? 'No cognitive score'
+              : 'Score: ' + ctx.parsed.y
+          }
+        }
+      },
+      scales:{
+        x:{
+          ticks:{maxRotation:0}
+        },
+        y:{
+          min:300,
+          max:900,
+          ticks:{stepSize:100},
+          title:{display:true,text:'UCAT cognitive score'}
+        }
+      }
+    }
+  });
+
+  const accByModule = MODULES.map(m => {
+    const records = attempts
+      .map(a => getModuleRecord(a,m))
+      .filter(Boolean);
+    if (!records.length) return null;
+    return Math.round(records.reduce((s,r)=>s+r.accuracy,0)/records.length);
+  });
+
+  new Chart(accEl, {
+    type:'bar',
+    data:{
+      labels:MODULES,
+      datasets:[{
+        label:'Accuracy',
+        data:accByModule,
+        borderWidth:1
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          callbacks:{
+            label:(ctx)=> ctx.parsed.y == null
+              ? 'No data'
+              : 'Accuracy: ' + ctx.parsed.y + '%'
+          }
+        }
+      },
+      scales:{
+        x:{
+          ticks:{maxRotation:0}
+        },
+        y:{
+          min:0,
+          max:100,
+          ticks:{stepSize:20,callback:(v)=>v+'%'},
+          title:{display:true,text:'Accuracy'}
+        }
+      }
+    }
+  });
 }
 
-window.addEventListener('hashchange', () => renderRoute().catch(console.error));
+/* ============================================================
+   MISTAKE BANK
+   ============================================================ */
+async function viewMistakes(){
+  const incorrect = await Data.getResponses({ incorrectOnly: true });
+  const flagged = await Data.getResponses({ flagged: true });
+  const weaknesses = (await Data.getWeaknesses()).sort((a,b)=>b.priority-a.priority).slice(0,8);
+  return `
+  <h2>Mistake bank &amp; priority practice</h2>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Today's priority practice</h3>
+      <p>Topics ranked by how often you've gotten them wrong recently.</p>
+      ${weaknesses.length ? weaknesses.map(w=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line);">
+        <div><strong>${esc(w.topic)}</strong><div class="stat-label">${w.module} · priority ${w.priority}/5 · ${w.accuracy}% accuracy</div></div>
+        <button class="btn btn-sm btn-primary" onclick="startPriorityPractice('${w.module}','${esc(w.topic)}')">Practise</button>
+      </div>`).join('') : '<div class="empty">No priority topics yet — complete a session first.</div>'}
+    </div>
+    <div class="card">
+      <h3>Flagged questions</h3>
+      <div class="stat-num">${flagged.length}</div>
+      <div class="stat-label">questions flagged during practice</div>
+      <h3 style="margin-top:20px;">Incorrect answers logged</h3>
+      <div class="stat-num">${incorrect.length}</div>
+      <div class="stat-label">available for "previously incorrect only" practice</div>
+      <a href="#/practice" class="btn btn-ghost" style="margin-top:14px;">Go set up a mistakes-only session</a>
+    </div>
+  </div>`;
+}
 
-window.addEventListener('error', event => {
-  console.error('Application error:', event.error || event.message);
-});
+/* ============================================================
+   ADMIN — DASHBOARD
+   ============================================================ */
+async function viewAdminDashboard(){
+  const questions = await Data.getQuestions({});
+  const attempts = await Data.getAttempts();
+  const weaknesses = await Data.getWeaknesses();
+  const placement = await computePlacementScore();
+  const byModule = MODULES.map(m => questions.filter(q=>q.module===m).length);
+  const byDiff = DIFFICULTIES.map(d => questions.filter(q=>q.difficulty===d).length);
+  const weakest = [...weaknesses].sort((a,b)=>a.accuracy-b.accuracy).slice(0,5);
+  const target = App.student.targetScore || 0;
+  const gap = placement.totalPlacement != null ? target - placement.totalPlacement : null;
+  const pct = (placement.totalPlacement != null && target > 0) ? Math.min(100, Math.max(0, Math.round((placement.totalPlacement / target) * 100))) : 0;
+  const realtimeDelta = (placement.latestPlacement != null && placement.totalPlacement != null) ? placement.latestPlacement - placement.totalPlacement : null;
+  const placementCard = `
+  <div class="card" style="margin-bottom:20px; border:1.5px solid var(--primary); background:linear-gradient(135deg, var(--surface), var(--primary-tint));">
+    <div class="eyebrow">Placement score vs target — updates live from every attempt, including full mock tests</div>
+    <h3 style="margin-bottom:14px;">${esc(App.student.name)}'s progress toward target</h3>
+    <div class="grid cols-4">
+      <div>
+        <div class="stat-num" style="font-size:36px;">${placement.totalPlacement ?? '—'}</div>
+        <div class="stat-label">Placement score${placement.totalPlacement!=null ? ' (personal best, VR+DM+QR)' : ''}</div>
+        ${placement.totalPlacement==null ? '<div class="stat-label" style="margin-top:4px;">Complete at least one VR, DM and QR session (or a mock covering all three) to calculate this.</div>' : ''}
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:36px; color:var(--primary-dark);">${placement.latestPlacement ?? '—'}</div>
+        <div class="stat-label">Realtime score (most recent VR+DM+QR)${realtimeDelta!=null ? ` <span class="badge ${realtimeDelta>=0?'badge-green':'badge-amber'}">${realtimeDelta>=0?'+':''}${realtimeDelta} vs best</span>` : ''}</div>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:36px; color:var(--ink-soft);">${target || '—'}</div>
+        <div class="stat-label">Target score (set in Settings)</div>
+      </div>
+      <div>
+        <div class="stat-num" style="font-size:36px; color:${gap!=null && gap<=0 ? 'var(--accent-green)' : 'var(--accent-amber)'};">${gap!=null ? (gap<=0 ? 'Met' : gap) : '—'}</div>
+        <div class="stat-label">${gap!=null ? (gap<=0 ? 'Target reached or exceeded (personal best)' : 'Points remaining to reach target') : 'Not enough data yet'}</div>
+      </div>
+    </div>
+    <div class="progress-bar" style="margin-top:16px; height:10px;"><div style="width:${pct}%; background:${gap!=null && gap<=0 ? 'var(--accent-green)' : 'var(--primary)'};"></div></div>
+    <div class="grid cols-4" style="margin-top:18px;">
+      ${MODULES.map(m => {
+        if (m === 'SJT') {
+          return `<div><div class="eyebrow">${m}</div><div class="stat-num" style="font-size:19px;">${placement.sjtBand ? 'Band '+placement.sjtBand : '—'}</div><div class="stat-label">${esc(placement.sjtLabel) || 'No attempts yet'}${placement.sjtLatestBand ? ' · latest: Band '+placement.sjtLatestBand : ''}</div></div>`;
+        }
+        const best = placement.bestByModule[m];
+        const latest = placement.latestByModule[m];
+        return `<div><div class="eyebrow">${m}</div><div class="stat-num" style="font-size:19px;">${best ? best.score : '—'}</div><div class="stat-label">${best ? 'Best (' + best.accuracy + '% acc.)' : 'No attempts yet'}${latest ? ' · latest: '+latest.score : ''}</div></div>`;
+      }).join('')}
+    </div>
+    <p class="disclaimer" style="margin-top:16px;">Placement score = the student's single best VR, DM and QR practice attempts added together (900–2700 range), mirroring how the real UCAT sums those three cognitive sections — this is the number to compare against the target. Realtime score is the same calculation using only the most recent attempt in each of VR/DM/QR, so you can see current form alongside the personal best. Both draw on every attempt, including full mock tests that cover several sections at once. SJT is reported separately as a Band 1–4 (never as a 300–900 number), consistent with how the real UCAT scores it. All figures are practice estimates, not official UCAT scores.</p>
+  </div>`;
+  return `
+  <h2>Admin dashboard</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  ${placementCard}
+  <div class="grid cols-4">
+    <div class="card"><div class="stat-num">${questions.length}</div><div class="stat-label">Questions in bank</div></div>
+    <div class="card"><div class="stat-num">${questions.filter(q=>q.active).length}</div><div class="stat-label">Active questions</div></div>
+    <div class="card"><div class="stat-num">${attempts.length}</div><div class="stat-label">Practice sessions</div></div>
+    <div class="card"><div class="stat-num">${attempts.length ? Math.round(attempts.reduce((s,a)=>s+a.accuracy,0)/attempts.length) : 0}%</div><div class="stat-label">Average accuracy</div></div>
+  </div>
+  <div class="grid cols-2" style="margin-top:20px;">
+    <div class="card"><h3>Questions by module</h3>${MODULES.map((m,i)=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${MODULE_NAMES[m]}</span><strong>${byModule[i]}</strong></div>`).join('')}</div>
+    <div class="card"><h3>Questions by difficulty</h3>${DIFFICULTIES.map((d,i)=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${d}</span><strong>${byDiff[i]}</strong></div>`).join('')}</div>
+  </div>
+  <div class="card" style="margin-top:20px;"><h3>Weakest student topics</h3>
+    ${weakest.length ? weakest.map(w=>`<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line);"><span>${esc(w.topic)} (${w.module})</span><span class="badge badge-red">${w.accuracy}%</span></div>`).join('') : '<div class="empty">No attempts recorded yet.</div>'}
+  </div>`;
+}
 
-window.addEventListener('unhandledrejection', event => {
-  console.error('Unhandled promise rejection:', event.reason);
-});
+/* ============================================================
+   ADMIN — QUESTION BANK
+   ============================================================ */
+async function viewAdminQuestions(params){
+  const filters = { module: params.get('module')||undefined, difficulty: params.get('difficulty')||undefined, active: params.get('active')==='1'?true:params.get('active')==='0'?false:undefined, search: params.get('search')||undefined };
+  const questions = await Data.getQuestions(filters);
+  return `
+  <h2>Question bank management</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions" class="active">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="filters">
+    <input type="search" id="qSearch" placeholder="Search question text or ID…" value="${esc(params.get('search')||'')}" onkeydown="if(event.key==='Enter')applyQFilters()">
+    <select id="qModuleF" onchange="applyQFilters()"><option value="">All modules</option>${MODULES.map(m=>`<option value="${m}" ${params.get('module')===m?'selected':''}>${m}</option>`).join('')}</select>
+    <select id="qDiffF" onchange="applyQFilters()"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}" ${params.get('difficulty')===d?'selected':''}>${d}</option>`).join('')}</select>
+    <select id="qActiveF" onchange="applyQFilters()"><option value="">Active + inactive</option><option value="1" ${params.get('active')==='1'?'selected':''}>Active only</option><option value="0" ${params.get('active')==='0'?'selected':''}>Inactive only</option></select>
+    <button class="btn btn-primary" onclick="location.hash='#/admin/edit'">+ New question</button>
+  </div>
+  <div class="card">
+    <table><thead><tr><th>ID</th><th>Module</th><th>Topic</th><th>Difficulty</th><th>Active</th><th></th></tr></thead>
+    <tbody>${questions.map(q=>`<tr>
+      <td>${esc(q.id)}</td><td><span class="badge badge-blue">${q.module}</span></td><td>${esc(q.topic)}</td>
+      <td><span class="badge badge-${q.difficulty==='advanced'?'red':q.difficulty==='standard'?'amber':'green'}">${q.difficulty}</span></td>
+      <td>${q.active?'<span class="badge badge-green">Active</span>':'<span class="badge badge-grey">Inactive</span>'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-sm btn-ghost" onclick="location.hash='#/admin/edit?id=${encodeURIComponent(q.id)}'">Edit</button>
+        <button class="btn btn-sm btn-ghost" onclick="duplicateQuestion('${esc(q.id)}')">Duplicate</button>
+        <button class="btn btn-sm btn-ghost" onclick="toggleActive('${esc(q.id)}', ${!q.active})">${q.active?'Deactivate':'Activate'}</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteQ('${esc(q.id)}')">Delete</button>
+      </td></tr>`).join('') || `<tr><td colspan="6"><div class="empty">No questions match these filters.</div></td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+function applyQFilters(){
+  const s = document.getElementById('qSearch').value, m = document.getElementById('qModuleF').value, d = document.getElementById('qDiffF').value, a = document.getElementById('qActiveF').value;
+  const p = new URLSearchParams(); if(s)p.set('search',s); if(m)p.set('module',m); if(d)p.set('difficulty',d); if(a)p.set('active',a);
+  location.hash = '#/admin/questions?' + p.toString();
+}
+async function duplicateQuestion(id){
+  const q = await Data.getQuestion(id);
+  if (!q) return;
+  const copy = { ...q }; delete copy.id; copy.question_id = q.question_id ? q.question_id+'_COPY_'+Date.now() : undefined;
+  await Data.saveQuestion(copy);
+  router();
+}
+async function toggleActive(id, val){ const q = await Data.getQuestion(id); await Data.saveQuestion({ ...q, active: val }); router(); }
+async function deleteQ(id){ if (!confirm('Delete this question permanently?')) return; await Data.deleteQuestion(id); router(); }
 
-/* Small amount of application CSS needed by the missing application layer. */
-const appStyle = document.createElement('style');
-appStyle.textContent = `
-.hero-card,.card,.result-card,.loading-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.hero-card{padding:32px;display:grid;grid-template-columns:1fr 260px;gap:28px;align-items:center;margin:24px auto;max-width:1200px}
-.eyebrow{font-size:11px;letter-spacing:.14em;font-weight:800;color:var(--primary);margin-bottom:8px}.hero-card h1,.page-head h1,.session-head h1,.result-card h1{margin:0 0 10px}.hero-card p,.page-head p{color:var(--ink-soft);max-width:760px}.hero-stat{padding:28px;border:1px solid var(--line);border-radius:12px;text-align:center;background:var(--primary-tint)}.hero-stat strong{display:block;font-size:48px;color:var(--primary)}.hero-stat span{font-size:13px;color:var(--ink-soft)}
-.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{border:1px solid var(--line);border-radius:9px;padding:11px 16px;background:#fff;cursor:pointer;font-weight:750}.btn:hover{filter:brightness(.97)}.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}.btn.large{padding:14px 22px}.btn.small{padding:7px 10px;font-size:12px}.btn:disabled{opacity:.45;cursor:not-allowed}
-.stat-grid{max-width:1200px;margin:20px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}.stat-card strong{display:block;font-size:28px}.stat-card span{font-size:13px;color:var(--ink-soft)}
-.page-head,.session-head{max-width:1200px;margin:26px auto 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.card{max-width:1200px;margin:18px auto;padding:22px}.field-group label,.filters-row label{font-size:13px;font-weight:750}.module-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.module-btn{background:#fff;border:1px solid var(--line);border-radius:10px;padding:15px;text-align:left;cursor:pointer}.module-btn strong{display:block;font-size:20px}.module-btn span{font-size:12px;color:var(--ink-soft)}.module-btn.active{border-color:var(--primary);background:var(--primary-tint)}.filters-row{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}.filters-row label{display:flex;flex-direction:column;gap:6px;min-width:200px}.filters-row select,.search-input{padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff}.practice-start{margin-top:22px}.status-line{margin-top:12px;padding:10px 12px;border-radius:8px;background:#f4f6fa;color:var(--ink-soft)}.status-line.success{background:var(--accent-green-tint);color:var(--accent-green)}.status-line.warning{background:var(--accent-amber-tint);color:var(--accent-amber)}
-.progress{height:7px;background:#e9edf4;max-width:1200px;margin:0 auto 18px;border-radius:99px;overflow:hidden}.progress div{height:100%;background:var(--primary)}.session-timer{font-family:var(--mono);font-size:22px;font-weight:800;padding:9px 13px;border:1px solid var(--line);border-radius:8px;background:#fff}.question-card{padding:28px}.question-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.question-meta>span{font-size:11px;padding:5px 8px;border:1px solid var(--line);border-radius:99px;color:var(--ink-soft)}.flag-btn{margin-left:auto;border:0;background:transparent;cursor:pointer;font-weight:700}.flag-btn.flagged{color:var(--accent-amber)}.passage{background:#f7f9fc;border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:20px}.passage h3{margin-top:0}.question-text{font-family:var(--serif);font-size:24px;line-height:1.45}.options{display:grid;gap:10px;margin-top:22px}.option{display:flex;gap:13px;align-items:flex-start;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;padding:14px;cursor:pointer;font-size:15px}.option:hover,.option.selected{border-color:var(--primary);background:var(--primary-tint)}.option-key{font-weight:900;min-width:25px}.session-actions{display:flex;justify-content:space-between;gap:10px;margin-top:25px}
-.review-summary{display:grid;grid-template-columns:repeat(4,90px);gap:8px}.review-summary>div,.result-grid>div{border:1px solid var(--line);border-radius:9px;padding:10px;text-align:center}.review-summary strong,.result-grid strong{display:block;font-size:21px}.review-summary span,.result-grid span{font-size:10px;color:var(--ink-soft)}.review-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}.review-q{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px;cursor:pointer;font-weight:800}.review-q.is-answered{border-color:#b7d9bf}.review-q.is-incomplete{background:#fff8f8}.review-q.is-flagged{background:var(--accent-amber-tint);border-color:#e8cb8b}.review-q small{display:block;font-size:9px;margin-top:3px}.review-final-actions{display:flex;justify-content:space-between;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
-.result-card{text-align:center;padding:38px;max-width:850px}.result-card h1{font-size:72px;color:var(--primary)}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}.answer-review{display:grid;gap:7px}.answer-row{padding:12px;border:1px solid var(--line);border-radius:8px;display:grid;gap:3px}.answer-row.correct{border-left:4px solid var(--accent-green)}.answer-row.incorrect{border-left:4px solid var(--accent-red)}.answer-row span,.answer-row small{color:var(--ink-soft);font-size:12px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section-title h2{margin:0}.table-wrap{overflow:auto}.table-wrap table{width:100%;border-collapse:collapse}.table-wrap th,.table-wrap td{text-align:left;padding:11px;border-bottom:1px solid var(--line);font-size:13px}.empty,.loading-card{text-align:center;color:var(--ink-soft);padding:35px}.profile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.profile-grid>div{padding:13px;border:1px solid var(--line);border-radius:8px}.profile-grid span{display:block;font-size:11px;color:var(--ink-soft)}.profile-grid strong{display:block;margin-top:5px}.mistake-list{display:grid;gap:8px}.mistake-item{display:flex;justify-content:space-between;gap:15px;padding:14px;border:1px solid var(--line);border-radius:8px}.mistake-item div{display:grid;gap:3px}.mistake-item span{font-size:12px;color:var(--ink-soft)}.toast{position:fixed;right:20px;bottom:20px;z-index:100;padding:13px 16px;border-radius:9px;background:#16243b;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.2);transform:translateY(20px);opacity:0;pointer-events:none;transition:.2s}.toast.show{transform:none;opacity:1}.toast[data-type="error"]{background:#8d2929}.toast[data-type="success"]{background:#176b4c}.toast[data-type="warning"]{background:#8a5a00}
-@media(max-width:800px){.hero-card{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}.module-grid{grid-template-columns:repeat(2,1fr)}.review-grid{grid-template-columns:repeat(5,1fr)}.review-summary{grid-template-columns:repeat(2,80px)}.profile-grid{grid-template-columns:repeat(2,1fr)}.page-head,.session-head{margin-left:15px;margin-right:15px}.card{margin-left:15px;margin-right:15px}.progress{margin-left:15px;margin-right:15px}}
-@media(max-width:520px){.stat-grid,.result-grid,.profile-grid{grid-template-columns:1fr}.module-grid{grid-template-columns:1fr}.question-text{font-size:20px}.session-actions{flex-wrap:wrap}.review-grid{grid-template-columns:repeat(4,1fr)}.hero-card{margin:15px}.card{padding:16px}}
-`;
-document.head.appendChild(appStyle);
+/* ---------- question editor ---------- */
+async function viewAdminEditor(id){
+  const q = id ? await Data.getQuestion(id) : {};
+  const isNew = !id;
+  return `
+  <h2>${isNew ? 'New question' : 'Edit question'}</h2>
+  <div class="card">
+    <form id="qForm" onsubmit="return false;">
+      <div class="grid cols-3">
+        <div class="field"><label>Module *</label><select id="f_module">${MODULES.map(m=>`<option value="${m}" ${q.module===m?'selected':''}>${MODULE_NAMES[m]}</option>`).join('')}</select></div>
+        <div class="field"><label>Difficulty *</label><select id="f_difficulty">${DIFFICULTIES.map(d=>`<option value="${d}" ${q.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        <div class="field"><label>Active</label><select id="f_active"><option value="true" ${q.active!==false?'selected':''}>Active</option><option value="false" ${q.active===false?'selected':''}>Inactive</option></select></div>
+      </div>
+      <div class="grid cols-2">
+        <div class="field"><label>Question type *</label><input type="text" id="f_qtype" value="${esc(q.question_type||q.questionType||'')}"></div>
+        <div class="field"><label>Topic *</label><input type="text" id="f_topic" value="${esc(q.topic||'')}"></div>
+      </div>
+      <div class="field"><label>Passage / data (optional — supports plain text)</label><textarea id="f_passage" rows="4">${esc(q.passage||'')}</textarea></div>
+      <div class="field"><label>Question text * (LaTeX supported: \\( \\) inline, \\[ \\] display)</label><textarea id="f_qtext" rows="2">${esc(q.question_text||q.questionText||'')}</textarea></div>
+      <div class="grid cols-2">
+        ${['a','b','c','d','e'].map(k=>`<div class="field"><label>Option ${k.toUpperCase()} ${k!=='e'?'*':'(optional)'}</label><input type="text" id="f_opt_${k}" value="${esc(q['option_'+k]||'')}"></div>`).join('')}
+      </div>
+      <div class="grid cols-2">
+        <div class="field"><label>Correct answer (A–E) *</label><input type="text" id="f_correct" maxlength="1" value="${esc(q.correct_answer||'')}"></div>
+        <div class="field"><label>Recommended time (seconds)</label><input type="number" id="f_time" value="${q.recommended_time||45}"></div>
+      </div>
+      <div class="field"><label>Explanation *</label><textarea id="f_explain" rows="3">${esc(q.explanation||'')}</textarea></div>
+      <div class="field"><label>Technique tip</label><textarea id="f_tip" rows="2">${esc(q.technique_tip||'')}</textarea></div>
+      <div class="field"><label>Tags (comma separated)</label><input type="text" id="f_tags" value="${esc(q.tags||'')}"></div>
+      <div id="qFormErrors" style="color:var(--accent-red); font-size:13px; margin-bottom:10px;"></div>
+      <button class="btn btn-primary" onclick="saveQuestionForm('${q.id||''}')">Save question</button>
+      <a href="#/admin/questions" class="btn btn-ghost">Cancel</a>
+    </form>
+  </div>`;
+}
+function validateQuestionForm(v){
+  const errs = [];
+  if (!v.question_text) errs.push('Question text is required.');
+  if (!v.module) errs.push('Module is required.');
+  if (!v.question_type) errs.push('Question type is required.');
+  if (!v.difficulty) errs.push('Difficulty is required.');
+  if (!v.option_a || !v.option_b) errs.push('At least options A and B are required.');
+  if (!v.correct_answer) errs.push('Correct answer is required.');
+  const validKeys = ['a','b','c','d','e'].filter(k => v['option_'+k]).map(k=>k.toUpperCase());
+  if (v.correct_answer && !validKeys.includes(v.correct_answer.toUpperCase())) errs.push('Correct answer must match one of the filled-in options.');
+  if (!v.explanation) errs.push('Explanation is required.');
+  return errs;
+}
+async function saveQuestionForm(existingId){
+  const v = {
+    module: document.getElementById('f_module').value, difficulty: document.getElementById('f_difficulty').value,
+    active: document.getElementById('f_active').value === 'true',
+    question_type: document.getElementById('f_qtype').value.trim(), topic: document.getElementById('f_topic').value.trim(),
+    passage: document.getElementById('f_passage').value.trim(), question_text: document.getElementById('f_qtext').value.trim(),
+    option_a: document.getElementById('f_opt_a').value.trim(), option_b: document.getElementById('f_opt_b').value.trim(),
+    option_c: document.getElementById('f_opt_c').value.trim(), option_d: document.getElementById('f_opt_d').value.trim(), option_e: document.getElementById('f_opt_e').value.trim(),
+    correct_answer: document.getElementById('f_correct').value.trim().toUpperCase(), recommended_time: parseInt(document.getElementById('f_time').value)||45,
+    explanation: document.getElementById('f_explain').value.trim(), technique_tip: document.getElementById('f_tip').value.trim(),
+    tags: document.getElementById('f_tags').value.trim()
+  };
+  const errs = validateQuestionForm(v);
+  if (errs.length) { document.getElementById('qFormErrors').innerHTML = errs.map(e=>'• '+esc(e)).join('<br>'); return; }
+  if (existingId) v.id = existingId;
+  await Data.saveQuestion(v);
+  location.hash = '#/admin/questions';
+}
 
-/* Start only after the complete document is parsed. */
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => initialiseApplication().catch(console.error));
-} else {
-  initialiseApplication().catch(console.error);
+/* ============================================================
+   ADMIN — EXCEL IMPORT / TEMPLATE
+   ============================================================ */
+const TEMPLATE_COLUMNS = ['question_id','module','question_type','topic','difficulty','question_text','passage','option_a','option_b','option_c','option_d','option_e','correct_answer','explanation','technique_tip','recommended_time','tags','active'];
+function downloadTemplate(){
+  const wb = XLSX.utils.book_new();
+  const wsData = XLSX.utils.json_to_sheet([
+    { question_id:'QR100', module:'QR', question_type:'Percentages', topic:'Percentage Change', difficulty:'foundation', question_text:'A patient receives £240 and spends 35% of it. How much remains?', passage:'', option_a:'£84', option_b:'£140', option_c:'£156', option_d:'£164', option_e:'£176', correct_answer:'C', explanation:'35% of 240 = 84; 240-84 = 156.', technique_tip:'Try 65% of 240 directly.', recommended_time:40, tags:'percentages', active:true },
+    { question_id:'VR100', module:'VR', question_type:'True/False/Cannot Tell', topic:'Inference', difficulty:'standard', question_text:'Statement to evaluate against the passage.', passage:'Full passage text goes here.', option_a:'True', option_b:'False', option_c:"Can't Tell", option_d:'', option_e:'', correct_answer:'B', explanation:'Explain why.', technique_tip:'A tip.', recommended_time:45, tags:'inference', active:true },
+    { question_id:'DM100', module:'DM', question_type:'Syllogism', topic:'Syllogisms', difficulty:'standard', question_text:'Logical premise question text.', passage:'', option_a:'Option A', option_b:'Option B', option_c:'Option C', option_d:'Option D', option_e:'', correct_answer:'A', explanation:'Explain the logic.', technique_tip:'A tip.', recommended_time:45, tags:'logic', active:true },
+    { question_id:'SJT100', module:'SJT', question_type:'Appropriateness Rating', topic:'Patient Safety', difficulty:'foundation', question_text:'Scenario and question text.', passage:'', option_a:'Very appropriate', option_b:'Appropriate', option_c:'Inappropriate', option_d:'Very inappropriate', option_e:'', correct_answer:'A', explanation:'Explain why this is the best response.', technique_tip:'A tip.', recommended_time:60, tags:'safety', active:true }
+  ], { header: TEMPLATE_COLUMNS });
+  XLSX.utils.book_append_sheet(wb, wsData, 'Questions');
+  const instructions = TEMPLATE_COLUMNS.map(c => ({ field: c, description: {
+    question_id:'Unique ID for the question, e.g. QR101. Leave blank to auto-generate.', module:'One of: VR, DM, QR, SJT.',
+    question_type:'Free text describing the question format, e.g. Syllogism, True/False/Cannot Tell.', topic:'The specific topic, used for weak-area tracking, e.g. Percentage Change.',
+    difficulty:'One of: foundation, standard, advanced.', question_text:'The question itself. LaTeX supported using \\( \\) and \\[ \\].',
+    passage:'Reading passage or data table text (VR/DM/QR as applicable). Leave blank if not needed.', option_a:'Answer option A (required).', option_b:'Answer option B (required).',
+    option_c:'Answer option C (optional).', option_d:'Answer option D (optional).', option_e:'Answer option E (optional).',
+    correct_answer:'Single letter A-E matching the correct option (required).', explanation:'Full explanation of the correct answer (required).',
+    technique_tip:'Optional short technique tip.', recommended_time:'Recommended time in seconds, e.g. 45.', tags:'Comma-separated tags.', active:'TRUE or FALSE — whether the question is live in the bank.'
+  }[c] }));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(instructions), 'Instructions');
+  const examples = SEED_QUESTIONS.filter(q => ['CLVR001','CLDM001','CLQR001','CLSJT001'].includes(q.question_id));
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(examples, { header: TEMPLATE_COLUMNS }), 'Examples');
+  XLSX.writeFile(wb, 'UCAT_Question_Bank_Template.xlsx');
+}
+function viewAdminImport(){
+  return `
+  <h2>Excel question bank import</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import" class="active">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>1. Get the template</h3>
+      <p>Download the template, fill it in following the Instructions sheet, then upload it below.</p>
+      <button class="btn btn-primary" onclick="downloadTemplate()">Download Question Bank Excel Template</button>
+    </div>
+    <div class="card">
+      <h3>2. Upload &amp; validate</h3>
+      <p>Supports .xlsx and .csv. Every row is validated before anything is imported.</p>
+      <input type="file" id="importFile" accept=".xlsx,.csv" onchange="handleImportFile(event)">
+    </div>
+  </div>
+  <div id="importPreview" style="margin-top:20px;"></div>`;
+}
+let importRows = [];
+function handleImportFile(e){
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const wb = XLSX.read(ev.target.result, { type: 'binary' });
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+    importRows = rows.map(r => validateImportRow(r));
+    renderImportPreview();
+  };
+  reader.readAsBinaryString(file);
+}
+function validateImportRow(r){
+  const errs = [];
+  if (!MODULES.includes(String(r.module).toUpperCase())) errs.push('Invalid or missing module');
+  if (!DIFFICULTIES.includes(String(r.difficulty).toLowerCase())) errs.push('Invalid or missing difficulty');
+  if (!r.question_text) errs.push('Missing question_text');
+  if (!r.option_a || !r.option_b) errs.push('Missing option_a/option_b');
+  if (!r.correct_answer) errs.push('Missing correct_answer');
+  else {
+    const valid = ['a','b','c','d','e'].filter(k=>r['option_'+k]).map(k=>k.toUpperCase());
+    if (!valid.includes(String(r.correct_answer).toUpperCase())) errs.push('correct_answer does not match a filled option');
+  }
+  if (!r.explanation) errs.push('Missing explanation');
+  return { ...r, module: String(r.module).toUpperCase(), difficulty: String(r.difficulty).toLowerCase(), correct_answer: String(r.correct_answer).toUpperCase(), active: String(r.active).toLowerCase() !== 'false', __errors: errs, __valid: errs.length === 0 };
+}
+function renderImportPreview(){
+  const valid = importRows.filter(r=>r.__valid).length;
+  const invalid = importRows.length - valid;
+  document.getElementById('importPreview').innerHTML = `
+  <div class="card">
+    <h3>Preview — ${importRows.length} rows read (${valid} valid, ${invalid} failed)</h3>
+    <table><thead><tr><th>Row</th><th>ID</th><th>Module</th><th>Status</th><th>Errors</th></tr></thead>
+    <tbody>${importRows.map((r,i)=>`<tr><td>${i+2}</td><td>${esc(r.question_id||'(auto)')}</td><td>${esc(r.module)}</td>
+      <td>${r.__valid?'<span class="badge badge-green">Valid</span>':'<span class="badge badge-red">Failed</span>'}</td>
+      <td style="color:var(--accent-red); font-size:12px;">${esc(r.__errors.join('; '))}</td></tr>`).join('')}</tbody></table>
+    <div style="margin-top:14px; display:flex; gap:10px;">
+      <button class="btn btn-primary" onclick="confirmImport()" ${valid===0?'disabled':''}>Import ${valid} valid question(s)</button>
+      <button class="btn btn-ghost" onclick="downloadImportErrors()" ${invalid===0?'disabled':''}>Download error report (CSV)</button>
+    </div>
+  </div>`;
+}
+async function confirmImport(){
+  const validRows = importRows.filter(r=>r.__valid).map(r => { const { __errors, __valid, ...rest } = r; return rest; });
+  await Data.bulkAddQuestions(validRows);
+  alert(validRows.length + ' question(s) imported successfully.');
+  location.hash = '#/admin/questions';
+}
+function downloadImportErrors(){
+  const failed = importRows.filter(r=>!r.__valid);
+  const csv = ['row,question_id,module,errors', ...failed.map((r,i)=>`${i+2},"${(r.question_id||'')}","${r.module||''}","${r.__errors.join('; ')}"`)].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'import_errors.csv'; a.click();
+}
+
+/* ============================================================
+   ADMIN — SETTINGS
+   ============================================================ */
+async function viewAdminSettings(){
+  const s = App.settings, st = App.student;
+  return `
+  <h2>Admin settings</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings" class="active">Settings</a><a href="#/admin/reports">Reports</a>
+  </div>
+  <div class="grid cols-2">
+    <div class="card">
+      <h3>Student profile</h3>
+      <div class="field"><label>Student name</label><input type="text" id="s_name" value="${esc(st.name)}"></div>
+      <div class="field"><label>Target university</label><input type="text" id="s_uni" value="${esc(st.targetUniversity)}"></div>
+      <div class="field"><label>Target course</label><input type="text" id="s_course" value="${esc(st.targetCourse)}"></div>
+      <div class="grid cols-2">
+        <div class="field"><label>Target UCAT year</label><input type="number" id="s_year" value="${st.targetUCATYear}"></div>
+        <div class="field"><label>Target score</label><input type="number" id="s_score" value="${st.targetScore}"></div>
+      </div>
+      <div class="field"><label>Test date</label><input type="text" id="s_date" value="${esc(st.testDate)}" placeholder="YYYY-MM-DD"></div>
+    </div>
+    <div class="card">
+      <h3>Module timing (seconds per question)</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="t_${m}" value="${s.moduleTiming[m]}"></div>`).join('')}
+      <h3 style="margin-top:16px;">Full mock question counts</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="c_${m}" value="${s.moduleQuestionCounts[m]}"></div>`).join('')}
+      <h3 style="margin-top:16px;">Diagnostic test question counts</h3>
+      ${MODULES.map(m=>`<div class="field"><label>${MODULE_NAMES[m]}</label><input type="number" id="d_${m}" value="${s.diagnosticCounts[m]}"></div>`).join('')}
+      <div class="field"><label>Daily practice target (questions)</label><input type="number" id="dailyTarget" value="${s.dailyPracticeTarget}"></div>
+    </div>
+  </div>
+  <button class="btn btn-primary" style="margin-top:16px;" onclick="saveAllSettings()">Save settings</button>`;
+}
+async function saveAllSettings(){
+  const student = { name: document.getElementById('s_name').value, targetUniversity: document.getElementById('s_uni').value, targetCourse: document.getElementById('s_course').value, targetUCATYear: parseInt(document.getElementById('s_year').value), targetScore: parseInt(document.getElementById('s_score').value), testDate: document.getElementById('s_date').value };
+  const moduleTiming = {}, moduleQuestionCounts = {}, diagnosticCounts = {};
+  MODULES.forEach(m => { moduleTiming[m] = parseInt(document.getElementById('t_'+m).value)||30; moduleQuestionCounts[m] = parseInt(document.getElementById('c_'+m).value)||20; diagnosticCounts[m] = parseInt(document.getElementById('d_'+m).value)||10; });
+  const settings = { moduleTiming, moduleQuestionCounts, diagnosticCounts, difficultyDistribution: App.settings.difficultyDistribution, dailyPracticeTarget: parseInt(document.getElementById('dailyTarget').value)||20 };
+  await Data.saveStudent(student);
+  await Data.saveSettings(settings);
+  alert('Settings saved.');
+  router();
+}
+
+/* ============================================================
+   ADMIN — REPORTS
+   ============================================================ */
+async function viewAdminReports(){
+  const attempts = await Data.getAttempts();
+  return `
+  <h2>Parent / coach reports</h2>
+  <div class="nav" style="margin-bottom:20px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:6px; display:inline-flex;">
+    <a href="#/admin">Overview</a><a href="#/admin/questions">Question bank</a><a href="#/admin/import">Excel import</a><a href="#/admin/settings">Settings</a><a href="#/admin/reports" class="active">Reports</a>
+  </div>
+  <div class="card">
+    <h3>All practice sessions (${attempts.length})</h3>
+    <button class="btn btn-primary" onclick="exportAttemptsCSV()" ${attempts.length===0?'disabled':''}>Export as CSV</button>
+    <table style="margin-top:14px;"><thead><tr><th>Date</th><th>Module</th><th>Mode</th><th>Accuracy</th><th>Score</th><th>Time used</th></tr></thead>
+    <tbody>${attempts.map(a=>`<tr><td>${new Date(a.date).toLocaleDateString()}</td><td>${a.module}</td><td>${a.mode}</td><td>${a.accuracy}%</td><td>${a.score}</td><td>${fmtTime(a.timeUsed)}</td></tr>`).join('') || `<tr><td colspan="6"><div class="empty">No sessions recorded yet.</div></td></tr>`}</tbody></table>
+  </div>`;
+}
+async function exportAttemptsCSV(){
+  const attempts = await Data.getAttempts();
+  const rows = ['date,module,mode,accuracy,score,timeUsed,questionsAttempted,questionsCorrect', ...attempts.map(a => `${new Date(a.date).toISOString()},${a.module},${a.mode},${a.accuracy},${a.score},${a.timeUsed},${a.questionsAttempted},${a.questionsCorrect}`)].join('\n');
+  const blob = new Blob([rows], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mathcloud_ucat_sessions.csv'; a.click();
 }
 </script>
+
+<script id="mathcloud-flag-autosave-js">
+(function(){
+  const FLAG_KEY_PREFIX = 'mathcloud_flagged_';
+  const ANSWER_KEY_PREFIX = 'mathcloud_live_answers_';
+
+  function testKey(){
+    return window.currentAttemptId || window.currentTestId ||
+      (window.currentTest && (window.currentTest.id || window.currentTest.testId)) ||
+      'active';
+  }
+  function storageKey(prefix){ return prefix + testKey(); }
+
+  window.MathCloudLive = window.MathCloudLive || {};
+
+  window.MathCloudLive.saveAnswerImmediately = async function(questionId, answer){
+    const key=storageKey(ANSWER_KEY_PREFIX);
+    let answers={};
+    try{ answers=JSON.parse(localStorage.getItem(key)||'{}'); }catch(e){}
+    answers[questionId]=answer;
+    localStorage.setItem(key, JSON.stringify(answers));
+
+    // Also update common in-memory answer stores when present.
+    try{
+      if(window.answers && typeof window.answers==='object') window.answers[questionId]=answer;
+      if(window.userAnswers && typeof window.userAnswers==='object') window.userAnswers[questionId]=answer;
+      if(window.currentAnswers && typeof window.currentAnswers==='object') window.currentAnswers[questionId]=answer;
+    }catch(e){}
+
+    // Persist to Firebase immediately when the page exposes Firebase/database.
+    try{
+      const dbRef = window.firebaseDatabase || window.db;
+      const uid = window.currentUser?.uid || window.auth?.currentUser?.uid;
+      if(dbRef && uid && window.set && window.ref){
+        await window.set(window.ref(dbRef, 'liveAnswers/'+uid+'/'+testKey()+'/'+questionId), {
+          answer: answer,
+          updatedAt: Date.now()
+        });
+      } else if(dbRef && uid && window.ref && window.update){
+        await window.update(window.ref(dbRef, 'liveAnswers/'+uid+'/'+testKey()), {
+          [questionId]: {answer:answer, updatedAt:Date.now()}
+        });
+      }
+    }catch(e){
+      // localStorage remains as a fail-safe if Firebase is temporarily unavailable.
+      console.warn('Live answer save deferred:', e);
+    }
+  };
+
+  window.MathCloudLive.toggleFlag = function(questionId, button, card){
+    const key=storageKey(FLAG_KEY_PREFIX);
+    let flags=[];
+    try{ flags=JSON.parse(localStorage.getItem(key)||'[]'); }catch(e){}
+    const i=flags.indexOf(String(questionId));
+    if(i>=0){ flags.splice(i,1); } else { flags.push(String(questionId)); }
+    localStorage.setItem(key, JSON.stringify(flags));
+    if(button) {
+      button.classList.toggle('flagged', flags.includes(String(questionId)));
+      button.innerHTML = flags.includes(String(questionId))
+        ? '<span class="flag-icon">⚑</span> Flagged'
+        : '<span class="flag-icon">⚐</span> Flag';
+    }
+    if(card) card.classList.toggle('flagged-question', flags.includes(String(questionId)));
+  };
+
+  window.MathCloudLive.isFlagged=function(questionId){
+    try{return JSON.parse(localStorage.getItem(storageKey(FLAG_KEY_PREFIX))||'[]').includes(String(questionId));}
+    catch(e){return false;}
+  };
+
+  // Add a flag button to question cards when the page creates/renders them.
+  window.MathCloudLive.decorateQuestion=function(card, questionId){
+    if(!card || questionId==null || card.querySelector('.question-flag-btn')) return;
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='question-flag-btn'+(window.MathCloudLive.isFlagged(questionId)?' flagged':'');
+    btn.innerHTML=window.MathCloudLive.isFlagged(questionId)
+      ? '<span class="flag-icon">⚑</span> Flagged'
+      : '<span class="flag-icon">⚐</span> Flag';
+    btn.addEventListener('click',function(e){
+      e.preventDefault(); e.stopPropagation();
+      window.MathCloudLive.toggleFlag(questionId,btn,card);
+    });
+    const target=card.querySelector('.question-actions,.actions,.question-header,.card-header') || card.firstElementChild || card;
+    target.appendChild(btn);
+    card.classList.toggle('flagged-question',window.MathCloudLive.isFlagged(questionId));
+  };
+
+  // Capture answer selections immediately. This covers radio, checkbox and select controls.
+  document.addEventListener('change', function(e){
+    const el=e.target;
+    if(!el.matches('input[type=radio],input[type=checkbox],select')) return;
+    const q=el.closest('[data-question-id],[data-question],[id^="question-"]');
+    const questionId=q?.dataset.questionId || q?.dataset.question || q?.id?.replace(/^question-/,'');
+    if(!questionId) return;
+    let answer;
+    if(el.type==='checkbox'){
+      const checked=[...document.querySelectorAll(
+        'input[type=checkbox][name="'+CSS.escape(el.name)+'"]:checked'
+      )].map(x=>x.value);
+      answer=checked;
+    } else {
+      answer=el.value;
+    }
+    window.MathCloudLive.saveAnswerImmediately(questionId,answer);
+  }, true);
+
+  // Try to decorate dynamically generated question cards.
+  const observer=new MutationObserver(function(muts){
+    muts.forEach(m=>{
+      m.addedNodes.forEach(n=>{
+        if(!(n instanceof Element)) return;
+        const cards=n.matches?.('[data-question-id],[data-question],[id^="question-"]')
+          ? [n] : [...n.querySelectorAll?.('[data-question-id],[data-question],[id^="question-"]')||[]];
+        cards.forEach(card=>{
+          const id=card.dataset.questionId || card.dataset.question || card.id.replace(/^question-/,'');
+          window.MathCloudLive.decorateQuestion(card,id);
+        });
+      });
+    });
+  });
+  observer.observe(document.documentElement,{childList:true,subtree:true});
+
+  // On submit/timeout, preserve current answers before the existing submit handler runs.
+  window.addEventListener('beforeunload',function(){
+    try{
+      const controls=[...document.querySelectorAll('input[type=radio]:checked,input[type=checkbox]:checked,select')];
+      controls.forEach(el=>el.dispatchEvent(new Event('change',{bubbles:true})));
+    }catch(e){}
+  });
+
+  // Restore local answers if the existing UI has rendered controls.
+  window.MathCloudLive.restoreAnswers=function(){
+    let answers={};
+    try{answers=JSON.parse(localStorage.getItem(storageKey(ANSWER_KEY_PREFIX))||'{}');}catch(e){}
+    Object.entries(answers).forEach(([qid,val])=>{
+      const card=document.querySelector(
+        '[data-question-id="'+CSS.escape(qid)+'"],[data-question="'+CSS.escape(qid)+'"],#question-'+CSS.escape(qid)
+      );
+      if(!card) return;
+      const vals=Array.isArray(val)?val:[val];
+      card.querySelectorAll('input,select').forEach(el=>{
+        if(el.type==='checkbox'||el.type==='radio') el.checked=vals.includes(el.value);
+        else if(vals.length) el.value=vals[0];
+      });
+    });
+  };
+})();
+</script>
+
+
+
+
+
+
 </body>
 </html>
