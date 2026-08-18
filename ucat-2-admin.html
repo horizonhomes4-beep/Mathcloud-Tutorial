@@ -366,11 +366,19 @@ const Data = {
   async getQuestions(filters = {}) {
     if (!db) return [];
     const snap = await db.ref('questions').once('value');
-    let rows = snapToArray(snap.val());
-    if (filters.module) rows = rows.filter(q => q.module === filters.module);
-    if (filters.difficulty) rows = rows.filter(q => q.difficulty === filters.difficulty);
+    let rows = snapToArray(snap.val()).map(q => ({
+      ...q,
+      id: q.id || q.question_id || '',
+      module: String(q.module || '').toUpperCase(),
+      topic: q.topic || '',
+      difficulty: String(q.difficulty || '').toLowerCase(),
+      questionType: q.questionType || q.question_type || '',
+      active: q.active !== false
+    }));
+    if (filters.module) rows = rows.filter(q => q.module === String(filters.module).toUpperCase());
+    if (filters.difficulty) rows = rows.filter(q => q.difficulty === String(filters.difficulty).toLowerCase());
     if (filters.topic) rows = rows.filter(q => q.topic === filters.topic);
-    if (filters.active !== undefined) rows = rows.filter(q => !!q.active === filters.active);
+    if (filters.active !== undefined) rows = rows.filter(q => q.active === filters.active);
     if (filters.questionType) rows = rows.filter(q => q.questionType === filters.questionType);
     if (filters.search) {
       const s = filters.search.toLowerCase();
@@ -486,7 +494,7 @@ const Data = {
   async seedIfEmpty() {
     if (!db) return;
 
-    const CURRENT_QUESTION_BANK_VERSION = 'clinical-2026-v2';
+    const CURRENT_QUESTION_BANK_VERSION = 'clinical-2026-v3';
     const settingsSnap = await db.ref('settings').once('value');
     const existingSettings = settingsSnap.exists() ? settingsSnap.val() : {};
     const bankVersion = existingSettings.questionBankVersion || '';
@@ -504,19 +512,25 @@ const Data = {
       const existingVal = existingSnap.val() || {};
       const updates = {};
 
-      // Retire only the previous MathCloud clinical seed bank.
-      // Admin-created/custom questions are preserved.
-      Object.keys(existingVal).forEach(id => {
-        if (/^CL(VR|DM|QR|SJT)\d+$/i.test(id) && existingVal[id] && existingVal[id].active !== false) {
-          updates['questions/' + id + '/active'] = false;
-        }
-      });
-
+      // Repair the official embedded bank instead of retiring it.
+      // Historical attempts/responses are preserved and admin-created questions are untouched.
+      // Older versions of this file could leave the embedded seed questions inactive,
+      // which made Custom Practice report zero available questions.
       const existingIds = new Set(Object.keys(existingVal));
       SEED_QUESTIONS.forEach(q => {
         const id = q.question_id ? sanitizeKey(q.question_id) : null;
-        if (id && !existingIds.has(id)) {
-          updates['questions/' + id] = { ...q };
+        if (!id) return;
+        if (!existingIds.has(id)) {
+          updates['questions/' + id] = { ...q, id, active: true, createdAt: Date.now(), updatedAt: Date.now() };
+        } else {
+          // Only repair seed-bank records. Do not overwrite user/admin question content.
+          const existing = existingVal[id] || {};
+          if (existing.active !== true) updates['questions/' + id + '/active'] = true;
+          if (!existing.module && q.module) updates['questions/' + id + '/module'] = q.module;
+          if (!existing.topic && q.topic) updates['questions/' + id + '/topic'] = q.topic;
+          if (!existing.difficulty && q.difficulty) updates['questions/' + id + '/difficulty'] = q.difficulty;
+          if (!existing.questionType && q.question_type) updates['questions/' + id + '/questionType'] = q.question_type;
+          if (!existing.question_text && q.question_text) updates['questions/' + id + '/question_text'] = q.question_text;
         }
       });
 
@@ -528,11 +542,18 @@ const Data = {
       // Keep the bank self-healing if a new question is missing.
       const existingSnap = await db.ref('questions').once('value');
       const existingVal = existingSnap.val() || {};
-      const missing = SEED_QUESTIONS.filter(q => {
+      const repairs = {};
+      SEED_QUESTIONS.forEach(q => {
         const id = q.question_id ? sanitizeKey(q.question_id) : null;
-        return id && !existingVal[id];
+        if (!id) return;
+        const existing = existingVal[id];
+        if (!existing) {
+          repairs['questions/' + id] = { ...q, id, active: true, createdAt: Date.now(), updatedAt: Date.now() };
+        } else if (existing.active !== true) {
+          repairs['questions/' + id + '/active'] = true;
+        }
       });
-      if (missing.length) await Data.bulkAddQuestions(missing);
+      if (Object.keys(repairs).length) await db.ref().update(repairs);
     }
 
     const studentSnap = await db.ref('student').once('value');
@@ -4477,9 +4498,16 @@ async function viewPracticeSetup(){
 }
 
 async function filterPool(module, topic, difficulty, source){
-  let pool = App.questions.filter(q => q.module === module);
-  if (topic) pool = pool.filter(q => q.topic === topic);
-  if (difficulty) pool = pool.filter(q => q.difficulty === difficulty);
+  // App.questions is the normalised active bank loaded by the practice view.
+  // Treat ALL/blank as every module and normalise legacy field casing.
+  const wantedModule = String(module || '').toUpperCase();
+  let pool = App.questions.filter(q => {
+    if (q.active === false) return false;
+    if (!wantedModule || wantedModule === 'ALL') return true;
+    return String(q.module || '').toUpperCase() === wantedModule;
+  });
+  if (topic) pool = pool.filter(q => (q.topic || '') === topic);
+  if (difficulty) pool = pool.filter(q => String(q.difficulty || '').toLowerCase() === String(difficulty).toLowerCase());
   if (source === 'incorrect') {
     const wrong = new Set((await Data.getResponses({ incorrectOnly: true })).map(r => r.questionId));
     pool = pool.filter(q => wrong.has(q.id));
