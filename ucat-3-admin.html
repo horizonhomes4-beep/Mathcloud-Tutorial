@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -4294,7 +4295,6 @@ const SEED_QUESTIONS = [
     "explanation": "The best rating is very appropriate. The judgement is based on integrity, confidentiality, appropriate escalation, respect and staying within role.",
     "technique_tip": "Use only the information provided; avoid assumptions."
   },
-[
   {
     "question_id": "VRX011",
     "module": "VR",
@@ -6495,5 +6495,839 @@ const SEED_QUESTIONS = [
     "explanation": "Complaining to people who cannot resolve the issue is unhelpful and unprofessional.",
     "technique_tip": "Use only the information provided and avoid assumptions."
   }
-]
-]
+];
+
+/* ============================================================
+   APP STATE & SMALL HELPERS
+   ============================================================ */
+const App = {
+  route: '/',
+  questionsCache: [],
+  session: null,      // active practice session object
+  flagReviewOpen: false
+};
+
+function $(sel, root=document){ return root.querySelector(sel); }
+function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+function esc(str){
+  return String(str==null?'':str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtTime(sec){
+  sec = Math.max(0, Math.round(sec));
+  const m = Math.floor(sec/60), s = sec%60;
+  return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+}
+function fmtDate(ts){
+  if (!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' }) + ' ' +
+         d.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function pctColor(pct){
+  if (pct >= 75) return 'var(--accent-green)';
+  if (pct >= 50) return 'var(--accent-amber)';
+  return 'var(--accent-red)';
+}
+function toast(msg){
+  let t = $('#toast');
+  if (!t){
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13.5px;font-weight:600;z-index:9999;box-shadow:var(--shadow);opacity:0;transition:opacity .2s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._hideTimer);
+  t._hideTimer = setTimeout(()=>{ t.style.opacity = '0'; }, 2200);
+}
+function openModal(html){
+  $('#modalBody').innerHTML = html;
+  $('#modalBg').classList.add('show');
+}
+function closeModal(){
+  $('#modalBg').classList.remove('show');
+  $('#modalBody').innerHTML = '';
+}
+$('#modalBg') && $('#modalBg').addEventListener('click', e => { if (e.target.id === 'modalBg') closeModal(); });
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+const ROUTES = {
+  '/': renderHome,
+  '/practice': renderPracticeSetup,
+  '/session': renderSession,
+  '/review': renderReview,
+  '/dashboard': renderDashboard,
+  '/mistakes': renderMistakes,
+  '/admin': renderAdmin
+};
+
+async function route(){
+  const hash = location.hash.replace(/^#/, '') || '/';
+  const path = hash.split('?')[0];
+  App.route = path;
+  $all('.nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+path));
+  const handler = ROUTES[path] || renderHome;
+  const app = $('#app');
+  app.innerHTML = '<div style="padding:60px 0;text-align:center;color:var(--ink-soft);">Loading…</div>';
+  try {
+    await handler(app);
+  } catch (err) {
+    console.error(err);
+    app.innerHTML = '<div class="card"><h3>Something went wrong</h3><p>'+esc(err.message||String(err))+'</p></div>';
+  }
+}
+window.addEventListener('hashchange', route);
+
+/* ============================================================
+   HOME
+   ============================================================ */
+async function renderHome(app){
+  const student = await Data.getStudent();
+  app.innerHTML = `
+    <div class="hero">
+      <div class="timer-chip">🩺 UCAT-style practice · not affiliated with the UCAT Consortium</div>
+      <h1>Welcome back, ${esc(student.name || 'Student')}.</h1>
+      <p class="lead">Practice Verbal Reasoning, Decision Making, Quantitative Reasoning and Situational Judgement with instant feedback, weakness tracking, and a growing mistake bank.</p>
+      <div class="hero-actions">
+        <a href="#/practice" class="btn btn-primary">Start practising</a>
+        <a href="#/dashboard" class="btn btn-ghost">View progress</a>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="card"><h3>🧠 Verbal Reasoning</h3><p>44 questions · 22 min official format.</p></div>
+      <div class="card"><h3>⚖️ Decision Making</h3><p>35 questions · 37 min official format.</p></div>
+      <div class="card"><h3>🔢 Quantitative Reasoning</h3><p>36 questions · 26 min official format.</p></div>
+      <div class="card"><h3>🤝 Situational Judgement</h3><p>69 questions · 26 min official format.</p></div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   PRACTICE SETUP
+   ============================================================ */
+async function renderPracticeSetup(app){
+  const settings = await Data.getSettings();
+  app.innerHTML = `
+    <div class="eyebrow">Practice</div>
+    <h2>Build a practice set</h2>
+    <p>Choose a module and how you'd like to practise.</p>
+    <div class="card" style="max-width:640px;">
+      <div class="field">
+        <label>Module</label>
+        <select id="pModule">
+          ${MODULES.map(m => `<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}
+        </select>
+      </div>
+      <div class="grid cols-2">
+        <div class="field">
+          <label>Difficulty</label>
+          <select id="pDifficulty">
+            <option value="">Mixed</option>
+            ${DIFFICULTIES.map(d => `<option value="${d}">${d[0].toUpperCase()+d.slice(1)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field">
+          <label>Number of questions</label>
+          <input type="number" id="pCount" min="1" max="60" value="10">
+        </div>
+      </div>
+      <div class="field">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:600;">
+          <input type="checkbox" id="pTimed" style="width:auto;" checked> Timed (official pace per question)
+        </label>
+      </div>
+      <button class="btn btn-primary" id="pStart">Start session</button>
+      <p class="disclaimer">Timing defaults come from official UCAT per-module pacing (${settings.moduleTiming.VR}s/VR, ${settings.moduleTiming.DM}s/DM, ${settings.moduleTiming.QR}s/QR, ${settings.moduleTiming.SJT}s/SJT question).</p>
+    </div>
+  `;
+  $('#pStart').addEventListener('click', async () => {
+    const module = $('#pModule').value;
+    const difficulty = $('#pDifficulty').value;
+    const count = Math.max(1, Math.min(60, parseInt($('#pCount').value,10) || 10));
+    const timed = $('#pTimed').checked;
+    const filters = { module, active: true };
+    if (difficulty) filters.difficulty = difficulty;
+    let pool = await Data.getQuestions(filters);
+    if (!pool.length) { toast('No questions available for that selection yet.'); return; }
+    pool = shuffle(pool).slice(0, count);
+    App.session = {
+      module, timed,
+      settings,
+      questions: pool,
+      index: 0,
+      answers: {},      // qId -> { selected, correct, timeTaken, flagged }
+      startedAt: Date.now(),
+      qStartedAt: Date.now()
+    };
+    location.hash = '#/session';
+  });
+}
+
+/* ============================================================
+   PRACTICE SESSION
+   ============================================================ */
+let sessionTickHandle = null;
+
+function currentQuestion(){
+  const s = App.session;
+  return s ? s.questions[s.index] : null;
+}
+
+async function renderSession(app){
+  const s = App.session;
+  if (!s || !s.questions.length){ location.hash = '#/practice'; return; }
+  clearInterval(sessionTickHandle);
+
+  const q = currentQuestion();
+  const total = s.questions.length;
+  const answered = s.answers[q.id || q.question_id];
+  const qid = q.id || q.question_id;
+  const perQTime = s.settings.moduleTiming[s.module] || 30;
+  const flaggedIds = Object.keys(s.answers).filter(k => s.answers[k].flagged);
+
+  const optionKeys = ['a','b','c','d','e'].filter(k => q['option_'+k] && String(q['option_'+k]).trim() !== '');
+
+  app.innerHTML = `
+    <div class="session-header">
+      <div class="session-meta">
+        <span><strong>${esc(MODULE_NAMES[s.module]||s.module)}</strong></span>
+        <span>Question ${s.index+1} / ${total}</span>
+        <span>${esc(q.topic||'')}</span>
+      </div>
+      <div class="session-meta">
+        ${s.timed ? `<span class="timer" id="sessionTimer">${fmtTime(perQTime)}</span>` : ''}
+        <div class="flag-review-wrap">
+          <button class="flag-review-open ${flaggedIds.length?'has-flags':''}" id="flagReviewBtn">🚩 ${flaggedIds.length} flagged</button>
+          <div class="flag-review-menu" id="flagReviewMenu">
+            <div class="flag-review-title">Flagged questions</div>
+            ${flaggedIds.length ? `<div class="flag-review-grid">${flaggedIds.map(fid => {
+              const idx = s.questions.findIndex(qq => (qq.id||qq.question_id) === fid);
+              return `<div class="flag-review-q" data-jump="${idx}">${idx+1}</div>`;
+            }).join('')}</div>` : `<div class="flag-review-empty">No flagged questions yet.</div>`}
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="calcToggle">🖩 Calculator</button>
+      </div>
+    </div>
+    <div class="progress-bar"><div style="width:${Math.round(((s.index)/total)*100)}%"></div></div>
+
+    <div class="card question-card ${answered && answered.flagged ? 'flagged-question':''}" style="margin-top:18px;">
+      ${q.passage ? `<div class="passage-box">${esc(q.passage)}</div>` : ''}
+      <div class="question-text">
+        ${esc(q.question_text||'')}
+        ${answered && answered.flagged ? `<span class="flagged-badge">Flagged</span>` : ''}
+      </div>
+      <div class="options" id="optionsWrap">
+        ${optionKeys.map(k => {
+          const selected = answered && answered.selected === k;
+          return `<div class="option ${selected?'selected':''}" data-key="${k}">
+            <span class="key">${k.toUpperCase()}</span>
+            <span>${esc(q['option_'+k])}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="session-footer">
+        <button class="question-flag-btn ${answered && answered.flagged?'flagged':''}" id="flagBtn">
+          <span class="flag-icon">🚩</span> ${answered && answered.flagged ? 'Flagged' : 'Flag for review'}
+        </button>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost" id="prevBtn" ${s.index===0?'disabled':''}>← Previous</button>
+          <button class="btn btn-primary" id="nextBtn">${s.index === total-1 ? 'Finish & review' : 'Next →'}</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // option selection
+  $all('.option', app).forEach(opt => {
+    opt.addEventListener('click', () => {
+      const key = opt.dataset.key;
+      const timeTaken = Math.round((Date.now() - s.qStartedAt)/1000);
+      const prev = s.answers[qid] || {};
+      s.answers[qid] = {
+        selected: key,
+        correct: key.toUpperCase() === String(q.correct_answer||'').toUpperCase(),
+        timeTaken: (prev.timeTaken||0) + timeTaken,
+        flagged: prev.flagged || false,
+        topic: q.topic, module: s.module
+      };
+      s.qStartedAt = Date.now();
+      $all('.option', app).forEach(o => o.classList.toggle('selected', o.dataset.key === key));
+    });
+  });
+
+  $('#flagBtn').addEventListener('click', () => {
+    const prev = s.answers[qid] || { selected:null, correct:false, timeTaken:0, topic:q.topic, module:s.module };
+    prev.flagged = !prev.flagged;
+    s.answers[qid] = prev;
+    renderSession(app);
+  });
+
+  $('#flagReviewBtn').addEventListener('click', () => {
+    App.flagReviewOpen = !App.flagReviewOpen;
+    $('#flagReviewMenu').classList.toggle('open', App.flagReviewOpen);
+  });
+  $all('.flag-review-q', app).forEach(el => {
+    el.addEventListener('click', () => {
+      s.index = parseInt(el.dataset.jump, 10);
+      s.qStartedAt = Date.now();
+      App.flagReviewOpen = false;
+      renderSession(app);
+    });
+  });
+
+  $('#prevBtn').addEventListener('click', () => {
+    if (s.index > 0){ s.index--; s.qStartedAt = Date.now(); renderSession(app); }
+  });
+  $('#nextBtn').addEventListener('click', () => {
+    if (!s.answers[qid]){
+      s.answers[qid] = { selected:null, correct:false, timeTaken:Math.round((Date.now()-s.qStartedAt)/1000), flagged:false, topic:q.topic, module:s.module };
+    }
+    if (s.index < total-1){
+      s.index++; s.qStartedAt = Date.now(); renderSession(app);
+    } else {
+      location.hash = '#/review';
+    }
+  });
+
+  $('#calcToggle').addEventListener('click', () => {
+    $('#calc').classList.toggle('show');
+  });
+
+  // timer
+  if (s.timed){
+    let remaining = perQTime - Math.round((Date.now() - s.qStartedAt)/1000);
+    const timerEl = () => $('#sessionTimer');
+    sessionTickHandle = setInterval(() => {
+      remaining -= 1;
+      const el = timerEl();
+      if (!el) { clearInterval(sessionTickHandle); return; }
+      if (remaining <= 0){
+        clearInterval(sessionTickHandle);
+        if (!s.answers[qid]){
+          s.answers[qid] = { selected:null, correct:false, timeTaken:perQTime, flagged:false, topic:q.topic, module:s.module };
+        }
+        if (s.index < total-1){ s.index++; s.qStartedAt = Date.now(); renderSession(app); }
+        else { location.hash = '#/review'; }
+        return;
+      }
+      el.textContent = fmtTime(remaining);
+      el.classList.toggle('low', remaining <= 10);
+    }, 1000);
+  }
+}
+
+/* ============================================================
+   REVIEW / RESULTS SCREEN
+   ============================================================ */
+async function renderReview(app){
+  const s = App.session;
+  if (!s){ location.hash = '#/practice'; return; }
+  clearInterval(sessionTickHandle);
+
+  const total = s.questions.length;
+  const answeredCount = Object.values(s.answers).filter(a => a.selected).length;
+  const correctCount = Object.values(s.answers).filter(a => a.correct).length;
+  const accuracy = answeredCount ? Math.round((correctCount/answeredCount)*100) : 0;
+  const avgTime = answeredCount ? Math.round(Object.values(s.answers).reduce((sum,a)=>sum+(a.timeTaken||0),0)/answeredCount) : 0;
+  const submitted = s._submitted;
+
+  app.innerHTML = `
+    <div class="card review-card">
+      <div class="review-header">
+        <div>
+          <div class="eyebrow">${esc(MODULE_NAMES[s.module]||s.module)}</div>
+          <h2>Session review</h2>
+          <p>Review your answers below, then submit to save this attempt.</p>
+        </div>
+        <div class="review-time">${fmtTime(avgTime)} <span style="font-size:11px;color:var(--ink-soft);font-weight:600;">avg / question</span></div>
+      </div>
+      <div class="review-summary">
+        <div><strong>${total}</strong><span>Questions</span></div>
+        <div><strong>${answeredCount}</strong><span>Answered</span></div>
+        <div><strong style="color:${pctColor(accuracy)}">${accuracy}%</strong><span>Accuracy</span></div>
+        <div><strong>${Object.values(s.answers).filter(a=>a.flagged).length}</strong><span>Flagged</span></div>
+      </div>
+      <div class="review-actions">
+        <button class="btn btn-primary" id="submitAttempt" ${submitted?'disabled':''}>${submitted ? 'Saved ✓' : 'Submit attempt'}</button>
+        <a href="#/practice" class="btn btn-ghost">New session</a>
+      </div>
+      <div class="review-list-title">Questions</div>
+      <div class="review-grid">
+        ${s.questions.map((q,i) => {
+          const qid = q.id||q.question_id;
+          const a = s.answers[qid];
+          let cls = 'is-incomplete';
+          if (a && a.selected) cls = a.correct ? 'is-answered' : 'is-incomplete';
+          if (a && a.flagged) cls += ' is-flagged';
+          return `<div class="review-q ${cls}" data-jump="${i}">${i+1}${submitted && a && a.selected ? `<small>${a.correct?'✓':'✕'}</small>` : ''}</div>`;
+        }).join('')}
+      </div>
+      <div class="review-final-actions">
+        <a href="#/dashboard" class="btn btn-ghost">Go to progress dashboard</a>
+        <a href="#/mistakes" class="btn btn-ghost">Go to mistake bank</a>
+      </div>
+    </div>
+    ${submitted ? renderAnswerBreakdown(s) : ''}
+  `;
+
+  $all('.review-q', app).forEach(el => {
+    el.addEventListener('click', () => {
+      if (submitted) return;
+      s.index = parseInt(el.dataset.jump, 10);
+      s.qStartedAt = Date.now();
+      location.hash = '#/session';
+    });
+  });
+
+  $('#submitAttempt').addEventListener('click', async () => {
+    const responses = s.questions.map(q => {
+      const qid = q.id||q.question_id;
+      const a = s.answers[qid] || { selected:null, correct:false, timeTaken:0, flagged:false };
+      return {
+        questionId: qid, module: s.module, topic: q.topic||'',
+        selected: a.selected, correct: a.correct, timeTaken: a.timeTaken||0, flagged: !!a.flagged
+      };
+    });
+    const attempt = {
+      module: s.module, total, answered: answeredCount, correct: correctCount, accuracy,
+      avgTime, durationSec: Math.round((Date.now()-s.startedAt)/1000)
+    };
+    try {
+      await Data.saveAttempt(attempt, responses);
+      s._submitted = true;
+      toast('Attempt saved.');
+      renderReview(app);
+    } catch (err) {
+      console.error(err);
+      toast('Could not save (check Firebase connection).');
+    }
+  });
+}
+
+function renderAnswerBreakdown(s){
+  return `
+    <div class="card" style="margin-top:18px;">
+      <h3>Answer breakdown</h3>
+      ${s.questions.map((q,i) => {
+        const qid = q.id||q.question_id;
+        const a = s.answers[qid] || {};
+        const optionKeys = ['a','b','c','d','e'].filter(k => q['option_'+k] && String(q['option_'+k]).trim()!=='');
+        return `
+          <div style="padding:14px 0;border-bottom:1px solid var(--line);">
+            <div style="font-weight:700;margin-bottom:8px;">${i+1}. ${esc(q.question_text||'')}</div>
+            <div class="options">
+              ${optionKeys.map(k => {
+                let cls = '';
+                if (k.toUpperCase() === String(q.correct_answer||'').toUpperCase()) cls = 'correct';
+                else if (a.selected === k) cls = 'incorrect';
+                return `<div class="option ${cls}"><span class="key">${k.toUpperCase()}</span><span>${esc(q['option_'+k])}</span></div>`;
+              }).join('')}
+            </div>
+            <div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation||'')}</div>
+            ${q.technique_tip ? `<div class="tip-box">💡 ${esc(q.technique_tip)}</div>` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+let chartInstances = [];
+function destroyCharts(){ chartInstances.forEach(c => c.destroy()); chartInstances = []; }
+
+async function renderDashboard(app){
+  const [attempts, weaknesses] = await Promise.all([Data.getAttempts(), Data.getWeaknesses()]);
+  destroyCharts();
+
+  const totalAttempts = attempts.length;
+  const avgAccuracy = totalAttempts ? Math.round(attempts.reduce((s,a)=>s+(a.accuracy||0),0)/totalAttempts) : 0;
+  const avgTime = totalAttempts ? Math.round(attempts.reduce((s,a)=>s+(a.avgTime||0),0)/totalAttempts) : 0;
+  const totalQ = attempts.reduce((s,a)=>s+(a.answered||0),0);
+
+  const byModule = {};
+  MODULES.forEach(m => { byModule[m] = attempts.filter(a => a.module === m); });
+
+  app.innerHTML = `
+    <div class="eyebrow">Progress</div>
+    <h2>Your dashboard</h2>
+    <div class="grid cols-4" style="margin:18px 0 26px;">
+      <div class="card"><div class="stat-num">${totalAttempts}</div><div class="stat-label">Sessions completed</div></div>
+      <div class="card"><div class="stat-num" style="color:${pctColor(avgAccuracy)}">${avgAccuracy}%</div><div class="stat-label">Average accuracy</div></div>
+      <div class="card"><div class="stat-num">${fmtTime(avgTime)}</div><div class="stat-label">Avg time / question</div></div>
+      <div class="card"><div class="stat-num">${totalQ}</div><div class="stat-label">Questions answered</div></div>
+    </div>
+
+    ${totalAttempts === 0 ? `<div class="empty">No attempts yet — <a href="#/practice">start a practice session</a> to see your progress here.</div>` : `
+    <div class="grid cols-2">
+      <div class="card chart-card">
+        <h3>Accuracy by module</h3>
+        <div class="chart-wrap"><canvas id="chartModule"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <h3>Score trend (last 15 sessions)</h3>
+        <div class="chart-wrap"><canvas id="chartTrend"></canvas></div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px;">Topic weaknesses</h3>
+    ${weaknesses.length === 0 ? `<div class="empty">No weakness data yet.</div>` : `
+    <div class="grid cols-4">
+      ${weaknesses.sort((a,b)=>a.accuracy-b.accuracy).slice(0,12).map(w => `
+        <div class="heatcell" style="background:${pctColor(w.accuracy)}" title="${esc(w.module)} · ${esc(w.topic)}">
+          ${esc(w.topic).slice(0,16)}<br>${w.accuracy}%
+        </div>
+      `).join('')}
+    </div>`}
+    `}
+  `;
+
+  if (totalAttempts > 0){
+    const moduleAcc = MODULES.map(m => {
+      const arr = byModule[m];
+      if (!arr.length) return 0;
+      return Math.round(arr.reduce((s,a)=>s+(a.accuracy||0),0)/arr.length);
+    });
+    chartInstances.push(new Chart($('#chartModule').getContext('2d'), {
+      type: 'bar',
+      data: { labels: MODULES.map(m=>MODULE_NAMES[m]), datasets: [{ label:'Accuracy %', data: moduleAcc, backgroundColor: '#1B5FD1', borderRadius:6 }] },
+      options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:100 } }, plugins:{ legend:{ display:false } } }
+    }));
+
+    const recent = attempts.slice(0,15).reverse();
+    chartInstances.push(new Chart($('#chartTrend').getContext('2d'), {
+      type: 'line',
+      data: { labels: recent.map((a,i)=>'#'+(i+1)), datasets: [{ label:'Accuracy %', data: recent.map(a=>a.accuracy||0), borderColor:'#0E9F6E', backgroundColor:'rgba(14,159,110,.12)', fill:true, tension:.3 }] },
+      options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:100 } }, plugins:{ legend:{ display:false } } }
+    }));
+  }
+}
+
+/* ============================================================
+   MISTAKE BANK
+   ============================================================ */
+async function renderMistakes(app){
+  const [responses, allQuestions] = await Promise.all([
+    Data.getResponses({ incorrectOnly:true }),
+    Data.getQuestions({})
+  ]);
+  const qById = {}; allQuestions.forEach(q => qById[q.id] = q);
+
+  app.innerHTML = `
+    <div class="eyebrow">Mistake Bank</div>
+    <h2>Questions you've missed</h2>
+    <div class="filters">
+      <select id="mFilterModule">
+        <option value="">All modules</option>
+        ${MODULES.map(m => `<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}
+      </select>
+      <label style="display:flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:var(--ink-soft);">
+        <input type="checkbox" id="mFlaggedOnly" style="width:auto;"> Flagged only
+      </label>
+    </div>
+    <div id="mistakeList"></div>
+  `;
+
+  function draw(){
+    const mod = $('#mFilterModule').value;
+    const flaggedOnly = $('#mFlaggedOnly').checked;
+    let rows = responses.slice();
+    if (mod) rows = rows.filter(r => r.module === mod);
+    if (flaggedOnly) rows = rows.filter(r => r.flagged);
+    const wrap = $('#mistakeList');
+    if (!rows.length){ wrap.innerHTML = '<div class="empty">No mistakes match this filter yet.</div>'; return; }
+    wrap.innerHTML = rows.map(r => {
+      const q = qById[r.questionId];
+      if (!q) return '';
+      const optionKeys = ['a','b','c','d','e'].filter(k => q['option_'+k] && String(q['option_'+k]).trim()!=='');
+      return `
+        <div class="card" style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;gap:10px;">
+            <span class="badge badge-blue">${esc(MODULE_NAMES[r.module]||r.module)}</span>
+            <span class="badge ${r.flagged?'badge-amber':'badge-grey'}">${r.flagged?'Flagged':esc(q.topic||'')}</span>
+          </div>
+          <div class="question-text" style="margin-top:10px;">${esc(q.question_text||'')}</div>
+          <div class="options">
+            ${optionKeys.map(k => {
+              let cls = '';
+              if (k.toUpperCase() === String(q.correct_answer||'').toUpperCase()) cls = 'correct';
+              else if (r.selected === k) cls = 'incorrect';
+              return `<div class="option ${cls}"><span class="key">${k.toUpperCase()}</span><span>${esc(q['option_'+k])}</span></div>`;
+            }).join('')}
+          </div>
+          <div class="explanation-box"><h4>Explanation</h4>${esc(q.explanation||'')}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  $('#mFilterModule').addEventListener('change', draw);
+  $('#mFlaggedOnly').addEventListener('change', draw);
+  draw();
+}
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+let adminTab = 'questions';
+
+async function renderAdmin(app){
+  app.innerHTML = `
+    <div class="eyebrow">Admin</div>
+    <h2>Manage MathCloud</h2>
+    <div class="tab-row" id="adminTabs">
+      <div class="tab" data-tab="questions">Questions</div>
+      <div class="tab" data-tab="student">Student profile</div>
+      <div class="tab" data-tab="settings">Settings</div>
+    </div>
+    <div id="adminBody"></div>
+  `;
+  $all('.tab', app).forEach(t => t.classList.toggle('active', t.dataset.tab === adminTab));
+  $all('.tab', app).forEach(t => t.addEventListener('click', () => { adminTab = t.dataset.tab; renderAdmin(app); }));
+
+  const body = $('#adminBody');
+  if (adminTab === 'questions') await renderAdminQuestions(body);
+  else if (adminTab === 'student') await renderAdminStudent(body);
+  else await renderAdminSettings(body);
+}
+
+async function renderAdminQuestions(body){
+  let all = await Data.getQuestions({});
+  App.questionsCache = all;
+
+  body.innerHTML = `
+    <div class="filters">
+      <select id="aModule"><option value="">All modules</option>${MODULES.map(m=>`<option value="${m}">${MODULE_NAMES[m]}</option>`).join('')}</select>
+      <select id="aDifficulty"><option value="">All difficulties</option>${DIFFICULTIES.map(d=>`<option value="${d}">${d}</option>`).join('')}</select>
+      <input type="search" id="aSearch" placeholder="Search question text, topic, ID…">
+      <button class="btn btn-primary btn-sm" id="aAddBtn">+ Add question</button>
+      <button class="btn btn-ghost btn-sm" id="aImportBtn">⇪ Bulk import (xlsx/csv)</button>
+      <input type="file" id="aImportFile" accept=".xlsx,.xls,.csv" style="display:none;">
+      <button class="btn btn-ghost btn-sm" id="aSeedBtn">↻ Re-run seed</button>
+    </div>
+    <div style="margin-bottom:10px;color:var(--ink-soft);font-size:13px;" id="aCount"></div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>ID</th><th>Module</th><th>Topic</th><th>Difficulty</th><th>Active</th><th></th></tr></thead>
+      <tbody id="aRows"></tbody>
+    </table>
+    </div>
+  `;
+
+  function draw(){
+    const mod = $('#aModule').value, diff = $('#aDifficulty').value, s = $('#aSearch').value.toLowerCase();
+    let rows = all.slice();
+    if (mod) rows = rows.filter(q => q.module === mod);
+    if (diff) rows = rows.filter(q => q.difficulty === diff);
+    if (s) rows = rows.filter(q => (q.question_text||'').toLowerCase().includes(s) || (q.topic||'').toLowerCase().includes(s) || (q.id||'').toLowerCase().includes(s));
+    $('#aCount').textContent = rows.length + ' of ' + all.length + ' questions';
+    $('#aRows').innerHTML = rows.slice(0,300).map(q => `
+      <tr>
+        <td style="font-family:var(--mono);font-size:12px;">${esc(q.id)}</td>
+        <td><span class="badge badge-blue">${esc(q.module)}</span></td>
+        <td>${esc(q.topic||'')}</td>
+        <td>${esc(q.difficulty||'')}</td>
+        <td>${q.active ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-grey">Inactive</span>'}</td>
+        <td style="white-space:nowrap;">
+          <button class="btn btn-ghost btn-sm" data-edit="${esc(q.id)}">Edit</button>
+          <button class="btn btn-danger btn-sm" data-del="${esc(q.id)}">Delete</button>
+        </td>
+      </tr>
+    `).join('') || `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--ink-soft);">No matching questions.</td></tr>`;
+
+    $all('[data-edit]', body).forEach(b => b.addEventListener('click', () => openQuestionModal(all.find(q=>q.id===b.dataset.edit), body)));
+    $all('[data-del]', body).forEach(b => b.addEventListener('click', async () => {
+      if (!confirm('Delete question ' + b.dataset.del + '?')) return;
+      await Data.deleteQuestion(b.dataset.del);
+      toast('Question deleted.');
+      renderAdminQuestions(body);
+    }));
+  }
+  $('#aModule').addEventListener('change', draw);
+  $('#aDifficulty').addEventListener('change', draw);
+  $('#aSearch').addEventListener('input', draw);
+  $('#aAddBtn').addEventListener('click', () => openQuestionModal(null, body));
+  $('#aSeedBtn').addEventListener('click', async () => { await Data.seedIfEmpty(); toast('Seed check complete.'); renderAdminQuestions(body); });
+  $('#aImportBtn').addEventListener('click', () => $('#aImportFile').click());
+  $('#aImportFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet);
+      if (!json.length){ toast('No rows found in file.'); return; }
+      await Data.bulkAddQuestions(json);
+      toast('Imported ' + json.length + ' questions.');
+      renderAdminQuestions(body);
+    } catch (err) {
+      console.error(err);
+      toast('Import failed — check the file format.');
+    }
+  });
+  draw();
+}
+
+function openQuestionModal(q, body){
+  q = q || { module:'VR', difficulty:'standard', question_type:'', topic:'', recommended_time:30, passage:'', question_text:'', option_a:'', option_b:'', option_c:'', option_d:'', option_e:'', correct_answer:'A', explanation:'', technique_tip:'', active:true };
+  openModal(`
+    <h3>${q.id ? 'Edit' : 'Add'} question</h3>
+    <div class="grid cols-2">
+      <div class="field"><label>Module</label><select id="qModule">${MODULES.map(m=>`<option value="${m}" ${q.module===m?'selected':''}>${MODULE_NAMES[m]}</option>`).join('')}</select></div>
+      <div class="field"><label>Difficulty</label><select id="qDifficulty">${DIFFICULTIES.map(d=>`<option value="${d}" ${q.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
+    </div>
+    <div class="field"><label>Topic</label><input type="text" id="qTopic" value="${esc(q.topic)}"></div>
+    <div class="field"><label>Passage (optional)</label><textarea id="qPassage">${esc(q.passage)}</textarea></div>
+    <div class="field"><label>Question text</label><textarea id="qText">${esc(q.question_text)}</textarea></div>
+    <div class="grid cols-2">
+      <div class="field"><label>Option A</label><input type="text" id="qA" value="${esc(q.option_a)}"></div>
+      <div class="field"><label>Option B</label><input type="text" id="qB" value="${esc(q.option_b)}"></div>
+      <div class="field"><label>Option C</label><input type="text" id="qC" value="${esc(q.option_c)}"></div>
+      <div class="field"><label>Option D</label><input type="text" id="qD" value="${esc(q.option_d)}"></div>
+      <div class="field"><label>Option E (optional)</label><input type="text" id="qE" value="${esc(q.option_e)}"></div>
+      <div class="field"><label>Correct answer</label><select id="qCorrect">${['A','B','C','D','E'].map(k=>`<option ${q.correct_answer===k?'selected':''}>${k}</option>`).join('')}</select></div>
+    </div>
+    <div class="field"><label>Explanation</label><textarea id="qExplanation">${esc(q.explanation)}</textarea></div>
+    <div class="field"><label>Technique tip</label><textarea id="qTip">${esc(q.technique_tip)}</textarea></div>
+    <div class="field"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="qActive" style="width:auto;" ${q.active?'checked':''}> Active</label></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn btn-ghost" id="qCancel">Cancel</button>
+      <button class="btn btn-primary" id="qSave">Save</button>
+    </div>
+  `);
+  $('#qCancel').addEventListener('click', closeModal);
+  $('#qSave').addEventListener('click', async () => {
+    const payload = {
+      ...(q.id ? { id:q.id } : {}),
+      question_id: q.question_id || q.id || undefined,
+      module: $('#qModule').value,
+      difficulty: $('#qDifficulty').value,
+      topic: $('#qTopic').value,
+      passage: $('#qPassage').value,
+      question_text: $('#qText').value,
+      option_a: $('#qA').value, option_b: $('#qB').value, option_c: $('#qC').value, option_d: $('#qD').value, option_e: $('#qE').value,
+      correct_answer: $('#qCorrect').value,
+      explanation: $('#qExplanation').value,
+      technique_tip: $('#qTip').value,
+      active: $('#qActive').checked
+    };
+    await Data.saveQuestion(payload);
+    closeModal();
+    toast('Question saved.');
+    renderAdminQuestions(body);
+  });
+}
+
+async function renderAdminStudent(body){
+  const student = await Data.getStudent();
+  body.innerHTML = `
+    <div class="card" style="max-width:560px;">
+      <div class="field"><label>Name</label><input type="text" id="sName" value="${esc(student.name)}"></div>
+      <div class="grid cols-2">
+        <div class="field"><label>Target university</label><input type="text" id="sUni" value="${esc(student.targetUniversity)}"></div>
+        <div class="field"><label>Target course</label><input type="text" id="sCourse" value="${esc(student.targetCourse)}"></div>
+      </div>
+      <div class="grid cols-2">
+        <div class="field"><label>Target UCAT year</label><input type="number" id="sYear" value="${esc(student.targetUCATYear)}"></div>
+        <div class="field"><label>Target score</label><input type="number" id="sScore" value="${esc(student.targetScore)}"></div>
+      </div>
+      <div class="field"><label>Test date</label><input type="text" id="sDate" value="${esc(student.testDate)}" placeholder="YYYY-MM-DD"></div>
+      <button class="btn btn-primary" id="sSave">Save profile</button>
+    </div>
+  `;
+  $('#sSave').addEventListener('click', async () => {
+    await Data.saveStudent({
+      name: $('#sName').value, targetUniversity: $('#sUni').value, targetCourse: $('#sCourse').value,
+      targetUCATYear: parseInt($('#sYear').value,10)||undefined, targetScore: parseInt($('#sScore').value,10)||undefined,
+      testDate: $('#sDate').value
+    });
+    toast('Profile saved.');
+  });
+}
+
+async function renderAdminSettings(body){
+  const settings = await Data.getSettings();
+  body.innerHTML = `
+    <div class="card" style="max-width:640px;">
+      <h3>Per-question timing (seconds)</h3>
+      <div class="grid cols-4">
+        ${MODULES.map(m => `<div class="field"><label>${m}</label><input type="number" id="t_${m}" value="${settings.moduleTiming[m]}"></div>`).join('')}
+      </div>
+      <h3>Official question counts</h3>
+      <div class="grid cols-4">
+        ${MODULES.map(m => `<div class="field"><label>${m}</label><input type="number" id="c_${m}" value="${settings.moduleQuestionCounts[m]}"></div>`).join('')}
+      </div>
+      <div class="field"><label>Daily practice target</label><input type="number" id="dailyTarget" value="${settings.dailyPracticeTarget}"></div>
+      <button class="btn btn-primary" id="settingsSave">Save settings</button>
+    </div>
+  `;
+  $('#settingsSave').addEventListener('click', async () => {
+    const moduleTiming = {}, moduleQuestionCounts = {};
+    MODULES.forEach(m => { moduleTiming[m] = parseInt($('#t_'+m).value,10)||settings.moduleTiming[m]; moduleQuestionCounts[m] = parseInt($('#c_'+m).value,10)||settings.moduleQuestionCounts[m]; });
+    await Data.saveSettings({ ...settings, moduleTiming, moduleQuestionCounts, dailyPracticeTarget: parseInt($('#dailyTarget').value,10)||settings.dailyPracticeTarget });
+    toast('Settings saved.');
+  });
+}
+
+/* ============================================================
+   CALCULATOR
+   ============================================================ */
+function buildCalculator(){
+  const keys = ['7','8','9','÷','4','5','6','×','1','2','3','−','0','.','=','+','C'];
+  const grid = $('#calcGrid');
+  if (!grid) return;
+  grid.innerHTML = keys.map(k => `<button data-k="${k}" style="${k==='C'?'grid-column:span 2;background:#7A2020;':''}${k==='='?'grid-column:span 2;background:#0E9F6E;':''}">${k}</button>`).join('');
+  let expr = '';
+  const display = $('#calcDisplay');
+  grid.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const k = btn.dataset.k;
+    if (k === 'C'){ expr = ''; }
+    else if (k === '='){
+      try {
+        const safe = expr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+        // eslint-disable-next-line no-eval
+        const result = Function('"use strict"; return (' + safe + ')')();
+        expr = String(Math.round(result * 1e8) / 1e8);
+      } catch { expr = 'Error'; }
+    } else {
+      expr = (expr === 'Error' ? '' : expr) + k;
+    }
+    display.value = expr || '0';
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+async function init(){
+  buildCalculator();
+  if (FIREBASE_READY){
+    try { await Data.seedIfEmpty(); } catch (err) { console.error('Seed check failed:', err); }
+  }
+  route();
+}
+
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>
